@@ -28,8 +28,8 @@ model Account {
   userId            String
   provider          String
   providerAccountId String
-  refresh_token     String? // Ако OAuth го изисква
-  access_token      String? // Ако OAuth го изисква
+  refresh_token     String? // If OAuth needs it
+  access_token      String? // If OAuth needs it
   expires_at        Int?
   token_type        String?
   scope             String?
