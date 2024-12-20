@@ -1,8 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { defaultLocale, supportedLocales } from "@/constants/server/index";
 import type { SupportedLocale } from "@/constants/server/index";
 
-export default function setLocaleMiddleware(request: Request): NextResponse {
+export default function setLocaleMiddleware(
+  request: NextRequest
+): NextResponse {
   const LOCALE_SLUG_POSITION = 1;
   const url = new URL(request.url);
   const pathSegments = url.pathname.split("/");
