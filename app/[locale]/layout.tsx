@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { SupportedLocale } from "@/constants/locales";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@/assets/styles/globals.css";
 
@@ -22,7 +23,7 @@ export default async function RootLayout({
   params,
 }: Readonly<{
   children: React.ReactNode;
-  params: { locale: string };
+  params: { locale: SupportedLocale };
 }>) {
   const { locale } = await params;
 
