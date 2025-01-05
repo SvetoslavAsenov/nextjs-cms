@@ -12,34 +12,12 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: `/:locale(${localePattern})`,
-        destination: "/",
+        source: "/",
+        destination: `/${defaultLocale}`,
       },
       {
-        source: `/:locale(${localePattern})/:path*`,
-        destination: "/:path*",
-      },
-    ];
-  },
-  async headers() {
-    return [
-      {
-        source: `/:locale(${localePattern})`,
-        headers: [
-          {
-            key: "x-locale",
-            value: ":locale",
-          },
-        ],
-      },
-      {
-        source: `/:locale(${localePattern})/:path*`,
-        headers: [
-          {
-            key: "x-locale",
-            value: defaultLocale,
-          },
-        ],
+        source: `/:path((?!${localePattern}).*)/:rest*`,
+        destination: `/${defaultLocale}/:path/:rest*`,
       },
     ];
   },
