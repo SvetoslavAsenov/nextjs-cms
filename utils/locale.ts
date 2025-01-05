@@ -22,3 +22,7 @@ export const getLocaleFromUrl = (url: string): SupportedLocale => {
 
   return validLocale(segments[1] as SupportedLocale);
 };
+
+export const localePattern = supportedLocales
+  .filter((locale) => locale !== defaultLocale)
+  .join("|");
