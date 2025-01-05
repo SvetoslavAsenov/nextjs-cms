@@ -75,7 +75,7 @@ model Authenticator {
 
 model Role {
   id                  String               @id @default(cuid())
-  name                String?
+  name                Json?
   hierarchy           Int                  @unique @default(0)
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
