@@ -7,7 +7,11 @@ export const rewrites = async () => [
     destination: `/${defaultLocale}`,
   },
   {
-    source: `/:path((?!${localePattern}|api).*)/:rest*`,
-    destination: `/${defaultLocale}/:path/:rest*`,
+    source: `/:locale(${localePattern})/:path*`,
+    destination: `/:locale/:path*`,
+  },
+  {
+    source: `/:path((?!api).*)`,
+    destination: `/${defaultLocale}/:path*`,
   },
 ];
