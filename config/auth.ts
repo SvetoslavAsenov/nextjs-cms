@@ -9,4 +9,17 @@ export const authConfig: NextAuthConfig = {
   session: {
     strategy: "database",
   },
+  callbacks: {
+    signIn: async ({ user }) => {
+      if (!user?.email) {
+        return false;
+      }
+
+      const existingUser = await prisma.user.findUnique({
+        where: { email: user.email },
+      });
+
+      return !!existingUser;
+    },
+  },
 };

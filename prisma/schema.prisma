@@ -85,7 +85,7 @@ model Role {
 
 model RegistrationInvite {
   id        String   @id @default(cuid())
-  token     String
+  token     String   @unique
   validitTo DateTime
   usedAt    DateTime?
   userId    String?
@@ -93,5 +93,5 @@ model RegistrationInvite {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   role      Role     @relation(fields: [roleId], references: [id])
-  user      User?     @relation(fields: [userId], references: [id])
+  user      User?    @relation(fields: [userId], references: [id])
 }
