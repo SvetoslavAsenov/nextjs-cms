@@ -6,7 +6,7 @@ const validateLocale = (locale: SupportedLocale): boolean => {
   return supportedLocales.includes(locale);
 };
 
-const getLocaleFromUrl = (url: string): SupportedLocale => {
+export const getLocaleFromUrl = (url: string): SupportedLocale => {
   const segments = getSlugSegmentsFromUrl(url);
 
   return validLocale(segments[1] as SupportedLocale);
@@ -16,7 +16,7 @@ export const validLocale = (locale: SupportedLocale): SupportedLocale => {
   return validateLocale(locale) ? locale : defaultLocale;
 };
 
-export const getLocale = async (): Promise<SupportedLocale> => {
+export const getLocale = () => {
   if (typeof window === "undefined") {
     throw new Error("getLocale can only be used in client components");
   }
