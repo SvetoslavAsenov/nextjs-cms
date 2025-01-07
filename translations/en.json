@@ -1,4 +1,6 @@
 {
   "greeting": "Hello",
-  "farewell": "Goodbye"
+  "farewell": "Goodbye",
+  "the_page_does_not_exist": "The page you are looking for does not exist.",
+  "page_not_found": "404 - Page Not Found"
 }
