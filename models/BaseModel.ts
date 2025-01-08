@@ -14,7 +14,7 @@ export default class BaseModel<
   private findManyFunc;
   private updateFunc;
 
-  constructor(prismaModel: {
+  protected constructor(prismaModel: {
     create: (args: TCreateArgs) => Promise<TReturn>;
     delete: (args: TDeleteArgs) => Promise<TReturn>;
     findUnique: (args: TFindUniqueArgs) => Promise<TReturn | null>;
