@@ -2,8 +2,8 @@ import { defaultLocale, supportedLocales } from "../config/locales";
 import type { SupportedLocale } from "../config/locales";
 import { getSlugSegmentsFromUrl } from "./url";
 
-const validateLocale = (locale: SupportedLocale): boolean => {
-  return supportedLocales.includes(locale);
+const validateLocale = (locale: SupportedLocale | string): boolean => {
+  return supportedLocales.includes(locale as SupportedLocale);
 };
 
 export const getLocaleFromUrl = (url: string): SupportedLocale => {
@@ -12,8 +12,10 @@ export const getLocaleFromUrl = (url: string): SupportedLocale => {
   return getValidLocale(segments[1] as SupportedLocale);
 };
 
-export const getValidLocale = (locale: SupportedLocale): SupportedLocale => {
-  return validateLocale(locale) ? locale : defaultLocale;
+export const getValidLocale = (
+  locale: SupportedLocale | string
+): SupportedLocale => {
+  return validateLocale(locale) ? (locale as SupportedLocale) : defaultLocale;
 };
 
 export const localePattern = supportedLocales

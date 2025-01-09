@@ -1,7 +1,10 @@
-import { validLocale } from "@/utils/locale";
+import { getTranslation } from "@/utils/translations";
 
-export default function register({ locale: localeParam }: { locale: string }) {
-  const locale = validLocale(localeParam);
-
-  return <p>{locale}</p>;
+export default async function register({
+  params,
+}: {
+  params: { locale: string };
+}) {
+  const { locale } = await params;
+  return <p>{getTranslation("login", locale)}</p>;
 }
