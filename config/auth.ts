@@ -1,11 +1,11 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 import type { NextAuthConfig } from "next-auth";
-import providers from "./authProviders";
+import { providersConfig } from "./authProviders";
 
 export const authConfig: NextAuthConfig = {
   adapter: PrismaAdapter(prisma),
-  providers,
+  providers: providersConfig,
   session: {
     strategy: "database",
   },
