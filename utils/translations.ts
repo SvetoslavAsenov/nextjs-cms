@@ -1,5 +1,5 @@
 import { defaultLocale } from "../config/locales";
-import { validLocale } from "./locale";
+import { getValidLocale } from "./locale";
 import { translations } from "../translations/";
 import type { SupportedLocale } from "../config/locales";
 
@@ -8,7 +8,7 @@ export const getTranslation = (
   locale: SupportedLocale
 ): string => {
   return (
-    translations[validLocale(locale)]?.[key] ||
+    translations[getValidLocale(locale)]?.[key] ||
     translations[defaultLocale]?.[key] ||
     key
   );

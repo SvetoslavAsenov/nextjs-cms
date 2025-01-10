@@ -3,7 +3,10 @@ import { getCookieValuesByKeys, setCookies } from "../cookies/cookies.server";
 import { THEME_NAME_COOKIE, THEME_MODE_COOKIE } from "@/constants/cookies";
 import type { SupportedTheme, SupportedMode } from "@/types/theme";
 
-export const setTheme = async (theme: SupportedTheme, mode: SupportedMode) => {
+export const setThemeAndMode = async (
+  theme: SupportedTheme,
+  mode: SupportedMode
+) => {
   await setCookies([
     [THEME_NAME_COOKIE, theme],
     [THEME_MODE_COOKIE, mode],

@@ -9,10 +9,10 @@ const validateLocale = (locale: SupportedLocale): boolean => {
 export const getLocaleFromUrl = (url: string): SupportedLocale => {
   const segments = getSlugSegmentsFromUrl(url);
 
-  return validLocale(segments[1] as SupportedLocale);
+  return getValidLocale(segments[1] as SupportedLocale);
 };
 
-export const validLocale = (locale: SupportedLocale): SupportedLocale => {
+export const getValidLocale = (locale: SupportedLocale): SupportedLocale => {
   return validateLocale(locale) ? locale : defaultLocale;
 };
 
