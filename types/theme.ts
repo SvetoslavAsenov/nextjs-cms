@@ -1,10 +1,11 @@
-import { supportedThemes } from "@/config/themes";
+import { supportedThemes, supportedModes } from "@/config/themes";
 
 export type SupportedTheme = (typeof supportedThemes)[number];
-
 export type Themes = {
   [key in SupportedTheme]: Theme;
 };
+
+export type SupportedMode = (typeof supportedModes)[number];
 
 type cssVariable =
   | "--background"
