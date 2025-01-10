@@ -1,5 +1,5 @@
 import { getTranslation } from "@/utils/translations";
-import type { SupportedLocale } from "@/constants/locales";
+import type { SupportedLocale } from "@/config/locales";
 
 export default async function Users({
   params,

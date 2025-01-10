@@ -1,7 +1,7 @@
-import { defaultLocale } from "../constants/locales";
+import { defaultLocale } from "../config/locales";
 import { validLocale } from "./locale";
 import { translations } from "../translations/";
-import type { SupportedLocale } from "../constants/locales";
+import type { SupportedLocale } from "../config/locales";
 
 export const getTranslation = (
   key: string,
