@@ -3,7 +3,7 @@ import {
   defaultTheme,
   supportedModes,
   defaultMode,
-} from "@/config/themes";
+} from "../../config/themes";
 
 import type { SupportedTheme, SupportedMode } from "@/types/theme";
 
