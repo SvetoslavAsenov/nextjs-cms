@@ -1,5 +1,5 @@
 import { localePattern } from "../utils/locale";
-import { defaultLocale } from "../constants/locales";
+import { defaultLocale } from "./locales";
 
 export const rewrites = async () => [
   {
