@@ -1,5 +1,5 @@
 import { defaultLocale, supportedLocales } from "../config/locales";
-import type { SupportedLocale } from "../config/locales";
+import type { SupportedLocale } from "@/types/locales";
 import { getSlugSegmentsFromUrl } from "./url";
 
 const validateLocale = (locale: SupportedLocale | string): boolean => {
