@@ -5,7 +5,14 @@ type CookieValuesMap<T extends readonly string[]> = {
   [K in T[number]]: ReturnedCookieValue;
 };
 type SetCookiesItem = [key: string, value: string];
-type SetCookiesParam = SetCookiesItem[];
+type SetCookiesArrayParam = SetCookiesItem[];
+type SetCookiesOptionsParam = Partial<{
+  httpOnly: boolean;
+  sameSite: "strict" | "lax" | "none";
+  secure: boolean;
+  maxAge: number;
+  path: string;
+}>;
 
 // Fetch multiple cookie values by their keys
 export const getCookieValuesByKeys = async <T extends readonly string[]>(
@@ -30,15 +37,30 @@ export const getCookieValueByKey = async (
 };
 
 // Set multiple cookies on the server
-export const setCookies = async (arr: SetCookiesParam) => {
+export const setCookies = async (
+  cookiesArray: SetCookiesArrayParam,
+  options: SetCookiesOptionsParam = {}
+) => {
   const cookies = await serverCookies();
+  const defaultOptions = {
+    httpOnly: true,
+    sameSite: "strict" as const, // Типът трябва да бъде строго зададен
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 3600, // 1 час по подразбиране
+    path: "/",
+  };
 
-  for (const [key, value] of arr) {
-    cookies.set(key, value);
-  }
+  const finalOptions = { ...defaultOptions, ...options };
+
+  cookiesArray.forEach(([key, value]) => {
+    cookies.set(key, value, finalOptions);
+  });
 };
-
 // Set a single cookie on the server
-export const setCookie = async (key: string, value: string) => {
-  await setCookies([[key, value]]);
+export const setCookie = async (
+  key: string,
+  value: string,
+  options: SetCookiesOptionsParam = {}
+) => {
+  await setCookies([[key, value]], options);
 };

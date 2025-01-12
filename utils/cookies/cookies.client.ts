@@ -4,6 +4,13 @@ type CookieValuesMap<T extends readonly string[]> = {
 };
 type SetCookiesItem = [key: string, value: string];
 type SetCookiesParam = SetCookiesItem[];
+type SetCookiesOptionsParam = Partial<{
+  path: string;
+  maxAge: number;
+  domain: string;
+  secure: boolean;
+  sameSite: "strict" | "lax" | "none";
+}>;
 
 // Function to parse cookies from `document.cookie`
 const parseCookies = (): Record<string, string> => {
@@ -35,13 +42,38 @@ export const getCookieValueByKey = (key: string): ReturnedCookieValue => {
 };
 
 // Set multiple cookies
-export const setCookies = (arr: SetCookiesParam) => {
-  arr.forEach(([key, value]) => {
-    document.cookie = `${key}=${encodeURIComponent(value)}; path=/`;
+export const setCookies = (
+  cookiesArray: SetCookiesParam,
+  options: SetCookiesOptionsParam = {}
+) => {
+  const defaultOptions: SetCookiesOptionsParam = {
+    path: "/",
+  };
+
+  const finalOptions = { ...defaultOptions, ...options };
+
+  const optionsString = Object.entries(finalOptions)
+    .map(([key, value]) => {
+      if (key === "secure" && value) return "Secure";
+      if (key === "sameSite") return `SameSite=${value}`;
+      if (key === "maxAge") return `Max-Age=${value}`;
+      if (key === "path") return `Path=${value}`;
+      if (key === "domain") return `Domain=${value}`;
+      return "";
+    })
+    .filter(Boolean)
+    .join("; ");
+
+  cookiesArray.forEach(([key, value]) => {
+    document.cookie = `${key}=${encodeURIComponent(value)}; ${optionsString}`;
   });
 };
 
 // Set a single cookie
-export const setCookie = (key: string, value: string) => {
-  setCookies([[key, value]]);
+export const setCookie = (
+  key: string,
+  value: string,
+  options: SetCookiesOptionsParam = {}
+) => {
+  setCookies([[key, value]], options);
 };
