@@ -86,6 +86,7 @@ model Role {
 model RegistrationInvite {
   id        String   @id @default(cuid())
   token     String   @unique
+  email     String?   @unique
   validitTo DateTime
   usedAt    DateTime?
   userId    String?
