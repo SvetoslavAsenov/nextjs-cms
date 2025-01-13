@@ -1,4 +1,4 @@
-import { defaultLocale } from "@/config/locales";
+import { defaultLocale } from "../config/locales";
 import type { SupportedLocale } from "@/types/locales";
 
 export const getSlugSegmentsFromUrl = (url: string): string[] => {
