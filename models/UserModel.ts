@@ -14,4 +14,15 @@ export default class UserModel extends BaseModel<
   constructor() {
     super(prisma.user);
   }
+
+  public setRole = async (userId: string, roleId: string) => {
+    await this.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        roleId,
+      },
+    });
+  };
 }

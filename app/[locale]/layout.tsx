@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import type { SupportedLocale } from "@/config/locales";
+import type { SupportedLocale } from "@/types/locales";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@/assets/styles/globals.css";
 

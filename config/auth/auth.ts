@@ -1,12 +1,20 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import Google from "next-auth/providers/google";
 import { prisma } from "@/lib/prisma";
 import type { NextAuthConfig } from "next-auth";
+import { providersConfig } from "./authProviders";
+import signIn from "./callbacks/signIn";
+import createUser from "./events/createUser";
 
 export const authConfig: NextAuthConfig = {
   adapter: PrismaAdapter(prisma),
-  providers: [Google],
+  providers: providersConfig,
   session: {
     strategy: "database",
+  },
+  callbacks: {
+    signIn,
+  },
+  events: {
+    createUser,
   },
 };

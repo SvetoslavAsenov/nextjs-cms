@@ -2,5 +2,7 @@
   "greeting": "Hello",
   "farewell": "Goodbye",
   "the_page_does_not_exist": "The page you are looking for does not exist.",
-  "page_not_found": "404 - Page Not Found"
+  "page_not_found": "404 - Page Not Found",
+  "register": "Register",
+  "login": "Login"
 }
