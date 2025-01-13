@@ -28,4 +28,27 @@ export default class RegistrationInviteModel extends BaseModel<
 
     return true;
   }
+
+  public setEmailAndUsedAtByToken = async (email: string, token: string) => {
+    await this.update({
+      where: {
+        token,
+      },
+      data: {
+        email,
+        usedAt: new Date(),
+      },
+    });
+  };
+
+  public setUserByEmail = async (email: string, userId: string) => {
+    await this.update({
+      where: {
+        email,
+      },
+      data: {
+        userId,
+      },
+    });
+  };
 }
