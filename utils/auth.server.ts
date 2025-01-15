@@ -8,7 +8,7 @@ export const applyPepper = (target: string): string => {
   return target + process.env.PEPPER_SECRET;
 };
 
-export const applySalt = (target: string): string => {
+export const hashAString = (target: string): string => {
   return bcrypt.hashSync(target, SALT_ROUNDS);
 };
 
