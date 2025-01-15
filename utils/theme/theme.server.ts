@@ -1,3 +1,5 @@
+"use server";
+
 import { getValidThemeAndMode } from "./theme";
 import { getCookieValuesByKeys, setCookies } from "../cookies/cookies.server";
 import { THEME_NAME_COOKIE, THEME_MODE_COOKIE } from "@/constants/cookies";

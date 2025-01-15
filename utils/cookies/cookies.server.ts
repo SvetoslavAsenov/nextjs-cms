@@ -1,3 +1,5 @@
+"use server";
+
 import { cookies as serverCookies } from "next/headers";
 
 type ReturnedCookieValue = string | null;
