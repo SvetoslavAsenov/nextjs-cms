@@ -22,7 +22,7 @@ export async function POST(request: Request) {
 
     await setCookie(REGISTRATION_INVITE_TOKEN_COOKIE, token, {
       httpOnly: true,
-      sameSite: "strict",
+      sameSite: "lax",
       path: "/",
       maxAge: 3600,
     });
