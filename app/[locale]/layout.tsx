@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { SupportedLocale } from "@/types/locales";
 import { Geist, Geist_Mono } from "next/font/google";
+import { getCurrentThemeAndMode } from "@/utils/theme/theme.server";
 import "@/assets/styles/globals.css";
 
 const geistSans = Geist({
@@ -26,9 +27,10 @@ export default async function RootLayout({
   params: { locale: SupportedLocale };
 }>) {
   const { locale } = await params;
+  const { theme, mode } = await getCurrentThemeAndMode();
 
   return (
-    <html lang={locale}>
+    <html lang={locale} className={`${theme} ${mode}`}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
