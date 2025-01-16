@@ -1,4 +1,5 @@
-import { defaultLocale } from "../config/locales";
+import { defaultLocale, supportedLocales } from "../config/locales";
+
 import type { SupportedLocale } from "@/types/locales";
 
 export const getSlugSegmentsFromUrl = (url: string): string[] => {
@@ -10,7 +11,11 @@ export const setLocaleToRelativeUrl = (
   url: string,
   locale: SupportedLocale
 ): string => {
-  return locale !== defaultLocale
-    ? `/${locale}/${url.replace(/^\/+/g, "")}`
-    : url;
+  const segments = getSlugSegmentsFromUrl(url);
+  const filteredSegments = segments.filter((s) => {
+    return !supportedLocales.includes(s as SupportedLocale) && s !== "";
+  });
+
+  const newPath = filteredSegments.join("/");
+  return locale !== defaultLocale ? `/${locale}/${newPath}` : `/${newPath}`;
 };

@@ -4,5 +4,19 @@
   "the_page_does_not_exist": "The page you are looking for does not exist.",
   "page_not_found": "404 - Page Not Found",
   "register": "Register",
-  "login": "Login"
+  "login": "Login",
+  "auth_description_login": "Sign in with your email and password or use one of the available providers.",
+  "auth_description_register": "Register with email and password or use one of the available providers.",
+  "email": "Email",
+  "password": "Password",
+  "create_password": "Create password",
+  "confirm_password": "Confirm password",
+  "forgot_password": "Forgot password?",
+  "dont_have_an_account": "Don't have an account?",
+  "already_have_an_account": "Already have an account?",
+  "or": "Or",
+  "login_with": "Login with",
+  "register_with": "Register with",
+  "google": "Google",
+  "linkedin": "Linkedin"
 }
