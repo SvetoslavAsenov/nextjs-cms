@@ -1,10 +1,10 @@
-import { notFound } from "next/navigation";
-import RegistrationInviteModel from "@/models/RegistrationInviteModel";
-import { getTranslation } from "@/utils/translations";
-import Test from "./test";
-import { redirect } from "next/navigation";
-import { setLocaleToRelativeUrl } from "@/utils/url";
+import { notFound, redirect } from "next/navigation";
 import { getValidLocale } from "@/utils/locale";
+import { setLocaleToRelativeUrl } from "@/utils/url";
+
+import RegistrationInviteModel from "@/models/RegistrationInviteModel";
+
+import AuthCard from "@/components/auth/AuthCard";
 
 export default async function Register({
   params,
@@ -30,9 +30,8 @@ export default async function Register({
   }
 
   return (
-    <div>
-      <Test token={token} />
-      <h1>{getTranslation("register", validLocale)}</h1>
+    <div className="relative flex justify-center items-center h-screen p-4">
+      <AuthCard locale={validLocale} variant="register" token={token} />
     </div>
   );
 }
