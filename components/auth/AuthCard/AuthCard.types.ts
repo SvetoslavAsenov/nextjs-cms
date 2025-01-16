@@ -28,3 +28,7 @@ export type AuthCardContentProps = {
   variant: AuthCardVariant;
   translations: AuthCardTranslations;
 };
+
+export type AuthCardFooterProps = {
+  translations: AuthCardTranslations;
+};

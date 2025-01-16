@@ -6,12 +6,12 @@ import useSetRegistrationInviteToken from "@/hooks/useSetRegistrationInviteToken
 import {
   Card,
   CardHeader,
-  CardFooter,
   CardTitle,
   CardDescription,
 } from "@/components/shadcn/ui/card";
-import AuthCardContent from "./AuthCardContent";
 import ChangeLocale from "./ChangeLocale";
+import AuthCardContent from "./AuthCardContent";
+import { AuthCardFooter } from "./AuthCardFooter";
 
 import type {
   AuthCardTranslations,
@@ -71,7 +71,7 @@ const AuthCard = ({ locale, variant, token }: AuthCardProps) => {
 
       <AuthCardContent translations={translations} variant={variant} />
 
-      <CardFooter></CardFooter>
+      <AuthCardFooter translations={translations} />
     </Card>
   );
 };

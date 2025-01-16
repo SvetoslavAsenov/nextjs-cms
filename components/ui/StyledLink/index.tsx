@@ -1,19 +1,20 @@
 import Link from "next/link";
 
-interface StyledLinkProps {
+interface StyledLinkProps
+  extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string;
-  children: React.ReactNode;
-  className?: string;
 }
 
 const StyledLink: React.FC<StyledLinkProps> = ({
   href,
   children,
   className = "",
+  ...rest
 }) => (
   <Link
     href={href}
     className={`self-center text-primary hover:underline ${className}`}
+    {...rest}
   >
     {children}
   </Link>

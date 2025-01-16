@@ -10,6 +10,12 @@ interface TogglePasswordInputProps {
   buttonProps?: React.ButtonHTMLAttributes<HTMLButtonElement>;
 }
 
+const iconsStyle = {
+  height: "100%",
+  width: "100%",
+  color: "hsl(var(--muted-foreground))",
+};
+
 const TogglePasswordInput = ({
   inputProps,
   buttonProps,
@@ -32,10 +38,14 @@ const TogglePasswordInput = ({
         variant="ghost"
         size="icon"
         onClick={togglePasswordVisibility}
-        className="absolute inset-y-0 top-0 right-0 flex items-center px-2 hover:bg-transparent"
+        className="absolute inset-y-0 top-0 right-0 flex items-center px-2 hover:bg-transparent h-full"
         {...buttonProps}
       >
-        {showPassword ? <EyeOffIcon size={16} /> : <EyeIcon size={16} />}
+        {showPassword ? (
+          <EyeOffIcon style={iconsStyle} />
+        ) : (
+          <EyeIcon style={iconsStyle} />
+        )}
       </Button>
     </div>
   );

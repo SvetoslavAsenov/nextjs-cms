@@ -19,19 +19,25 @@ const ChangeLocale = ({ locale }: { locale: SupportedLocale }) => {
     }
   }, [isClient]);
 
-  return currentUrl ? (
-    <div className="flex flex-row-reverse gap-2">
+  return (
+    <div className="flex gap-2 justify-end">
       {supportedLocales.map((v) => {
-        return locale !== v ? (
-          <StyledLink href={setLocaleToRelativeUrl(currentUrl, v)} key={v}>
-            {LOCALE_LABELS[v]}
+        return locale !== v && currentUrl ? (
+          <StyledLink
+            href={setLocaleToRelativeUrl(currentUrl, v)}
+            key={v}
+            title={LOCALE_LABELS[v].full}
+          >
+            {LOCALE_LABELS[v].short}
           </StyledLink>
         ) : (
-          <p key={v}>{LOCALE_LABELS[v]}</p>
+          <p key={v} className="text-muted-foreground">
+            {LOCALE_LABELS[v].short}
+          </p>
         );
       })}
     </div>
-  ) : null;
+  );
 };
 
 export default ChangeLocale;
