@@ -1,44 +1,57 @@
 "use client";
 
-// import { signIn } from "next-auth/react";
+import { useActionState } from "react";
 import { CardContent } from "@/components/shadcn/ui/card";
-import { Input } from "@/components/shadcn/ui/input";
-import TogglePasswordInput from "@/components/ui/TogglePasswordInput";
 import { Button } from "@/components/shadcn/ui/button";
 import StyledLink from "@/components/ui/StyledLink";
+import InputGroup from "@/components/ui/InputGroup";
+import CredentialsFormHandler from "@/actions/CredentialsFormHandler";
 
 import type { AuthCardContentProps } from "../AuthCard.types";
 
 const AuthCardContent = ({ translations, variant }: AuthCardContentProps) => {
-  const handleFormSubmit = (formData: FormData) => {
-    console.log(formData);
-    // TODO: Implement
-  };
+  const [actionState, action, isPending] = useActionState(
+    CredentialsFormHandler,
+    null
+  );
 
   return (
     <CardContent>
       <div className="">
-        <form action={handleFormSubmit} className="gap-4 flex flex-col">
-          <Input placeholder={translations.email} className="h-12" />
-          <TogglePasswordInput
-            inputProps={{
-              placeholder: translations.passwordInput,
-              className: "h-12",
-            }}
+        <form action={action} className="gap-4 flex flex-col">
+          <InputGroup
+            name="email"
+            id="email"
+            placeholder={translations.email}
+            className="h-12"
+            disabled={isPending}
+            defaultValue={actionState?.email}
           />
+
+          <InputGroup
+            placeholder={translations.passwordInput}
+            className="h-12"
+            name="password"
+            disabled={isPending}
+            defaultValue={actionState?.password}
+            type="password"
+          />
+
           {variant === "register" ? (
-            <TogglePasswordInput
-              inputProps={{
-                placeholder: translations.confirmPassword,
-                className: "h-12",
-              }}
+            <InputGroup
+              placeholder={translations.confirmPassword}
+              className="h-12"
+              name="confirmPassword"
+              disabled={isPending}
+              defaultValue={actionState?.confirmPassword}
+              type="password"
             />
           ) : (
             <StyledLink href="/forgot-password" className="ml-2">
               {translations.forgotPassword}
             </StyledLink>
           )}
-          <Button type="submit" className="text-base h-12">
+          <Button type="submit" className="text-base h-12" disabled={isPending}>
             {translations.buttonLabel}
           </Button>
           {variant === "register" && (

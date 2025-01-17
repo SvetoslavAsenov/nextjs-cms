@@ -5,10 +5,9 @@ import { Input } from "@/components/shadcn/ui/input";
 import { Button } from "@/components/shadcn/ui/button";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 
-interface TogglePasswordInputProps {
-  inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+type TogglePasswordInputProps = {
   buttonProps?: React.ButtonHTMLAttributes<HTMLButtonElement>;
-}
+} & React.InputHTMLAttributes<HTMLInputElement>;
 
 const iconsStyle = {
   height: "100%",
@@ -17,21 +16,22 @@ const iconsStyle = {
 };
 
 const TogglePasswordInput = ({
-  inputProps,
   buttonProps,
+  ...rest
 }: TogglePasswordInputProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
+    console.log("-------------------");
     setShowPassword((prev) => !prev);
   };
 
   return (
     <div className="relative w-100">
       <Input
-        type={showPassword ? "text" : "password"}
         className="pr-8"
-        {...inputProps}
+        {...rest}
+        type={showPassword ? "text" : "password"}
       />
       <Button
         type="button"
