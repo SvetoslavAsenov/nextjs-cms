@@ -1,14 +1,16 @@
 "use client";
 
 import { signIn } from "next-auth/react";
-import { CardFooter } from "@/components/shadcn/ui/card";
 import { Button } from "@/components/shadcn/ui/button";
 import Image from "next/image";
 import { OAUTH_PROVIDERS } from "@/constants/oauthProviders";
 
-import type { AuthCardFooterProps } from "../AuthCard.types";
+import type { ProviderButtonsProps } from "../../AuthCard.types";
 
-export const AuthCardFooter = ({ translations }: AuthCardFooterProps) => {
+export const ProviderButtons = ({
+  translations,
+  isPending,
+}: ProviderButtonsProps) => {
   const btnHandler = (ev: React.MouseEvent<HTMLButtonElement>) => {
     const target = ev.target as HTMLButtonElement;
     const provider = target.getAttribute("data-provider");
@@ -18,7 +20,7 @@ export const AuthCardFooter = ({ translations }: AuthCardFooterProps) => {
   };
 
   return (
-    <CardFooter className="flex flex-col">
+    <div className="flex flex-col">
       <div className="relative w-full flex flex-col justify-center items-center mb-6">
         <hr className="w-full self-center absolute" />
         <p className="bg-background px-4 text-muted-foreground z-10">
@@ -34,6 +36,7 @@ export const AuthCardFooter = ({ translations }: AuthCardFooterProps) => {
               className="text-base h-12"
               onClick={btnHandler}
               key={provider.name}
+              disabled={isPending}
             >
               <Image src={provider.icon} alt={provider.name} className="w-4" />
               {translations.providerButtonLabel} {translations.google}
@@ -41,6 +44,6 @@ export const AuthCardFooter = ({ translations }: AuthCardFooterProps) => {
           );
         })}
       </div>
-    </CardFooter>
+    </div>
   );
 };

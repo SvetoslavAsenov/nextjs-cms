@@ -11,7 +11,6 @@ import {
 } from "@/components/shadcn/ui/card";
 import ChangeLocale from "./ChangeLocale";
 import AuthCardContent from "./AuthCardContent";
-import { AuthCardFooter } from "./AuthCardFooter";
 
 import type {
   AuthCardTranslations,
@@ -70,8 +69,6 @@ const AuthCard = ({ locale, variant, token }: AuthCardProps) => {
       </CardHeader>
 
       <AuthCardContent translations={translations} variant={variant} />
-
-      <AuthCardFooter translations={translations} />
     </Card>
   );
 };

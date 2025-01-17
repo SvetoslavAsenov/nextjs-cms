@@ -5,9 +5,13 @@ import { CardContent } from "@/components/shadcn/ui/card";
 import { Button } from "@/components/shadcn/ui/button";
 import StyledLink from "@/components/ui/StyledLink";
 import InputGroup from "@/components/ui/InputGroup";
+import { ProviderButtons } from "./ProviderButtons";
 import CredentialsFormHandler from "@/actions/CredentialsFormHandler";
 
 import type { AuthCardContentProps } from "../AuthCard.types";
+
+const LOGIN_ROUTE = "/login";
+const FORGOT_PASSWORD_ROUTE = "/forgot-passwprd";
 
 const AuthCardContent = ({ translations, variant }: AuthCardContentProps) => {
   const [actionState, action, isPending] = useActionState(
@@ -47,7 +51,7 @@ const AuthCardContent = ({ translations, variant }: AuthCardContentProps) => {
               type="password"
             />
           ) : (
-            <StyledLink href="/forgot-password" className="ml-2">
+            <StyledLink href={FORGOT_PASSWORD_ROUTE} className="ml-2">
               {translations.forgotPassword}
             </StyledLink>
           )}
@@ -57,13 +61,14 @@ const AuthCardContent = ({ translations, variant }: AuthCardContentProps) => {
           {variant === "register" && (
             <p className="text-center">
               {translations.underButtonLabel}
-              <StyledLink href="/login" className="ml-2">
+              <StyledLink href={LOGIN_ROUTE} className="ml-2">
                 {translations.underButtonLink}
               </StyledLink>
             </p>
           )}
         </form>
       </div>
+      <ProviderButtons translations={translations} isPending={isPending} />
     </CardContent>
   );
 };

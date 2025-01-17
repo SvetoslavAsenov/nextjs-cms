@@ -29,6 +29,7 @@ export type AuthCardContentProps = {
   translations: AuthCardTranslations;
 };
 
-export type AuthCardFooterProps = {
+export type ProviderButtonsProps = {
   translations: AuthCardTranslations;
+  isPending: boolean;
 };

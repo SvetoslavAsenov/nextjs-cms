@@ -22,7 +22,6 @@ const TogglePasswordInput = ({
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
-    console.log("-------------------");
     setShowPassword((prev) => !prev);
   };
 
