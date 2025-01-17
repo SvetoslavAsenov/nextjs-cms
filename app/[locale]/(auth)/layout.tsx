@@ -7,10 +7,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <Image
         src={bgImage}
         alt="Background"
-        layout="fill"
-        objectFit="cover"
+        fill
         quality={100}
-        className="absolute top-0 left-0"
+        className="absolute top-0 left-0 object-cover"
       />
       {children}
     </div>
