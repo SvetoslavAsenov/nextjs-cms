@@ -14,6 +14,11 @@ export interface AuthCardTranslations {
   providerButtonLabel: string;
   google: string;
   linkedin: string;
+  emailTaken: string;
+  invalidPasswordFormat: string;
+  invalidEmail: string;
+  passwordsDoesNotMatch: string;
+  passwordRequirements: string;
 }
 
 export type AuthCardVariant = "login" | "register";

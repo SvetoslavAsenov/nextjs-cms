@@ -20,7 +20,7 @@ export const ProviderButtons = ({
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col mt-6">
       <div className="relative w-full flex flex-col justify-center items-center mb-6">
         <hr className="w-full self-center absolute" />
         <p className="bg-background px-4 text-muted-foreground z-10">

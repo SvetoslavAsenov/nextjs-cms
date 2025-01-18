@@ -18,5 +18,10 @@
   "login_with": "Вход с",
   "register_with": "Регистрация с",
   "google": "Google",
-  "linkedin": "LinkedIn"
+  "linkedin": "LinkedIn",
+  "email_taken": "Потребител с такъв email вече съществува.",
+  "invalid_email": "Невалиден email",
+  "invalid_password_format": "Невалиден формат на паролата",
+  "passwords_does_not_match": "Паролите не съвпадат",
+  "password_requirements": "Паролата трябва да е поне 8 символа и да съдържа главна буква, малка буква, цифра и специален знак (!@#$%^&*)."
 }

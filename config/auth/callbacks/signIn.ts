@@ -15,9 +15,7 @@ const signIn = async ({ user }: { user: UserParam }) => {
 
   // Check if registration with this email exist
   const userModel = new UserModel();
-  const existingUser = await userModel.findUnique({
-    where: { email: user.email },
-  });
+  const existingUser = await userModel.isExistingUser(user.email);
 
   if (!!existingUser) {
     return true;
@@ -27,7 +25,6 @@ const signIn = async ({ user }: { user: UserParam }) => {
     if (typeof token !== "string") {
       return false;
     }
-
     // Check if the registration invite token is valid
     const registrationInviteModel = new RegistrationInviteModel();
     const isValid = await registrationInviteModel.validateToken(token);

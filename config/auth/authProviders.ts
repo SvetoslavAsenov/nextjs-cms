@@ -1,4 +1,5 @@
 import Credentials from "next-auth/providers/credentials";
+import credentialsConfig from "./providers/credentialsConfig";
 import Google from "next-auth/providers/google";
 import Linkedin from "next-auth/providers/linkedin";
 
@@ -7,20 +8,7 @@ import type { Provider } from "next-auth/providers";
 const CREDENTIALS_PROVIDER_NAME = "credentials";
 
 export const providersConfig: Provider[] = [
-  Credentials({
-    credentials: {
-      username: { label: "Username", type: "text" },
-      password: { label: "Password", type: "password" },
-    },
-    authorize(c) {
-      if (c.password !== "password") return null;
-      return {
-        id: "test",
-        name: "Test User",
-        email: "test@example.com",
-      };
-    },
-  }),
+  Credentials(credentialsConfig),
   Google,
   Linkedin,
 ];

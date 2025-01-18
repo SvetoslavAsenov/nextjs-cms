@@ -4,17 +4,17 @@ import bcrypt from "bcryptjs";
 
 const SALT_ROUNDS = 10;
 
-export const applyPepper = (target: string): string => {
+export const applyPepper = async (target: string): Promise<string> => {
   return target + process.env.PEPPER_SECRET;
 };
 
-export const hashAString = (target: string): string => {
-  return bcrypt.hashSync(target, SALT_ROUNDS);
+export const hashAString = async (target: string): Promise<string> => {
+  return await bcrypt.hash(target, SALT_ROUNDS);
 };
 
-export const compareStringWithHash = (
+export const compareStringWithHash = async (
   candidate: string,
   digest: string
-): boolean => {
-  return bcrypt.compareSync(candidate, digest);
+): Promise<boolean> => {
+  return await bcrypt.compare(candidate, digest);
 };

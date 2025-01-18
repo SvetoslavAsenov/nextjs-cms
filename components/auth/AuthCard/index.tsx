@@ -38,6 +38,11 @@ const getTranslations = (
     providerButtonLabel: variant === "login" ? "login_with" : "register_with",
     google: "google",
     linkedin: "linkedin",
+    emailTaken: "email_taken",
+    invalidPasswordFormat: "invalid_password_format",
+    invalidEmail: "invalid_email",
+    passwordsDoesNotMatch: "passwords_does_not_match",
+    passwordRequirements: "password_requirements",
   };
 
   const res: AuthCardTranslations = {} as AuthCardTranslations;
