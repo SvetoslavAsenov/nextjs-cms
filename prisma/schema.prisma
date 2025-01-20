@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 String               @id @default(cuid())
+  name               String?
+  email              String               @unique
+  password           String?
+  emailVerified      DateTime?
+  image              String?
+  roleId             String?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  accounts           Account[]
+  Authenticator      Authenticator[]
+  RegistrationInvite RegistrationInvite[]
+  sessions           Session[]
+  Role               Role?                @relation(fields: [roleId], references: [id])
+}
+
+model Account {
+  userId            String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  type              String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, credentialID])
+}
+
+model Role {
+  id                  String               @id @default(cuid())
+  name                Json?
+  hierarchy           Int                  @unique @default(0)
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  RegistrationInvites RegistrationInvite[]
+  Users               User[]
+}
+
+model RegistrationInvite {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  email     String?   @unique
+  validitTo DateTime
+  usedAt    DateTime?
+  userId    String?
+  roleId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  role      Role     @relation(fields: [roleId], references: [id])
+  user      User?    @relation(fields: [userId], references: [id])
+}

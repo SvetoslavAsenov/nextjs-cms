@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
+import { rewrites } from "./config/rewrites";
+// import { pages } from "./config/pages";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  rewrites,
+  // pages,
 };
 
 export default nextConfig;
