@@ -1,6 +1,8 @@
 "use client";
 
 import { useActionState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { getTranslation } from "@/utils/translations";
 import { CardContent } from "@/components/shadcn/ui/card";
 import { Button } from "@/components/shadcn/ui/button";
 import StyledLink from "@/components/ui/StyledLink";
@@ -15,20 +17,23 @@ const LOGIN_ROUTE = "/login";
 const FORGOT_PASSWORD_ROUTE = "/forgot-password";
 
 const AuthCardContent = ({
+  locale,
   translations,
   variant,
   token,
 }: AuthCardContentProps) => {
+  const router = useRouter();
+
   const [actionState, action, isPending] = useActionState<
     ResultObjectType,
     FormData
   >(CredentialsFormHandler, { fields: {}, errors: {} });
 
   useEffect(() => {
-    if (actionState?.redirectUrl && typeof window !== "undefined") {
-      window.location.href = actionState?.redirectUrl;
+    if (actionState?.redirectUrl) {
+      router.push(actionState.redirectUrl);
     }
-  }, [actionState?.redirectUrl]);
+  }, [actionState?.redirectUrl, router]);
 
   const getError = (fieldName: string): string[] | undefined => {
     const error = actionState?.errors?.[fieldName];
@@ -39,22 +44,24 @@ const AuthCardContent = ({
     switch (fieldName) {
       case "email":
         return error === "email_taken"
-          ? [translations.emailTaken]
-          : [translations.invalidEmail];
+          ? [getTranslation("email_taken", locale)]
+          : [getTranslation("invalid_email", locale)];
 
       case "password":
-        return [
-          translations.invalidPasswordFormat,
-          translations.passwordRequirements,
-        ];
+        return variant === "register"
+          ? [
+              getTranslation("invalid_password_format", locale),
+              getTranslation("password_requirements", locale),
+            ]
+          : undefined;
 
       case "confirmPassword":
         return error === "passwords_does_not_match"
-          ? [translations.passwordsDoesNotMatch]
+          ? [getTranslation("password_does_not_match", locale)]
           : undefined;
 
       default:
-        break;
+        return [getTranslation(error, locale)];
     }
   };
 
@@ -64,13 +71,19 @@ const AuthCardContent = ({
 
   return (
     <CardContent>
-      <div className="">
+      <div>
+        {getError("general") && (
+          <p className="text-destructive text-center pb-6">
+            {getError("general")}
+          </p>
+        )}
+
         <form action={action} className="gap-4 flex flex-col">
           <input type="text" name="token" hidden={true} defaultValue={token} />
           <InputGroup
             name="email"
             id="email"
-            placeholder={translations.email}
+            placeholder={getTranslation("email", locale)}
             className="h-12"
             disabled={isPending}
             defaultValue={getFieldValue("email")}
@@ -89,7 +102,7 @@ const AuthCardContent = ({
 
           {variant === "register" ? (
             <InputGroup
-              placeholder={translations.confirmPassword}
+              placeholder={getTranslation("confirm_password", locale)}
               className="h-12"
               name="confirmPassword"
               disabled={isPending}
@@ -99,7 +112,7 @@ const AuthCardContent = ({
             />
           ) : (
             <StyledLink href={FORGOT_PASSWORD_ROUTE} className="ml-2">
-              {translations.forgotPassword}
+              {getTranslation("forgot_password", locale)}
             </StyledLink>
           )}
           <Button type="submit" className="text-base h-12" disabled={isPending}>
@@ -115,7 +128,11 @@ const AuthCardContent = ({
           )}
         </form>
       </div>
-      <ProviderButtons translations={translations} isPending={isPending} />
+      <ProviderButtons
+        translations={translations}
+        isPending={isPending}
+        locale={locale}
+      />
     </CardContent>
   );
 };

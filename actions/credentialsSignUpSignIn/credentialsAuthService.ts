@@ -7,12 +7,16 @@ import { authConfig } from "../../config/auth/auth";
 import { setCookie } from "@/utils/cookies/cookies.server";
 import { prisma } from "@/lib/prisma";
 
+type ResultObject = { success: boolean; message?: string };
+
+type CredentialsAuthService = (
+  credentials: Record<string, string | undefined>
+) => Promise<ResultObject>;
+
 const calculateExpires = (maxAge: number) =>
   new Date(Date.now() + maxAge * 1000);
 
-const credentialsAuthService = async (
-  credentials: Record<string, string | undefined>
-) => {
+const credentialsAuthService: CredentialsAuthService = async (credentials) => {
   try {
     await prisma.$transaction(async () => {
       let userRecord;
@@ -30,13 +34,11 @@ const credentialsAuthService = async (
         },
       });
 
-      const registrationInviteModel = new RegistrationInviteModel();
-
       // In case of login attempt
       if (!isRegistration) {
         // The user must exist in case of login
         if (!isRegistration && !existingUser) {
-          throw new Error("Login error: User with this email was not found");
+          throw new Error("invalid_credentials");
         }
         userRecord = existingUser;
 
@@ -46,24 +48,24 @@ const credentialsAuthService = async (
           credentials?.password as string
         );
         if (!credentialsValid) {
-          throw new Error("Login error: Invalid credentials");
+          throw new Error("invalid_credentials");
         }
       } else {
         // The user must not exist in case of registration
         if (isRegistration && existingUser) {
-          throw new Error(
-            "Registration error: User with this email already exists"
-          );
+          throw new Error("email_taken");
         }
 
         // Check if the registration invite token is valid
+        const registrationInviteModel = new RegistrationInviteModel();
         const isValid =
           credentials?.token &&
           (await registrationInviteModel.validateToken(credentials?.token));
         if (!isValid) {
-          throw new Error(
+          console.error(
             "Registration error: Invalid registration invite token"
           );
+          throw new Error("unexpected_error");
         }
 
         // Get the token record from the db
@@ -79,7 +81,8 @@ const credentialsAuthService = async (
           credentials.password as string
         );
         if (!newUser) {
-          throw new Error("Can't create a new user");
+          console.error("Can't create a new user");
+          throw new Error("unexpected_error");
         }
         userRecord = newUser;
 
@@ -104,7 +107,8 @@ const credentialsAuthService = async (
           },
         });
         if (!newAccount) {
-          throw new Error("Can't create new account");
+          console.error("Can't create new account");
+          throw new Error("unexpected_error");
         }
 
         // Update the registration invite entry in the db.
@@ -130,7 +134,8 @@ const credentialsAuthService = async (
       });
 
       if (!newSession) {
-        throw new Error("Can't create new session");
+        console.error("Can't create new session");
+        throw new Error("unexpected_error");
       }
 
       // await authConfig?.adapter?.createSession?.({
@@ -146,8 +151,16 @@ const credentialsAuthService = async (
         path: "/",
       });
     });
+
+    return {
+      success: true,
+    };
   } catch (error) {
-    console.error(error);
+    const err = error as Error;
+    return {
+      success: false,
+      message: err?.message,
+    };
   }
 };
 

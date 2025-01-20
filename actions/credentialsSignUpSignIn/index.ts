@@ -1,5 +1,4 @@
 "use server";
-import UserModel from "@/models/UserModel";
 import {
   credentialsLoginSchema,
   credentialsRegisterSchema,
@@ -46,6 +45,7 @@ const CredentialsFormHandler: CredentialsFormHandlerType = async (
   // In case of validation errors fill the errors to the result object
   if (!validationResult.success) {
     for (const issue of validationResult.error.issues) {
+      console.log("-".repeat(100), issue);
       // If there is an error with the token
       // we will redirect the user.
       if (issue?.path?.[0] === "token") {
@@ -60,19 +60,17 @@ const CredentialsFormHandler: CredentialsFormHandlerType = async (
     return resultObject;
   }
 
-  const userModel = new UserModel();
-  const existingUser = await userModel.findUnique({
-    where: {
-      email: formData.get("email") as string,
-    },
-  });
+  const authResult = await credentialsAuthService(resultObject.fields);
+  if (!authResult.success && authResult.message) {
+    if (authResult.message === "email_taken") {
+      resultObject.errors.email = "email_taken";
+    } else {
+      resultObject.errors.general = authResult.message;
+    }
 
-  if (existingUser) {
-    resultObject.errors.email = "email_taken";
     return resultObject;
   }
 
-  await credentialsAuthService(resultObject.fields);
   resultObject.redirectUrl = REDIRECT_URL;
   return resultObject;
 };

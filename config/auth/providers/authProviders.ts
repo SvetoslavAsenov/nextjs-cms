@@ -16,8 +16,12 @@ export const providersConfig: Provider[] = [
       return null;
     },
   }),
-  Google,
-  Linkedin,
+  Google({
+    allowDangerousEmailAccountLinking: true,
+  }),
+  Linkedin({
+    allowDangerousEmailAccountLinking: true,
+  }),
 ];
 
 export const providersMap = providersConfig

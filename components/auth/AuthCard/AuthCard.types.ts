@@ -1,24 +1,13 @@
 import type { SupportedLocale } from "@/types/locales";
 
-export interface AuthCardTranslations {
+export interface AuthCardVariantTranslations {
   title: string;
   description: string;
-  email: string;
   passwordInput: string;
-  confirmPassword: string;
-  forgotPassword: string;
   buttonLabel: string;
   underButtonLabel: string;
   underButtonLink: string;
-  or: string;
   providerButtonLabel: string;
-  google: string;
-  linkedin: string;
-  emailTaken: string;
-  invalidPasswordFormat: string;
-  invalidEmail: string;
-  passwordsDoesNotMatch: string;
-  passwordRequirements: string;
 }
 
 export type AuthCardVariant = "login" | "register";
@@ -30,12 +19,14 @@ export type AuthCardProps = {
 };
 
 export type AuthCardContentProps = {
+  locale: SupportedLocale;
   variant: AuthCardVariant;
-  translations: AuthCardTranslations;
+  translations: AuthCardVariantTranslations;
   token?: string;
 };
 
 export type ProviderButtonsProps = {
-  translations: AuthCardTranslations;
+  locale: SupportedLocale;
+  translations: AuthCardVariantTranslations;
   isPending: boolean;
 };
