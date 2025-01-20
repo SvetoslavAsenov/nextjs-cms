@@ -32,6 +32,7 @@ export type AuthCardProps = {
 export type AuthCardContentProps = {
   variant: AuthCardVariant;
   translations: AuthCardTranslations;
+  token?: string;
 };
 
 export type ProviderButtonsProps = {

@@ -1,13 +1,12 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState } from "react";
 import { CardContent } from "@/components/shadcn/ui/card";
 import { Button } from "@/components/shadcn/ui/button";
 import StyledLink from "@/components/ui/StyledLink";
 import InputGroup from "@/components/ui/InputGroup";
 import { ProviderButtons } from "./ProviderButtons";
-import CredentialsFormHandler from "@/actions/CredentialsFormHandler";
-import { signIn } from "next-auth/react";
+import CredentialsFormHandler from "@/actions/credentialsSignUpSignIn";
 
 import type { AuthCardContentProps } from "../AuthCard.types";
 import type {
@@ -18,7 +17,11 @@ import type {
 const LOGIN_ROUTE = "/login";
 const FORGOT_PASSWORD_ROUTE = "/forgot-password";
 
-const AuthCardContent = ({ translations, variant }: AuthCardContentProps) => {
+const AuthCardContent = ({
+  translations,
+  variant,
+  token,
+}: AuthCardContentProps) => {
   const [actionState, action, isPending] = useActionState<
     ResultObjectType,
     FormData
@@ -54,31 +57,11 @@ const AuthCardContent = ({ translations, variant }: AuthCardContentProps) => {
     }
   };
 
-  useEffect(() => {
-    if (!actionState || !Object.entries(actionState)?.length) {
-      return;
-    }
-
-    const callSignIn = async () => {
-      await signIn("credentials", {
-        email: actionState.value,
-        password: actionState.password,
-      });
-    };
-
-    const hasErrors = Object.values(actionState).find((v) => {
-      return v?.error;
-    });
-
-    if (!hasErrors) {
-      callSignIn();
-    }
-  }, [actionState]);
-
   return (
     <CardContent>
       <div className="">
         <form action={action} className="gap-4 flex flex-col">
+          <input type="text" name="token" hidden={true} defaultValue={token} />
           <InputGroup
             name="email"
             id="email"

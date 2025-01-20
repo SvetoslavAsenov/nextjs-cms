@@ -73,7 +73,11 @@ const AuthCard = ({ locale, variant, token }: AuthCardProps) => {
         </CardDescription>
       </CardHeader>
 
-      <AuthCardContent translations={translations} variant={variant} />
+      <AuthCardContent
+        translations={translations}
+        variant={variant}
+        token={token}
+      />
     </Card>
   );
 };

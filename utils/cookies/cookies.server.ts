@@ -2,7 +2,7 @@
 
 import { cookies as serverCookies } from "next/headers";
 
-type ReturnedCookieValue = string | null;
+export type ReturnedCookieValue = string | null;
 type CookieValuesMap<T extends readonly string[]> = {
   [K in T[number]]: ReturnedCookieValue;
 };
@@ -46,9 +46,9 @@ export const setCookies = async (
   const cookies = await serverCookies();
   const defaultOptions = {
     httpOnly: true,
-    sameSite: "strict" as const, // Типът трябва да бъде строго зададен
+    sameSite: "strict" as const,
     secure: process.env.NODE_ENV === "production",
-    maxAge: 3600, // 1 час по подразбиране
+    maxAge: 3600,
     path: "/",
   };
 

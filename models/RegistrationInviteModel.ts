@@ -29,14 +29,28 @@ export default class RegistrationInviteModel extends BaseModel<
     return true;
   }
 
-  public setEmailAndUsedAtByToken = async (email: string, token: string) => {
+  public setTokenAsUsed = async (
+    token: string,
+    data: Prisma.RegistrationInviteUpdateInput & { userId?: string }
+  ) => {
+    const { userId, ...restData } = data;
+
     await this.update({
       where: {
         token,
       },
       data: {
-        email,
         usedAt: new Date(),
+        ...(userId
+          ? {
+              user: {
+                connect: {
+                  id: userId,
+                },
+              },
+            }
+          : {}),
+        ...restData,
       },
     });
   };

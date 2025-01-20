@@ -3,31 +3,31 @@ import { z } from "zod";
 const MIN_PASSWORD_LENGTH = 8;
 const MAX_PASSWORD_LENGTH = 50;
 
-export const credentialsLoginSchema = z.object({
+export const credentialsRules = {
   email: z.string().email({ message: "Invalid email." }),
-  password: z.string().min(MIN_PASSWORD_LENGTH).max(MAX_PASSWORD_LENGTH),
-});
+  password: z
+    .string()
+    .min(MIN_PASSWORD_LENGTH)
+    .max(MAX_PASSWORD_LENGTH)
+    .refine((password) => /[A-ZА-З]/.test(password), {
+      message: "invalid_password_format",
+    })
+    .refine((password) => /[a-zа-з]/.test(password), {
+      message: "invalid_password_format",
+    })
+    .refine((password) => /[0-9]/.test(password), {
+      message: "invalid_password_format",
+    })
+    .refine((password) => /[!@#$%^&*]/.test(password), {
+      message: "invalid_password_format",
+    }),
+};
 
 export const credentialsRegisterSchema = z
   .object({
-    email: z.string().email({ message: "Invalid email." }),
-    password: z
-      .string()
-      .min(MIN_PASSWORD_LENGTH)
-      .max(MAX_PASSWORD_LENGTH)
-      .refine((password) => /[A-ZА-З]/.test(password), {
-        message: "invalid_password_format",
-      })
-      .refine((password) => /[a-zа-з]/.test(password), {
-        message: "invalid_password_format",
-      })
-      .refine((password) => /[0-9]/.test(password), {
-        message: "invalid_password_format",
-      })
-      .refine((password) => /[!@#$%^&*]/.test(password), {
-        message: "invalid_password_format",
-      }),
+    ...credentialsRules,
     confirmPassword: z.string().min(1),
+    token: z.string().length(64),
   })
   .refine(
     (values) => {
@@ -38,3 +38,10 @@ export const credentialsRegisterSchema = z
       path: ["confirmPassword"],
     }
   );
+
+export const credentialsLoginSchema = z.object({
+  email: z.string().email({ message: "Invalid email." }),
+  password: z.string().min(MIN_PASSWORD_LENGTH).max(MAX_PASSWORD_LENGTH),
+});
+
+export const credentialsCreateUserSchema = z.object(credentialsRules);

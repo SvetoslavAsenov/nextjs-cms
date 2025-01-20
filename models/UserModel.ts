@@ -1,7 +1,12 @@
 import { Prisma, User } from "@prisma/client";
 import BaseModel from "./BaseModel";
 import { prisma } from "@/lib/prisma";
-import { compareStringWithHash, applyPepper } from "@/utils/auth.server";
+import {
+  compareStringWithHash,
+  applyPepper,
+  hashAString,
+} from "@/utils/auth.server";
+import { credentialsCreateUserSchema } from "@/schemas/auth";
 
 export default class UserModel extends BaseModel<
   Prisma.UserCreateArgs,
@@ -37,7 +42,7 @@ export default class UserModel extends BaseModel<
     });
   };
 
-  public validatePassword = async (
+  public validateCredentials = async (
     email: string,
     password: string
   ): Promise<boolean> => {
@@ -51,5 +56,30 @@ export default class UserModel extends BaseModel<
     return (
       !!user?.password && compareStringWithHash(withPepper, user?.password)
     );
+  };
+
+  public createNewUser = async (
+    email: string,
+    password: string
+  ): Promise<User | null> => {
+    const validationResult = credentialsCreateUserSchema.safeParse({
+      email,
+      password,
+    });
+
+    if (validationResult.success) {
+      const withPepper = await applyPepper(password);
+      const hashedPass = await hashAString(withPepper);
+      const user = await this.create({
+        data: {
+          email,
+          password: hashedPass,
+        },
+      });
+
+      return user;
+    }
+
+    return null;
   };
 }
