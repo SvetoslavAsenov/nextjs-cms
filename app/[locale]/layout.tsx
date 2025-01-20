@@ -1,17 +1,7 @@
 import type { Metadata } from "next";
 import type { SupportedLocale } from "@/types/locales";
-import { Geist, Geist_Mono } from "next/font/google";
+import { getThemeClasses } from "@/utils/theme/theme.server";
 import "@/assets/styles/globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -26,14 +16,11 @@ export default async function RootLayout({
   params: { locale: SupportedLocale };
 }>) {
   const { locale } = await params;
+  const themeClasses = await getThemeClasses();
 
   return (
-    <html lang={locale}>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
+    <html lang={locale} className={themeClasses}>
+      <body className={"antialiased"}>{children}</body>
     </html>
   );
 }
