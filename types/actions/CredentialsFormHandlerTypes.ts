@@ -3,7 +3,7 @@ export type ResultObjectItemType = Record<string, string | undefined>;
 export type ResultObjectType = {
   fields: ResultObjectItemType;
   errors: ResultObjectItemType;
-  redirectUrl: string | null;
+  redirectUrl?: string | null;
 };
 
 export type CredentialsFormHandlerType = (

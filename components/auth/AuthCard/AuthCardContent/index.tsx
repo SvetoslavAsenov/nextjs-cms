@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { CardContent } from "@/components/shadcn/ui/card";
 import { Button } from "@/components/shadcn/ui/button";
 import StyledLink from "@/components/ui/StyledLink";
@@ -9,10 +9,7 @@ import { ProviderButtons } from "./ProviderButtons";
 import CredentialsFormHandler from "@/actions/credentialsSignUpSignIn";
 
 import type { AuthCardContentProps } from "../AuthCard.types";
-import type {
-  ResultObjectType,
-  ResultObjectItemType,
-} from "@/types/actions/CredentialsFormHandlerTypes";
+import type { ResultObjectType } from "@/types/actions/CredentialsFormHandlerTypes";
 
 const LOGIN_ROUTE = "/login";
 const FORGOT_PASSWORD_ROUTE = "/forgot-password";
@@ -25,19 +22,23 @@ const AuthCardContent = ({
   const [actionState, action, isPending] = useActionState<
     ResultObjectType,
     FormData
-  >(CredentialsFormHandler, {});
+  >(CredentialsFormHandler, { fields: {}, errors: {} });
 
-  const getError = (
-    fieldName: string,
-    item: ResultObjectItemType
-  ): string[] | undefined => {
-    if (!item?.error || isPending) {
+  useEffect(() => {
+    if (actionState?.redirectUrl && typeof window !== "undefined") {
+      window.location.href = actionState?.redirectUrl;
+    }
+  }, [actionState?.redirectUrl]);
+
+  const getError = (fieldName: string): string[] | undefined => {
+    const error = actionState?.errors?.[fieldName];
+    if (!error || isPending) {
       return undefined;
     }
 
     switch (fieldName) {
       case "email":
-        return item.error === "email_taken"
+        return error === "email_taken"
           ? [translations.emailTaken]
           : [translations.invalidEmail];
 
@@ -48,13 +49,17 @@ const AuthCardContent = ({
         ];
 
       case "confirmPassword":
-        return item.error === "passwords_does_not_match"
+        return error === "passwords_does_not_match"
           ? [translations.passwordsDoesNotMatch]
           : undefined;
 
       default:
         break;
     }
+  };
+
+  const getFieldValue = (fieldName: string): string | undefined => {
+    return actionState?.fields?.[fieldName];
   };
 
   return (
@@ -68,8 +73,8 @@ const AuthCardContent = ({
             placeholder={translations.email}
             className="h-12"
             disabled={isPending}
-            defaultValue={actionState?.email?.value}
-            errors={getError("email", actionState.email)}
+            defaultValue={getFieldValue("email")}
+            errors={getError("email")}
           />
 
           <InputGroup
@@ -77,9 +82,9 @@ const AuthCardContent = ({
             className="h-12"
             name="password"
             disabled={isPending}
-            defaultValue={actionState?.password?.value}
+            defaultValue={getFieldValue("password")}
             type="password"
-            errors={getError("password", actionState.password)}
+            errors={getError("password")}
           />
 
           {variant === "register" ? (
@@ -88,9 +93,9 @@ const AuthCardContent = ({
               className="h-12"
               name="confirmPassword"
               disabled={isPending}
-              defaultValue={actionState?.confirmPassword?.value}
+              defaultValue={getFieldValue("confirmPassword")}
               type="password"
-              errors={getError("confirmPassword", actionState.confirmPassword)}
+              errors={getError("confirmPassword")}
             />
           ) : (
             <StyledLink href={FORGOT_PASSWORD_ROUTE} className="ml-2">
