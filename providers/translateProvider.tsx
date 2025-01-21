@@ -1,3 +1,5 @@
+"use client";
+
 import React, { createContext } from "react";
 import { useLocale } from "@/hooks/useLocale";
 import { getTranslation } from "@/utils/translations";
