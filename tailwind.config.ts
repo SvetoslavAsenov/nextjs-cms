@@ -51,6 +51,12 @@ export default {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        // Custom
+        "consistent-dark": {
+          DEFAULT: "hsl(var(--consistent-dark))",
+          foreground: "hsl(var(--consistent-dark))",
+        },
+        "consistent-light": "hsl(var(--consistent-light))",
       },
       borderRadius: {
         lg: "var(--radius)",
