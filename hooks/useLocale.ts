@@ -1,9 +1,10 @@
-import { getLocaleFromUrl } from "@/utils/locale";
-import { usePathname } from "next/navigation";
+import { useContext } from "react";
+import { LocaleContext } from "@/providers/localeProvider";
 
-const useLocale = () => {
-  const pathname = usePathname();
-  return getLocaleFromUrl(pathname);
+export const useLocale = () => {
+  const context = useContext(LocaleContext);
+  if (!context) {
+    throw new Error("useLocale must be used within a LocaleProvider");
+  }
+  return context;
 };
-
-export default useLocale;
