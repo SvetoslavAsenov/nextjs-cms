@@ -5,7 +5,11 @@ export default function Test() {
   const { user, logout } = useAuth();
   return (
     <>
-      <p onClick={logout}>{user?.email}</p>
+      <p onClick={logout} className="cursor-pointer">
+        {user?.email}
+        <br />
+        {user?.roleId}
+      </p>
       <p>Test</p>
     </>
   );

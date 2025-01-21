@@ -4,9 +4,7 @@ import LocaleProvider from "@/components/providers/LocaleProvider";
 import TranslateProvider from "@/components/providers/TranslateProvider";
 import AuthProvider from "@/components/providers/AuthProvider";
 import { auth } from "@/lib/auth";
-import UserModel from "@/models/UserModel";
-
-import type { AuthProviderUser } from "@/providers/authProvider";
+import type { User } from "@prisma/client";
 
 type AppLayoutProps = {
   children: React.ReactNode;
@@ -19,22 +17,8 @@ export default async function AppLayout({ children, params }: AppLayoutProps) {
   const authResult = await auth();
 
   if (authResult?.user?.email) {
-    user = {
-      email: authResult?.user?.email,
-      name: authResult?.user?.name,
-      image: authResult?.user?.image,
-    } as AuthProviderUser;
-
-    const userModel = new UserModel();
-    const loggedUser = await userModel.findUnique({
-      where: {
-        email: user.email,
-      },
-    });
-
-    if (loggedUser?.roleId) {
-      user.roleId = loggedUser.roleId;
-    }
+    const { id, email, name, image, roleId } = authResult?.user as User;
+    user = { id, email, name, image, roleId };
   }
 
   return (

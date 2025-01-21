@@ -1,7 +1,7 @@
 import UserModel from "@/models/UserModel";
 import RegistrationInviteModel from "@/models/RegistrationInviteModel";
 
-import type { SignInWithTokenParams, SignInReturnType } from "./signIn";
+import type { SignInWithTokenParams, SignInReturnType } from ".";
 
 const oAuthSignIn = async ({
   user,

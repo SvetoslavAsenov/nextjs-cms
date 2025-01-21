@@ -5,11 +5,12 @@ import { signOut } from "next-auth/react";
 
 const LOGIN_URL = "/login";
 
-export type AuthProviderUser = {
-  email: string;
-  name?: string;
-  image?: string;
-  roleId?: string;
+type AuthProviderUser = {
+  id: string;
+  email: string | null;
+  name?: string | null;
+  image?: string | null;
+  roleId?: string | null;
 };
 
 type AuthContextProps = {
