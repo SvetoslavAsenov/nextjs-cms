@@ -33,7 +33,8 @@ export const compareStringWithHash: CompareStringWithHash = async (
 
 export const isLoggedIn: IsLoggedIn = async () => {
   const authResult = await auth();
-  return !!authResult?.user?.id;
+  const isLogged = !authResult?.user?.id;
+  return isLogged;
 };
 
 export const getLoggedUser: GetLoggedUser = async () => {
