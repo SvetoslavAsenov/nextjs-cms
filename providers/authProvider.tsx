@@ -3,26 +3,15 @@
 import React, { createContext } from "react";
 import { signOut } from "next-auth/react";
 
-const LOGIN_URL = "/login";
-
-type AuthProviderUser = {
-  id: string;
-  email: string | null;
-  name?: string | null;
-  image?: string | null;
-  roleId?: string | null;
-};
+import type { AuthUser, AuthProviderProps } from "@/types/auth";
 
 type AuthContextProps = {
   isLoggedIn: boolean;
-  user?: AuthProviderUser;
+  user?: AuthUser;
   logout: () => void;
 };
 
-export type AuthProviderProps = {
-  user?: AuthProviderUser;
-  children: React.ReactNode;
-};
+const LOGIN_URL = "/login";
 
 export const AuthContext = createContext<AuthContextProps | undefined>(
   undefined

@@ -3,11 +3,10 @@ import "@/assets/styles/globals.css";
 import LocaleProvider from "@/components/providers/LocaleProvider";
 import TranslateProvider from "@/components/providers/TranslateProvider";
 import AuthProvider from "@/components/providers/AuthProvider";
-import { auth } from "@/lib/auth";
 
 import type { Metadata } from "next";
 import type { SupportedLocale } from "@/types/locales";
-import type { User } from "@prisma/client";
+import { getLoggedUser } from "@/utils/auth.server";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,13 +22,7 @@ export default async function MainLayout({
 }>) {
   const { locale } = await params;
   const themeClasses = await getThemeClasses();
-  let user;
-  const authResult = await auth();
-
-  if (authResult?.user?.email) {
-    const { id, email, name, image, roleId } = authResult?.user as User;
-    user = { id, email, name, image, roleId };
-  }
+  const user = await getLoggedUser();
 
   return (
     <AuthProvider user={user}>

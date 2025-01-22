@@ -8,7 +8,7 @@ export default function Test() {
       <p onClick={logout} className="cursor-pointer">
         {user?.email}
         <br />
-        {user?.roleId}
+        {typeof user}
       </p>
       <p>Test</p>
     </>

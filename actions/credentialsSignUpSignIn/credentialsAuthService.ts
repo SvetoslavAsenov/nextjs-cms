@@ -139,12 +139,6 @@ const credentialsAuthService: CredentialsAuthService = async (credentials) => {
         throw new Error("unexpected_error");
       }
 
-      // await authConfig?.adapter?.createSession?.({
-      //   sessionToken: sessionToken,
-      //   userId: userRecord?.id as string,
-      //   expires,
-      // });
-
       setCookie(AUTH_SESSION_COOKIE, sessionToken, {
         maxAge: sessionMaxAge,
         sameSite: "lax",
