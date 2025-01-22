@@ -1,18 +1,18 @@
 "use client";
 
+import { useTranslate } from "@/hooks/useTranslate";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/shadcn/ui/button";
 import Image from "next/image";
-import { getTranslation } from "@/utils/translations";
 import { OAUTH_PROVIDERS } from "@/constants/oauthProviders";
 
 import type { ProviderButtonsProps } from "../../AuthCard.types";
 
 export const ProviderButtons = ({
-  locale,
   translations,
   isPending,
 }: ProviderButtonsProps) => {
+  const { translate } = useTranslate();
   const btnHandler = (ev: React.MouseEvent<HTMLButtonElement>) => {
     const target = ev.target as HTMLButtonElement;
     const provider = target.getAttribute("data-provider");
@@ -26,7 +26,7 @@ export const ProviderButtons = ({
       <div className="relative w-full flex flex-col justify-center items-center mb-6">
         <hr className="w-full self-center absolute" />
         <p className="bg-background px-4 text-muted-foreground z-10">
-          {getTranslation("or", locale)}
+          {translate("or")}
         </p>
       </div>
       <div className="flex flex-col w-full gap-4">
@@ -41,8 +41,7 @@ export const ProviderButtons = ({
               disabled={isPending}
             >
               <Image src={provider.icon} alt={provider.name} className="w-4" />
-              {translations.providerButtonLabel}{" "}
-              {getTranslation("google", locale)}
+              {translations.providerButtonLabel} {translate("google")}
             </Button>
           );
         })}

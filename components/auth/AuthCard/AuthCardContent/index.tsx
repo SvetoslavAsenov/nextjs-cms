@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getTranslation } from "@/utils/translations";
+import { useTranslate } from "@/hooks/useTranslate";
 import { CardContent } from "@/components/shadcn/ui/card";
 import { Button } from "@/components/shadcn/ui/button";
 import StyledLink from "@/components/ui/StyledLink";
@@ -17,11 +17,11 @@ const LOGIN_ROUTE = "/login";
 const FORGOT_PASSWORD_ROUTE = "/forgot-password";
 
 const AuthCardContent = ({
-  locale,
   translations,
   variant,
   token,
 }: AuthCardContentProps) => {
+  const { translate } = useTranslate();
   const router = useRouter();
 
   const [actionState, action, isPending] = useActionState<
@@ -44,24 +44,24 @@ const AuthCardContent = ({
     switch (fieldName) {
       case "email":
         return error === "email_taken"
-          ? [getTranslation("email_taken", locale)]
-          : [getTranslation("invalid_email", locale)];
+          ? [translate("email_taken")]
+          : [translate("invalid_email")];
 
       case "password":
         return variant === "register"
           ? [
-              getTranslation("invalid_password_format", locale),
-              getTranslation("password_requirements", locale),
+              translate("invalid_password_format"),
+              translate("password_requirements"),
             ]
           : undefined;
 
       case "confirmPassword":
         return error === "passwords_does_not_match"
-          ? [getTranslation("password_does_not_match", locale)]
+          ? [translate("password_does_not_match")]
           : undefined;
 
       default:
-        return [getTranslation(error, locale)];
+        return [translate(error)];
     }
   };
 
@@ -83,7 +83,7 @@ const AuthCardContent = ({
           <InputGroup
             name="email"
             id="email"
-            placeholder={getTranslation("email", locale)}
+            placeholder={translate("email")}
             className="h-12"
             disabled={isPending}
             defaultValue={getFieldValue("email")}
@@ -102,7 +102,7 @@ const AuthCardContent = ({
 
           {variant === "register" ? (
             <InputGroup
-              placeholder={getTranslation("confirm_password", locale)}
+              placeholder={translate("confirm_password")}
               className="h-12"
               name="confirmPassword"
               disabled={isPending}
@@ -112,7 +112,7 @@ const AuthCardContent = ({
             />
           ) : (
             <StyledLink href={FORGOT_PASSWORD_ROUTE} className="ml-2">
-              {getTranslation("forgot_password", locale)}
+              {translate("forgot_password")}
             </StyledLink>
           )}
           <Button type="submit" className="text-base h-12" disabled={isPending}>
@@ -128,11 +128,7 @@ const AuthCardContent = ({
           )}
         </form>
       </div>
-      <ProviderButtons
-        translations={translations}
-        isPending={isPending}
-        locale={locale}
-      />
+      <ProviderButtons translations={translations} isPending={isPending} />
     </CardContent>
   );
 };
