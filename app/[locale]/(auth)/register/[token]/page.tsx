@@ -5,7 +5,8 @@ import RegistrationInviteModel from "@/models/RegistrationInviteModel";
 import AuthCard from "@/components/auth/AuthCard";
 import { isLoggedIn } from "@/utils/auth.server";
 
-const REDIRECT_URL = "/";
+const HOME_URL = "/";
+const LOGIN_URL = "/login";
 
 export default async function Register({
   params,
@@ -17,13 +18,13 @@ export default async function Register({
 
   const loggedUser = await isLoggedIn();
   if (loggedUser) {
-    redirect(setLocaleToRelativeUrl(REDIRECT_URL, validLocale));
+    redirect(setLocaleToRelativeUrl(HOME_URL, validLocale));
   }
 
   const registrationInviteModel = new RegistrationInviteModel();
   const valid = await registrationInviteModel.validateToken(token);
   if (!valid) {
-    redirect(setLocaleToRelativeUrl("/login", validLocale));
+    redirect(setLocaleToRelativeUrl(LOGIN_URL, validLocale));
   }
 
   return (
