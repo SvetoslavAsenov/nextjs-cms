@@ -1,3 +1,5 @@
+import Profile from "./Profile";
+
 import { SupportedLocale } from "@/types/locales";
 
 type AppHeaderProps = {
@@ -6,9 +8,8 @@ type AppHeaderProps = {
 
 const AppHeader = ({ locale }: AppHeaderProps) => {
   return (
-    <header className="w-screen h-12 shadow">
-      <div></div>
-      <div></div>
+    <header className="w-screen h-12 shadow px-4 flex items-center bg-background">
+      <Profile />
     </header>
   );
 };
