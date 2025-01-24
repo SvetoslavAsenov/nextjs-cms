@@ -1,6 +1,6 @@
 import React from "react";
 import { Pencil, LogOut } from "lucide-react";
-import Item from "./Item";
+import { Menu, Item } from "../../Menu/index";
 import { useTranslate } from "@/hooks/useTranslate";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -13,11 +13,7 @@ const ProfileMenu = ({ shown }: ProfileMenuProps) => {
   const { logout, user } = useAuth();
 
   return (
-    <ul
-      className={`absolute shadow top-full right-0 p-1 bg-background${
-        !shown ? " hidden" : ""
-      }`}
-    >
+    <Menu shown={shown}>
       <Item
         label={translate("profile")}
         icon={Pencil}
@@ -30,7 +26,12 @@ const ProfileMenu = ({ shown }: ProfileMenuProps) => {
         variant="button"
         handler={() => logout()}
       />
-    </ul>
+      <Item label="tesst" variant="parent">
+        <Menu isChild={true}>
+          <Item label="kur" variant="link" href="/users"></Item>
+        </Menu>
+      </Item>
+    </Menu>
   );
 };
 
