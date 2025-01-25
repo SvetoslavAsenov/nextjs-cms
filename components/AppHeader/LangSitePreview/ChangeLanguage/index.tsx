@@ -18,7 +18,7 @@ const ChangeLanguage = ({ shown, toggle }: ChangeLanguageProps) => {
   return (
     <div className="relative flex h-full items-center">
       <button
-        className="block relative leading-none hover:text-primary"
+        className="block relative leading-none hover:text-primary text-foreground"
         onClick={() => toggle()}
         title={translate("language")}
       >

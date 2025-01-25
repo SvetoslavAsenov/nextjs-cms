@@ -21,7 +21,7 @@ const ProfileNav = () => {
           {user?.name || user?.email}
         </span>
         <ChevronDown
-          className={`w-4 h-4 transition-transform duration-300 ${
+          className={`w-4 h-4 transition-transform duration-300 text-foreground ${
             isOpen ? "rotate-180" : ""
           } group-hover:text-primary`}
         />
