@@ -63,6 +63,15 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      screens: {
+        xs: "480px",
+        sm: "640px", // Small screens
+        md: "768px", // Medium screens
+        lg: "1024px", // Large screens
+        xl: "1280px", // Extra large screens
+        "2xl": "1536px", // Double extra large screens
+        "3xl": "1920px", // Larger than 1920px
+      },
     },
   },
   plugins: [tailwindcssAnimate],

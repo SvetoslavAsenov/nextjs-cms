@@ -17,7 +17,7 @@ const ProfileNav = () => {
         className="leading-none m-w-[12rem] flex items-center group"
         onClick={() => setIsOpened((prev) => !prev)}
       >
-        <span className="text-ellipsis overflow-hidden mr-1 pb-0.5 text-foreground group-hover:text-primary">
+        <span className="max-w-[3rem] sm:max-w-[12.5rem] text-ellipsis overflow-hidden mr-1 pb-0.5 text-foreground group-hover:text-primary">
           {user?.name || user?.email}
         </span>
         <ChevronDown
