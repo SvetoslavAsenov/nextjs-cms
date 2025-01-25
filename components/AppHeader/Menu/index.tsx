@@ -18,8 +18,8 @@ type NotAChildMenuProps = CommonMenuProps & {
 type MenuProps = NotAChildMenuProps | ChildMenuProps;
 
 const Menu = ({ shown, isChild, children }: MenuProps) => {
-  const isChildClasses = "border-l border-l-foreground-mutted";
-  const isNotAChildClasses = `absolute shadow top-full right-0 p-1 bg-background${
+  const isChildClasses = "border-l border-l-foreground-mutted w-max";
+  const isNotAChildClasses = `absolute shadow top-full right-0 p-1 bg-background w-max${
     !shown ? " hidden" : ""
   }`;
 

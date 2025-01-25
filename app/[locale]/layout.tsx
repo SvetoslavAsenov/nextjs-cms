@@ -3,10 +3,15 @@ import "@/assets/styles/globals.css";
 import LocaleProvider from "@/components/providers/LocaleProvider";
 import TranslateProvider from "@/components/providers/TranslateProvider";
 import AuthProvider from "@/components/providers/AuthProvider";
+import SiteProvider from "@/components/providers/SiteProvider";
+import { getLoggedUser } from "@/utils/auth.server";
+import { getCookieValueByKey } from "@/utils/cookies/cookies.server";
+import { SITE_SUPPORTED_LOCALES, SITE_DEFAULT_LOCALE } from "@/config/site";
+import { SITE_LOCALE_COOKIE } from "@/constants/cookies";
 
 import type { Metadata } from "next";
 import type { SupportedLocale } from "@/types/locales";
-import { getLoggedUser } from "@/utils/auth.server";
+import { SiteSupportedLocale } from "@/types/site/locales";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,14 +28,24 @@ export default async function MainLayout({
   const { locale } = await params;
   const themeClasses = await getThemeClasses();
   const user = await getLoggedUser();
+  let siteLocale = await getCookieValueByKey(SITE_LOCALE_COOKIE);
+
+  if (
+    !siteLocale ||
+    !SITE_SUPPORTED_LOCALES.includes(siteLocale as SiteSupportedLocale)
+  ) {
+    siteLocale = SITE_DEFAULT_LOCALE;
+  }
 
   return (
     <AuthProvider user={user}>
       <LocaleProvider locale={locale}>
         <TranslateProvider>
-          <html lang={locale} className={themeClasses}>
-            <body className={"antialiased"}>{children}</body>
-          </html>
+          <SiteProvider initialSiteLocale={siteLocale as SiteSupportedLocale}>
+            <html lang={locale} className={themeClasses}>
+              <body className={"antialiased"}>{children}</body>
+            </html>
+          </SiteProvider>
         </TranslateProvider>
       </LocaleProvider>
     </AuthProvider>

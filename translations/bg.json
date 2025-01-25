@@ -27,5 +27,7 @@
   "invalid_credentials": "Грешен email или парола.",
   "unexpected_error": "Възникна неочаквана грешка",
   "profile": "Профил",
-  "logout": "Изход"
+  "logout": "Изход",
+  "language": "Език",
+  "site": "Сайт"
 }

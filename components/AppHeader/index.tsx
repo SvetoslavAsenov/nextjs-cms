@@ -1,15 +1,11 @@
 import Profile from "./Profile";
+import LangSitePreview from "./LangSitePreview";
 
-import { SupportedLocale } from "@/types/locales";
-
-type AppHeaderProps = {
-  locale: SupportedLocale;
-};
-
-const AppHeader = ({ locale }: AppHeaderProps) => {
+const AppHeader = () => {
   return (
-    <header className="w-screen h-12 shadow px-4 flex items-center bg-background">
+    <header className="w-screen h-12 shadow px-4 flex items-center bg-background justify-between">
       <Profile />
+      <LangSitePreview />
     </header>
   );
 };

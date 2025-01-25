@@ -26,11 +26,6 @@ const ProfileMenu = ({ shown }: ProfileMenuProps) => {
         variant="button"
         handler={() => logout()}
       />
-      <Item label="tesst" variant="parent">
-        <Menu isChild={true}>
-          <Item label="kur" variant="link" href="/users"></Item>
-        </Menu>
-      </Item>
     </Menu>
   );
 };

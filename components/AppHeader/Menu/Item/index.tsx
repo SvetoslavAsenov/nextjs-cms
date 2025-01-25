@@ -7,6 +7,7 @@ export type ButtonItemProps = {
   label: string;
   icon?: React.ComponentType<{ className?: string }>;
   handler: React.MouseEventHandler<HTMLButtonElement>;
+  disabled?: boolean;
   href?: never;
   children?: never;
 };
@@ -17,6 +18,7 @@ export type LinkItemProps = {
   href: string;
   handler?: never;
   children?: never;
+  disabled?: never;
 };
 
 export type ParentItemProps = {
@@ -25,6 +27,7 @@ export type ParentItemProps = {
   children: React.ReactNode;
   handler?: never;
   href?: never;
+  disabled?: never;
 };
 
 type ItemProps =
@@ -37,6 +40,7 @@ const Item = ({
   label,
   icon: Icon,
   handler,
+  disabled,
   href,
   children,
 }: ItemProps) => {
@@ -47,7 +51,12 @@ const Item = ({
       }`}
     >
       {variant === "button" && (
-        <ButtonItem label={label} icon={Icon} handler={handler} />
+        <ButtonItem
+          label={label}
+          icon={Icon}
+          handler={handler}
+          disabled={disabled}
+        />
       )}
 
       {variant === "link" && <LinkItem href={href} icon={Icon} label={label} />}

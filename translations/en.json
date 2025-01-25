@@ -27,5 +27,7 @@
   "invalid_credentials": "Invalid credentials",
   "unexpected_error": "An unexpected error occurred",
   "profile": "Profile",
-  "logout": "Logout"
+  "logout": "Logout",
+  "language": "Language",
+  "site": "Site"
 }

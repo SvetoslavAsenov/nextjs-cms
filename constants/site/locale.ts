@@ -1,10 +1,12 @@
-import type { SupportedLocale } from "@/types/locales";
-import type { ImportedImage } from "@/types/importedIcon";
 import bg from "@/assets/icons/bg.svg";
 import us from "@/assets/icons/us.svg";
+import de from "@/assets/icons/de.svg";
 
-export const LOCALE_LABELS: {
-  [key in SupportedLocale]: {
+import type { SiteSupportedLocale } from "@/types/site/locales";
+import type { ImportedImage } from "@/types/importedIcon";
+
+export const SITE_LOCALES: {
+  [key in SiteSupportedLocale]: {
     short: string;
     full: string;
     icon: ImportedImage;
@@ -19,5 +21,10 @@ export const LOCALE_LABELS: {
     short: "en",
     full: "English",
     icon: us,
+  },
+  de: {
+    short: "de",
+    full: "Deutsch",
+    icon: de,
   },
 };

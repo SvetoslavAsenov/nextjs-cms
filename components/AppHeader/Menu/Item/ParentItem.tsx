@@ -7,12 +7,14 @@ const ParentItem = ({ label, children }: ParentItemProps) => {
   const [isOpened, setIsOpened] = useState(false);
   const [childMaxHeight, setChildMaxHeight] = useState(300);
   const childRef = useRef<HTMLDivElement>(null);
+  const currentChildHeight =
+    childRef?.current?.getBoundingClientRect?.().height;
 
   useEffect(() => {
     if (childRef?.current) {
       setChildMaxHeight(childRef.current.getBoundingClientRect().height);
     }
-  }, [children]);
+  }, [currentChildHeight]);
 
   return (
     <>
