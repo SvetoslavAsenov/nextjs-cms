@@ -1,11 +1,12 @@
-import { auth } from "@/lib/auth";
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import { getValidLocale } from "@/utils/locale";
 import { setLocaleToRelativeUrl } from "@/utils/url";
 import RegistrationInviteModel from "@/models/RegistrationInviteModel";
 import AuthCard from "@/components/auth/AuthCard";
+import { isLoggedIn } from "@/utils/auth.server";
 
-const REDIRECT_URL = "/";
+const HOME_URL = "/";
+const LOGIN_URL = "/login";
 
 export default async function Register({
   params,
@@ -14,24 +15,16 @@ export default async function Register({
 }) {
   const { locale, token } = await params;
   const validLocale = getValidLocale(locale);
-  const authResult = await auth();
-  if (authResult?.user) {
-    redirect(setLocaleToRelativeUrl(REDIRECT_URL, validLocale));
+
+  const loggedUser = await isLoggedIn();
+  if (loggedUser) {
+    redirect(setLocaleToRelativeUrl(HOME_URL, validLocale));
   }
+
   const registrationInviteModel = new RegistrationInviteModel();
-  const invite = await registrationInviteModel.findUnique({
-    where: {
-      token,
-    },
-  });
-
-  if (!invite) {
-    notFound();
-  }
-
   const valid = await registrationInviteModel.validateToken(token);
   if (!valid) {
-    redirect(setLocaleToRelativeUrl("/login", validLocale));
+    redirect(setLocaleToRelativeUrl(LOGIN_URL, validLocale));
   }
 
   return (

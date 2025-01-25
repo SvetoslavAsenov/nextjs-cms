@@ -1,6 +1,5 @@
 "use client";
 
-import { getTranslation } from "@/utils/translations";
 import useSetRegistrationInviteToken from "@/hooks/useSetRegistrationInviteToken";
 
 import {
@@ -17,39 +16,38 @@ import type {
   AuthCardProps,
   AuthCardVariant,
 } from "./AuthCard.types";
-import type { SupportedLocale } from "@/types/locales";
-
-const getTranslations = (
-  locale: SupportedLocale,
-  variant: AuthCardVariant
-): AuthCardVariantTranslations => {
-  const keys = {
-    title: variant,
-    description: `auth_description_${variant}`,
-    passwordInput: variant === "login" ? "password" : "create_password",
-    buttonLabel: variant,
-    underButtonLabel:
-      variant === "login" ? "dont_have_an_account" : "already_have_an_account",
-    underButtonLink: variant === "login" ? "register" : "login",
-    providerButtonLabel: variant === "login" ? "login_with" : "register_with",
-  };
-
-  const res: AuthCardVariantTranslations = {} as AuthCardVariantTranslations;
-
-  for (const [key, value] of Object.entries(keys)) {
-    res[key as keyof AuthCardVariantTranslations] = getTranslation(
-      value,
-      locale
-    );
-  }
-
-  return res;
-};
+import { useTranslate } from "@/hooks/useTranslate";
 
 const AuthCard = ({ locale, variant, token }: AuthCardProps) => {
-  const translations = getTranslations(locale, variant);
-
   useSetRegistrationInviteToken(token);
+  const { translate } = useTranslate();
+
+  const getTranslations = (
+    variant: AuthCardVariant
+  ): AuthCardVariantTranslations => {
+    const keys = {
+      title: variant,
+      description: `auth_description_${variant}`,
+      passwordInput: variant === "login" ? "password" : "create_password",
+      buttonLabel: variant,
+      underButtonLabel:
+        variant === "login"
+          ? "dont_have_an_account"
+          : "already_have_an_account",
+      underButtonLink: variant === "login" ? "register" : "login",
+      providerButtonLabel: variant === "login" ? "login_with" : "register_with",
+    };
+
+    const res: AuthCardVariantTranslations = {} as AuthCardVariantTranslations;
+
+    for (const [key, value] of Object.entries(keys)) {
+      res[key as keyof AuthCardVariantTranslations] = translate(value);
+    }
+
+    return res;
+  };
+
+  const translations = getTranslations(variant);
 
   return (
     <Card className="max-w-md mx-auto w-screen">
@@ -64,7 +62,6 @@ const AuthCard = ({ locale, variant, token }: AuthCardProps) => {
       </CardHeader>
 
       <AuthCardContent
-        locale={locale}
         translations={translations}
         variant={variant}
         token={token}

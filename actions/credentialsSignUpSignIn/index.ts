@@ -45,7 +45,6 @@ const CredentialsFormHandler: CredentialsFormHandlerType = async (
   // In case of validation errors fill the errors to the result object
   if (!validationResult.success) {
     for (const issue of validationResult.error.issues) {
-      console.log("-".repeat(100), issue);
       // If there is an error with the token
       // we will redirect the user.
       if (issue?.path?.[0] === "token") {

@@ -6,7 +6,7 @@ import type { Provider } from "next-auth/providers";
 
 const CREDENTIALS_PROVIDER_NAME = "credentials";
 
-export const providersConfig: Provider[] = [
+export const providers: Provider[] = [
   Credentials({
     async authorize() {
       // Note: Auth.js does not fully support using the credentials provider with the database session strategy.
@@ -24,7 +24,7 @@ export const providersConfig: Provider[] = [
   }),
 ];
 
-export const providersMap = providersConfig
+export const providersMap = providers
   .map((provider: Provider) => {
     return typeof provider === "function" ? provider() : provider;
   })
