@@ -5,6 +5,10 @@
 @import "./themes/theme1.css";
 @import "./themes/theme2.css";
 
+html {
+  font-size: 16px;
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
 }

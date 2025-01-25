@@ -17,7 +17,7 @@ const LangSitePreview = () => {
   };
 
   return (
-    <ul className="flex h-full gap-2">
+    <ul className="flex h-full gap-4">
       <li className={liClasses}>
         <ChangeLanguage
           shown={shownMenu === "language"}
