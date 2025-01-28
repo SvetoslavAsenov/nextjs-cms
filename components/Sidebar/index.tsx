@@ -1,16 +1,17 @@
 "use client";
 
 import { useSidebar } from "@/hooks/useSidebar";
+import Header from "./Header";
 
 const Sidebar = () => {
-  const { isOpen, toggle } = useSidebar();
+  const { isOpen } = useSidebar();
   return (
-    <div
-      onClick={toggle}
+    <aside
       className={`fixed 
+        shadow
         top-[var(--header-height) 
         left-0 h-[calc(100vh-var(--header-height))] 
-        bg-red-500 
+        bg-background 
         transition-width ${
           isOpen
             ? " w-[var(--sidebar-width)]"
@@ -23,7 +24,9 @@ const Sidebar = () => {
       style={{
         transitionDuration: "var(--sidebar-transition-duration)",
       }}
-    ></div>
+    >
+      <Header />
+    </aside>
   );
 };
 
