@@ -3,7 +3,7 @@ import LangSitePreview from "./LangSitePreview";
 
 const AppHeader = () => {
   return (
-    <header className="w-screen h-12 shadow px-4 flex items-center bg-background justify-between select-none">
+    <header className="w-full h-[var(--header-height)] shadow px-4 flex items-center bg-background justify-between select-none fixed left-0 top-0">
       <Profile />
       <LangSitePreview />
     </header>

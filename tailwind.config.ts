@@ -72,6 +72,10 @@ export default {
         "2xl": "1536px", // Double extra large screens
         "3xl": "1920px", // Larger than 1920px
       },
+      transitionProperty: {
+        width: "width",
+        margin: "margin",
+      },
     },
   },
   plugins: [tailwindcssAnimate],
