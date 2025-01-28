@@ -1,4 +1,6 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
+import { getValue, setValue } from "@/utils/localstorage";
+import { SIDEBAR_OPENED_KEY } from "@/constants/localStorage";
 
 type OpenCloseToggle = () => void;
 
@@ -7,6 +9,10 @@ type SidebarContextProps = {
   open: OpenCloseToggle;
   close: OpenCloseToggle;
   toggle: OpenCloseToggle;
+};
+
+type LocalStorageIsOpened = {
+  value: boolean;
 };
 
 export type SidebarProviderProps = {
@@ -19,10 +25,26 @@ export const SidebarContext = createContext<SidebarContextProps | undefined>(
 
 export const SidebarProvider = ({ children }: SidebarProviderProps) => {
   const [isOpen, setIsOpen] = useState(true);
+  const isSsr = typeof window === "undefined";
 
-  const open = () => setIsOpen(true);
-  const close = () => setIsOpen(false);
-  const toggle = () => setIsOpen((prev) => !prev);
+  useEffect(() => {
+    if (!isSsr) {
+      const openStorageResult = getValue(
+        SIDEBAR_OPENED_KEY
+      ) as LocalStorageIsOpened;
+      console.log(openStorageResult?.value);
+      setIsOpen(!!openStorageResult?.value);
+    }
+  }, [isSsr]);
+
+  const setState = (value: boolean) => {
+    setValue(SIDEBAR_OPENED_KEY, { value });
+    setIsOpen(value);
+  };
+
+  const open = () => setState(true);
+  const close = () => setState(false);
+  const toggle = () => setState(!isOpen);
 
   return (
     <SidebarContext value={{ isOpen, open, close, toggle }}>
