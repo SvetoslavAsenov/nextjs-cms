@@ -9,6 +9,7 @@ const Sidebar = () => {
   return (
     <aside
       className={`fixed 
+        z-10
         select-none
         overflow-hidden
         flex
@@ -21,7 +22,7 @@ const Sidebar = () => {
         transition-width ${
           isOpen
             ? " w-[var(--sidebar-width)]"
-            : " w-[var(--sidebar-icons-width)]"
+            : " w-0 lg:w-[var(--sidebar-icons-width)]"
         }`}
       // According to Tailwind's documentation,
       // transition-duration should support CSS variables,

@@ -15,10 +15,10 @@ const Main = ({ children }: MainProps) => {
       className={`bg-muted 
         min-h-[calc(100vh-var(--header-height))] 
         mt-[var(--header-height)] 
-        transition-margin ${
+        transition-margin overflow-auto${
           isOpen
-            ? " ml-[var(--sidebar-width)]"
-            : " ml-[var(--sidebar-icons-width)]"
+            ? " lg:ml-[var(--sidebar-width)] lg:after:hidden after:content-[' '] after:bg-black-500 after:w-screen after:h-screen after:fixed after:top-0 after:left-0 after:block after:bg-black/75"
+            : " lg:ml-[var(--sidebar-icons-width)]"
         }`}
       // According to Tailwind's documentation,
       // transition-duration should support CSS variables,

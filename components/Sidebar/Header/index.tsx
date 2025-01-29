@@ -4,7 +4,7 @@ import { Menu, SquareChevronLeft } from "lucide-react";
 const Header = () => {
   const { isOpen, toggle } = useSidebar();
   const iconClasses =
-    "w-[calc(var(--sidebar-icons-width)-1.25rem)] h-auto cursor-pointer rounded-sm hover:text-primary";
+    "w-[calc(var(--sidebar-icons-width)-1.25rem)] h-auto cursor-pointer rounded-sm hover:text-primary shrink-0";
 
   return (
     <header className="flex justify-end items-center p-[0.625rem]">
