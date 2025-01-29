@@ -51,11 +51,32 @@ export default {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        // Custom
+        "consistent-dark": {
+          DEFAULT: "hsl(var(--consistent-dark))",
+          foreground: "hsl(var(--consistent-dark))",
+        },
+        "consistent-light": "hsl(var(--consistent-light))",
       },
       borderRadius: {
         lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        // md: "calc(var(--radius) - 2px)",
+        // sm: "calc(var(--radius) - 4px)",
+        md: "var(--radius)",
+        sm: "var(--radius)",
+      },
+      screens: {
+        xs: "480px",
+        sm: "640px", // Small screens
+        md: "768px", // Medium screens
+        lg: "1024px", // Large screens
+        xl: "1280px", // Extra large screens
+        "2xl": "1536px", // Double extra large screens
+        "3xl": "1920px", // Larger than 1920px
+      },
+      transitionProperty: {
+        width: "width",
+        margin: "margin",
       },
     },
   },

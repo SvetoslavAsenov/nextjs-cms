@@ -19,14 +19,12 @@ export type AuthCardProps = {
 };
 
 export type AuthCardContentProps = {
-  locale: SupportedLocale;
   variant: AuthCardVariant;
   translations: AuthCardVariantTranslations;
   token?: string;
 };
 
 export type ProviderButtonsProps = {
-  locale: SupportedLocale;
   translations: AuthCardVariantTranslations;
   isPending: boolean;
 };

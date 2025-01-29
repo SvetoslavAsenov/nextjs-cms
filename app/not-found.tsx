@@ -1,9 +1,9 @@
 "use client";
-import useLocale from "@/hooks/useLocale";
+import useLocaleFromUrl from "@/hooks/useLocaleFromUrl";
 import { getTranslation } from "@/utils/translations";
 
 export default function NotFound() {
-  const locale = useLocale();
+  const locale = useLocaleFromUrl();
 
   return (
     <html>

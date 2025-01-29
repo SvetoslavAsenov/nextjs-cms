@@ -6,6 +6,7 @@ import { randomUUID } from "crypto";
 import { authConfig } from "../../config/auth/auth";
 import { setCookie } from "@/utils/cookies/cookies.server";
 import { prisma } from "@/lib/prisma";
+import { AUTH_SESSION_COOKIE } from "@/constants/cookies";
 
 type ResultObject = { success: boolean; message?: string };
 
@@ -138,13 +139,7 @@ const credentialsAuthService: CredentialsAuthService = async (credentials) => {
         throw new Error("unexpected_error");
       }
 
-      // await authConfig?.adapter?.createSession?.({
-      //   sessionToken: sessionToken,
-      //   userId: userRecord?.id as string,
-      //   expires,
-      // });
-
-      setCookie("authjs.session-token", sessionToken, {
+      setCookie(AUTH_SESSION_COOKIE, sessionToken, {
         maxAge: sessionMaxAge,
         sameSite: "lax",
         httpOnly: true,
