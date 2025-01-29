@@ -34,5 +34,9 @@
   "navigations": "Navigations",
   "users": "Users",
   "roles": "Roles",
-  "settings": "Settings"
+  "settings": "Settings",
+  "select_site": "Select site",
+  "preview_site": "Preview site",
+  "show_menu": "Show menu",
+  "hide_menu": "Hide menu"
 }
