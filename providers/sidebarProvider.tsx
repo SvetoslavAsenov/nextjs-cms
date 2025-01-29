@@ -32,7 +32,6 @@ export const SidebarProvider = ({ children }: SidebarProviderProps) => {
       const openStorageResult = getValue(
         SIDEBAR_OPENED_KEY
       ) as LocalStorageIsOpened;
-      console.log(openStorageResult?.value);
       setIsOpen(!!openStorageResult?.value);
     }
   }, [isSsr]);

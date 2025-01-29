@@ -2,16 +2,22 @@
 
 import { useSidebar } from "@/hooks/useSidebar";
 import Header from "./Header";
+import Nav from "./Nav";
 
 const Sidebar = () => {
   const { isOpen } = useSidebar();
   return (
     <aside
       className={`fixed 
+        select-none
+        overflow-hidden
+        flex
+        flex-col
         shadow
         top-[var(--header-height) 
         left-0 h-[calc(100vh-var(--header-height))] 
         bg-background 
+        pb-[3rem]
         transition-width ${
           isOpen
             ? " w-[var(--sidebar-width)]"
@@ -26,6 +32,7 @@ const Sidebar = () => {
       }}
     >
       <Header />
+      <Nav />
     </aside>
   );
 };

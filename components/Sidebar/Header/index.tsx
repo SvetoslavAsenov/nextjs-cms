@@ -1,5 +1,5 @@
 import { useSidebar } from "@/hooks/useSidebar";
-import { Menu, ChevronLeft } from "lucide-react";
+import { Menu, SquareChevronLeft } from "lucide-react";
 
 const Header = () => {
   const { isOpen, toggle } = useSidebar();
@@ -9,7 +9,7 @@ const Header = () => {
   return (
     <header className="flex justify-end items-center p-[0.625rem]">
       {isOpen ? (
-        <ChevronLeft onClick={toggle} className={iconClasses} />
+        <SquareChevronLeft onClick={toggle} className={iconClasses} />
       ) : (
         <Menu onClick={toggle} className={iconClasses} />
       )}

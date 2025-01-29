@@ -29,5 +29,10 @@
   "profile": "Profile",
   "logout": "Logout",
   "language": "Language",
-  "site": "Site"
+  "site": "Site",
+  "pages": "Pages",
+  "navigations": "Navigations",
+  "users": "Users",
+  "roles": "Roles",
+  "settings": "Settings"
 }

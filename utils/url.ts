@@ -19,3 +19,14 @@ export const setLocaleToRelativeUrl = (
   const newPath = filteredSegments.join("/");
   return locale !== defaultLocale ? `/${locale}/${newPath}` : `/${newPath}`;
 };
+
+export const comparePaths = (
+  inputPath: string,
+  targetPath: string
+): boolean => {
+  // Remove any potential locale from the url
+  const regex = new RegExp(`(\/(${supportedLocales.join("|")}))`, "gi");
+  const cleanedInputPath = inputPath.replaceAll(regex, "");
+
+  return cleanedInputPath === targetPath;
+};
