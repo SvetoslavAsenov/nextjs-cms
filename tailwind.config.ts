@@ -60,8 +60,10 @@ export default {
       },
       borderRadius: {
         lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        // md: "calc(var(--radius) - 2px)",
+        // sm: "calc(var(--radius) - 4px)",
+        md: "var(--radius)",
+        sm: "var(--radius)",
       },
       screens: {
         xs: "480px",
@@ -71,6 +73,10 @@ export default {
         xl: "1280px", // Extra large screens
         "2xl": "1536px", // Double extra large screens
         "3xl": "1920px", // Larger than 1920px
+      },
+      transitionProperty: {
+        width: "width",
+        margin: "margin",
       },
     },
   },

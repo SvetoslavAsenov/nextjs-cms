@@ -1,4 +1,6 @@
 import AppHeader from "@/components/AppHeader";
+import Sidebar from "@/components/Sidebar";
+import Main from "@/components/Main";
 // import { SupportedLocale } from "@/types/locales";
 
 type AppLayoutProps = {
@@ -12,7 +14,8 @@ export default async function AppLayout({ children }: AppLayoutProps) {
   return (
     <div className="app-wrapper">
       <AppHeader />
-      <main>{children}</main>
+      <Sidebar />
+      <Main>{children}</Main>
     </div>
   );
 }

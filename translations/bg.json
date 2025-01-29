@@ -29,5 +29,14 @@
   "profile": "Профил",
   "logout": "Изход",
   "language": "Език",
-  "site": "Сайт"
+  "site": "Сайт",
+  "pages": "Страници",
+  "navigations": "Менюта",
+  "users": "Потребители",
+  "roles": "Роли",
+  "settings": "Настройки",
+  "select_site": "Избор на сайт",
+  "preview_site": "Преглед на сайта",
+  "show_menu": "Показване на меню",
+  "hide_menu": "Скриване на меню"
 }
