@@ -18,7 +18,7 @@ const Main = ({ children }: MainProps) => {
         mt-[var(--header-height)] 
         transition-margin overflow-auto${
           isOpen
-            ? " lg:ml-[var(--sidebar-width)] lg:after:hidden after:content-[' '] after:w-screen after:h-screen after:fixed after:top-0 after:left-0 after:block after:bg-foreground/85"
+            ? " lg:ml-[var(--sidebar-width)] lg:after:hidden after:content-[' '] after:w-screen after:h-screen after:fixed after:top-0 after:left-0 after:block after:bg-foreground/85 after:z-10"
             : " lg:ml-[var(--sidebar-icons-width)]"
         }`}
       // According to Tailwind's documentation,

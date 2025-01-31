@@ -12,6 +12,7 @@ export default async function Users({
       <Breadcrumbs
         items={[
           { label: "лорем ипсум", href: "/users" },
+          { label: "сит долор" },
           { label: "лорем ипсум", href: "/users/test" },
           { label: "сит долор" },
         ]}
