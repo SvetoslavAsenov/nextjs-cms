@@ -9,7 +9,7 @@ const Sidebar = () => {
   return (
     <aside
       className={`fixed 
-        z-10
+        z-20
         select-none
         overflow-hidden
         flex

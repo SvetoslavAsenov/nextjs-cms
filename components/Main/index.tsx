@@ -13,6 +13,7 @@ const Main = ({ children }: MainProps) => {
   return (
     <main
       className={`bg-muted 
+        p-[0.5rem]
         min-h-[calc(100vh-var(--header-height))] 
         mt-[var(--header-height)] 
         transition-margin overflow-auto${
@@ -28,7 +29,9 @@ const Main = ({ children }: MainProps) => {
         transitionDuration: "var(--sidebar-transition-duration)",
       }}
     >
-      {children}
+      <div className="w-full h-full bg-background shadow p-[0.5rem]">
+        {children}
+      </div>
     </main>
   );
 };
