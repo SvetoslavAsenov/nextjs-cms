@@ -1,80 +1,104 @@
 "use client";
 
 import React from "react";
+import Toolbar from "./Toolbar";
 
 type RowOptions = {
-  disableSelection?: boolean;
+  selectable?: boolean;
+  selectedTableActions?: string[];
 };
 
-export type Row<TData = Record<string, unknown>> = {
-  data: TData;
-  options: RowOptions;
+export type Row = {
+  data: Record<string, unknown>;
+  options?: RowOptions;
 };
 
 type TableActionLink = {
   type: "link";
-  icon: React.ReactElement;
   href: string;
   action: never;
 };
 
-type ActionCta<TData = Record<string, unknown>> = (params: {
-  items: Row<TData>[];
-}) => void;
+type ActionCtaHandlerParams = { items: Row[] };
 
-type TableActionCta<TData = Record<string, unknown>> = {
+type ActionCtaHandler = (params?: ActionCtaHandlerParams) => void;
+
+type TableActionCta = {
   type: "action";
-  icon: React.ReactElement;
-  action: ActionCta<TData>;
+  onAction: ActionCtaHandler;
   href: never;
 };
 
-type TableAction<TData = Record<string, unknown>> =
-  | TableActionLink
-  | TableActionCta<TData>;
-
-export type TableOptions<TData = Record<string, unknown>> = {
-  selectable?: boolean;
-  orderable?: boolean;
-  actions?: TableAction<TData>[];
+type TableAction = (TableActionLink | TableActionCta) & {
+  icon: React.ReactElement;
 };
 
-export type Column<TData = Record<string, unknown>> = {
+export type TableOptionsActions = Record<string, TableAction>;
+
+type TableOptionsSortItem = {
+  sortKey: string;
+  label: string;
+};
+
+export type TableOptionsSort = {
+  sortedByKey: string;
+  sortedDirection: "asc" | "desc";
+  items: TableOptionsSortItem[];
+  onSort: (sortKey: string, direction: "asc" | "desc") => void;
+};
+
+export type TableOptions = {
+  actions?: TableOptionsActions;
+  sort?: TableOptionsSort;
+};
+
+export type Column = {
   columnKey: string;
   header: React.ReactElement;
-  cell: (row: TData) => React.ReactElement;
+  cell: (row: Row) => React.ReactElement;
 };
 
-type DataTableProps<TData = Record<string, unknown>> = {
-  options?: TableOptions<TData>;
-  columns: Column<TData>[];
-  rows: Row<TData>[];
+type DataTableProps = {
+  options?: TableOptions;
+  columns: Column[];
+  rows: Row[];
 };
 
-const DataTable = <TData,>({
-  columns,
-  rows,
-  options,
-}: DataTableProps<TData>) => {
+const DataTable = ({ columns, rows }: DataTableProps) => {
   return (
-    <table>
-      <thead>
-        <tr>
-          {columns.map((col) => (
-            <th key={col.columnKey}>{col.header}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((row, rowIndex) => (
-          <tr key={rowIndex}>
+    <div className="w-full">
+      <Toolbar
+        sort={{
+          sortedByKey: "putkatati",
+          sortedDirection: "asc",
+          items: [
+            { label: "kur", sortKey: "kurami" },
+            { label: "putka", sortKey: "putkatati" },
+          ],
+          onSort: (sortKey, sortDirection) => {
+            alert(sortKey + " " + sortDirection);
+          },
+        }}
+      />
+      {/* <table>
+        <thead>
+          <tr>
             {columns.map((col) => (
-              <td key={col.columnKey}>{col.cell(row.data)}</td>
+              <th key={col.columnKey}>{col.header}</th>
             ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {rows.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              {columns.map((col) => (
+                <td key={col.columnKey}>{col.cell(row)}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table> */}
+    </div>
   );
 };
 

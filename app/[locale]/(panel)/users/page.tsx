@@ -13,7 +13,7 @@ export default async function Users({
         items={[
           { label: "лорем ипсум", href: "/users" },
           { label: "сит долор" },
-          { label: "лорем ипсум", href: "/users/test" },
+          { label: "лорем ипсум", href: "/test" },
           { label: "сит долор" },
         ]}
       />
