@@ -10,21 +10,19 @@ export type UpdateSortBy = (value: string) => void;
 export type ToggleSortDirection = () => void;
 
 const Sort = (props: TableOptionsSort) => {
+  const { onSort, sortedByKey, sortedDirection, items } = props;
   const { translate } = useTranslate();
   const id = useId();
 
   const updateSortBy: UpdateSortBy = (value) => {
-    props.onSort(value, props.sortedDirection);
+    onSort(value, sortedDirection);
   };
 
   const toggleSortDirection = () => {
-    props.onSort(
-      props.sortedByKey,
-      props.sortedDirection === "asc" ? "desc" : "asc"
-    );
+    onSort(sortedByKey, sortedDirection === "asc" ? "desc" : "asc");
   };
 
-  return props?.items?.length ? (
+  return items?.length ? (
     <div className="flex inline-flex items-center pr-4">
       <label htmlFor={id} className="mr-2 leading-none text-background">
         {translate("sort")}:
