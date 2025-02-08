@@ -12,7 +12,7 @@ type ToolbarProps = {
 const Toolbar = ({ actions, sort }: ToolbarProps) => {
   return (
     <div className="bg-foreground p-1 select-none">
-      {sort && <Sort sort={sort} />}
+      {sort && <Sort {...sort} />}
     </div>
   );
 };

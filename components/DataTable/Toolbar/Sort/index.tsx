@@ -2,67 +2,35 @@
 
 import { useId } from "react";
 import { useTranslate } from "@/hooks/useTranslate";
-import { ChevronUp, ChevronDown } from "lucide-react";
+import SortBy from "./SortBy";
+import SortDirection from "./SortDirection";
 
 import type { TableOptionsSort } from "../..";
+export type UpdateSortBy = (value: string) => void;
+export type ToggleSortDirection = () => void;
 
-type SortProps = {
-  sort: TableOptionsSort;
-};
-
-const Sort = ({ sort }: SortProps) => {
+const Sort = (props: TableOptionsSort) => {
   const { translate } = useTranslate();
   const id = useId();
-  const chevronsClasses = "w-3 rounded-[0.125rem]";
-  const activeChevronClasses = " bg-background";
-  const inactiveChevronClasses = " text-background group-hover:bg-primary";
 
-  return sort?.items?.length ? (
+  const updateSortBy: UpdateSortBy = (value) => {
+    props.onSort(value, props.sortedDirection);
+  };
+
+  const toggleSortDirection = () => {
+    props.onSort(
+      props.sortedByKey,
+      props.sortedDirection === "asc" ? "desc" : "asc"
+    );
+  };
+
+  return props?.items?.length ? (
     <div className="flex inline-flex items-center pr-4">
       <label htmlFor={id} className="mr-2 leading-none text-background">
         {translate("sort")}:
       </label>
-      <select
-        name="sort"
-        id={id}
-        className="bg-background p-0.5"
-        value={sort?.sortedByKey}
-        onChange={(ev) => {
-          sort.onSort(ev.target.value, sort.sortedDirection);
-        }}
-      >
-        {sort.items.map((item, index) => (
-          <option value={item.sortKey} key={index}>
-            {translate(item.label)}
-          </option>
-        ))}
-      </select>
-      <div
-        className="flex flex-col h-[1.5rem] cursor-pointer px-1 group"
-        onClick={() =>
-          sort.onSort(
-            sort.sortedByKey,
-            sort.sortedDirection === "asc" ? "desc" : "asc"
-          )
-        }
-      >
-        <ChevronUp
-          className={
-            chevronsClasses +
-            (sort.sortedDirection === "asc"
-              ? activeChevronClasses
-              : inactiveChevronClasses)
-          }
-        />
-        <ChevronDown
-          className={
-            chevronsClasses +
-            (sort.sortedDirection === "desc"
-              ? activeChevronClasses
-              : inactiveChevronClasses)
-          }
-        />
-      </div>
+      <SortBy {...props} id={id} updateSortBy={updateSortBy} />
+      <SortDirection {...props} toggleSortDirection={toggleSortDirection} />
     </div>
   ) : null;
 };
