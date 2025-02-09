@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Toolbar from "./Toolbar";
 
 type RowOptions = {
@@ -16,21 +16,23 @@ export type Row = {
 type TableActionLink = {
   type: "link";
   href: string;
-  action: never;
+  onAction?: never;
 };
 
-type ActionCtaHandlerParams = { items: Row[] };
+export type SelectedRows = Row[];
 
-type ActionCtaHandler = (params?: ActionCtaHandlerParams) => void;
+type ActionCtaHandler = (items?: SelectedRows) => void;
 
 type TableActionCta = {
   type: "action";
   onAction: ActionCtaHandler;
-  href: never;
+  href?: never;
 };
 
 type TableAction = (TableActionLink | TableActionCta) & {
-  icon: React.ReactElement;
+  title: string;
+  shown: "always" | "onselect";
+  icon: React.ReactNode;
 };
 
 export type TableOptionsActions = Record<string, TableAction>;
@@ -64,22 +66,25 @@ type DataTableProps = {
   rows: Row[];
 };
 
-const DataTable = ({ columns, rows }: DataTableProps) => {
+export type ToggleSelectAll = () => void;
+
+const DataTable = ({ columns, rows, options }: DataTableProps) => {
+  const [selectedRows, setSelectedRows] = useState<Row[]>([]);
+
+  const toggleSelectAll: ToggleSelectAll = () => {
+    setSelectedRows(selectedRows.length ? [] : rows);
+  };
+
   return (
     <div className="w-full">
-      <Toolbar
-        sort={{
-          sortedByKey: "putkatati",
-          sortedDirection: "asc",
-          items: [
-            { label: "kur", sortKey: "kurami" },
-            { label: "putka", sortKey: "putkatati" },
-          ],
-          onSort: (sortKey, sortDirection) => {
-            alert(sortKey + " " + sortDirection);
-          },
-        }}
-      />
+      {options && (
+        <Toolbar
+          options={options}
+          selectedRows={selectedRows}
+          toggleSelectAll={toggleSelectAll}
+          selected={!!selectedRows.length}
+        />
+      )}
       {/* <table>
         <thead>
           <tr>

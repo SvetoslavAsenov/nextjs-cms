@@ -23,7 +23,7 @@ const Sort = (props: TableOptionsSort) => {
   };
 
   return items?.length ? (
-    <div className="flex inline-flex items-center pr-4">
+    <div className="flex inline-flex items-center">
       <label htmlFor={id} className="mr-2 leading-none text-background">
         {translate("sort")}:
       </label>
