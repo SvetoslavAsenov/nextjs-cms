@@ -1,5 +1,6 @@
 "use client";
 
+import Breadcrumbs from "@/components/Breadcrumbs";
 import DataTable from "@/components/DataTable";
 import { ListPlus, Trash2, Eye, EyeOff } from "lucide-react";
 
@@ -146,10 +147,22 @@ const userTableOptions: TableOptions = {
 
 export default function Test() {
   return (
-    <DataTable
-      columns={userColumns}
-      rows={userRows}
-      options={userTableOptions}
-    />
+    <>
+      <div className="pb-2 border-bottom-solid">
+        <Breadcrumbs
+          items={[
+            { label: "лорем ипсум", href: "/users" },
+            { label: "сит долор" },
+            { label: "лорем ипсум", href: "/test" },
+            { label: "сит долор" },
+          ]}
+        />
+      </div>
+      <DataTable
+        columns={userColumns}
+        rows={userRows}
+        options={userTableOptions}
+      />
+    </>
   );
 }

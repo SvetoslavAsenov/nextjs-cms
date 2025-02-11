@@ -35,14 +35,16 @@ const Table = ({
         gridColumns={gridColumns}
       />
 
-      <Rows
-        rows={rows}
-        columns={columns}
-        selectableItems={selectableItems}
-        selectedRows={selectedRows}
-        toggleSelectRow={toggleSelectRow}
-        gridColumns={gridColumns}
-      />
+      {rows && (
+        <Rows
+          rows={rows}
+          columns={columns}
+          selectableItems={selectableItems}
+          selectedRows={selectedRows}
+          toggleSelectRow={toggleSelectRow}
+          gridColumns={gridColumns}
+        />
+      )}
     </section>
   );
 };

@@ -25,7 +25,11 @@ const Toolbar = ({ options, selectedRows, toggleSelectAll }: ToolbarProps) => {
         </div>
       )}
       {options?.actions && (
-        <div className="w-full flex justify-center lg:w-auto">
+        <div
+          className={`flex justify-center${
+            options?.selectableItems ? " w-full lg:w-auto" : "w-auto"
+          }`}
+        >
           <Actions actions={options.actions} selectedRows={selectedRows} />
         </div>
       )}
