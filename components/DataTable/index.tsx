@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Toolbar from "./Toolbar";
+import Table from "./Table";
 
 type RowOptions = {
   selectable?: boolean;
@@ -9,7 +10,7 @@ type RowOptions = {
 };
 
 export type Row = {
-  data: Record<string, unknown>;
+  data: Record<string, unknown> & { id: string };
   options?: RowOptions;
 };
 
@@ -52,58 +53,63 @@ export type TableOptionsSort = {
 export type TableOptions = {
   actions?: TableOptionsActions;
   sort?: TableOptionsSort;
+  selectableItems?: boolean;
+  gridColumns?: string;
 };
 
 export type Column = {
   columnKey: string;
-  header: React.ReactElement;
+  header: {
+    label: string;
+    element?: React.ReactElement;
+  };
   cell: (row: Row) => React.ReactElement;
 };
 
-type DataTableProps = {
+export type DataTableProps = {
   options?: TableOptions;
   columns: Column[];
   rows: Row[];
 };
 
 export type ToggleSelectAll = () => void;
+export type ToggleSelectRow = (targetRow: Row) => void;
 
 const DataTable = ({ columns, rows, options }: DataTableProps) => {
-  const [selectedRows, setSelectedRows] = useState<Row[]>([]);
+  const [selectedRows, setSelectedRows] = useState<SelectedRows>([]);
 
   const toggleSelectAll: ToggleSelectAll = () => {
-    setSelectedRows(selectedRows.length ? [] : rows);
+    const selected = selectedRows.length ? [] : rows;
+    setSelectedRows(selected);
+  };
+
+  const toggleSelectRow: ToggleSelectRow = (targetRow) => {
+    const newArr = selectedRows.filter((r) => r.data.id !== targetRow.data.id);
+    if (newArr.length === selectedRows.length) {
+      newArr.push(targetRow);
+    }
+    setSelectedRows(newArr);
   };
 
   return (
-    <div className="w-full">
+    <section className="w-full flex flex-col gap-1">
       {options && (
         <Toolbar
           options={options}
           selectedRows={selectedRows}
           toggleSelectAll={toggleSelectAll}
-          selected={!!selectedRows.length}
         />
       )}
-      {/* <table>
-        <thead>
-          <tr>
-            {columns.map((col) => (
-              <th key={col.columnKey}>{col.header}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row, rowIndex) => (
-            <tr key={rowIndex}>
-              {columns.map((col) => (
-                <td key={col.columnKey}>{col.cell(row)}</td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table> */}
-    </div>
+      <Table
+        columns={columns}
+        rows={rows}
+        selectableItems={!!options?.selectableItems}
+        selectedRows={selectedRows}
+        toggleSelectAll={toggleSelectAll}
+        toggleSelectRow={toggleSelectRow}
+        gridColumns={options?.gridColumns}
+      />
+    </section>
   );
 };
 

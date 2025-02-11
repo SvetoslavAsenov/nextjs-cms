@@ -7,19 +7,40 @@ import type { Row, TableOptions } from "@/components/DataTable";
 
 const userRows = [
   {
-    data: { id: 1, name: "Alice Johnson", email: "alice@example.com" },
+    data: {
+      id: 1,
+      name: "Alice Johnson",
+      email: "alice@example.com",
+      published: false,
+    },
     options: {
       selectable: true,
-      selectedTableActions: ["delete"],
+      selectedTableActions: ["delete", "publish"],
     },
   },
   {
-    data: { id: 2, name: "Bob Smith", email: "bob@example.com" },
-    options: { selectable: true, selectedTableActions: ["publish"] },
+    data: {
+      id: 2,
+      name: "Bob Smith",
+      email: "bob@example.com",
+      published: true,
+    },
+    options: {
+      selectable: true,
+      selectedTableActions: ["delete", "unpublish"],
+    },
   },
   {
-    data: { id: 3, name: "Charlie Brown", email: "charlie@example.com" },
-    options: { selectable: true, selectedTableActions: ["unpublish"] },
+    data: {
+      id: 3,
+      name: "Charlie Brown",
+      email: "charlie@example.com",
+      published: true,
+    },
+    options: {
+      selectable: true,
+      selectedTableActions: ["delete", "unpublish"],
+    },
   },
   {
     data: { id: 4, name: "David White", email: "david@example.com" },
@@ -32,22 +53,48 @@ const userRows = [
 const userColumns = [
   {
     columnKey: "id",
-    header: <span>ID</span>,
-    cell: (row: Row) => <span>{row.data.id as number}</span>,
+    header: {
+      label: "ID",
+      element: <p className="text-center">ID</p>,
+    },
+    cell: (row: Row) => (
+      <div className="w-full lg:text-center">{row.data.id as number}</div>
+    ),
   },
   {
     columnKey: "name",
-    header: <span>Name</span>,
+    header: { label: "Name" },
     cell: (row: Row) => <span>{row.data.name as string}</span>,
   },
   {
     columnKey: "email",
-    header: <span>Email</span>,
+    header: { label: "Email" },
     cell: (row: Row) => <span>{row.data.email as string}</span>,
+  },
+  {
+    columnKey: "actions",
+    header: {
+      label: "Actions",
+      element: <p className="text-right">Actions</p>,
+    },
+    cell: (row: Row) => {
+      return (
+        <div className="flex gap-1 lg:justify-end">
+          {row.data.published ? (
+            <EyeOff className="cursor-pointer hover:text-primary" />
+          ) : (
+            <Eye className="cursor-pointer hover:text-primary" />
+          )}
+          <Trash2 className="cursor-pointer hover:text-primary" />
+        </div>
+      );
+    },
   },
 ];
 
 const userTableOptions: TableOptions = {
+  selectableItems: true,
+  gridColumns: "2.5rem 4rem repeat(2, minmax(6rem, 1fr)) 6.1rem",
   actions: {
     unpublish: {
       title: "Unpublish",
