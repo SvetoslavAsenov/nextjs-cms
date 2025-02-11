@@ -38,5 +38,8 @@
   "select_site": "Select site",
   "preview_site": "Preview site",
   "show_menu": "Show menu",
-  "hide_menu": "Hide menu"
+  "hide_menu": "Hide menu",
+  "sort": "Sort",
+  "ascending": "Ascending",
+  "descending": "Descending"
 }

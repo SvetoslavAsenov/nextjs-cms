@@ -1,6 +1,6 @@
 import { useSidebar } from "@/hooks/useSidebar";
 import { useTranslate } from "@/hooks/useTranslate";
-import { Menu, SquareChevronLeft } from "lucide-react";
+import { Menu, PanelLeftClose } from "lucide-react";
 
 const Header = () => {
   const { isOpen, toggle } = useSidebar();
@@ -13,7 +13,7 @@ const Header = () => {
     <header className="flex justify-end items-center p-[0.625rem]">
       <div title={translate(isOpen ? "hide_menu" : "show_menu")}>
         {isOpen ? (
-          <SquareChevronLeft onClick={toggle} className={iconClasses} />
+          <PanelLeftClose onClick={toggle} className={iconClasses} />
         ) : (
           <Menu onClick={toggle} className={iconClasses} />
         )}
