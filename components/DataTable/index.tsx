@@ -39,17 +39,37 @@ type TableAction = (TableActionLink | TableActionCta) & {
 
 export type TableOptionsActions = Record<string, TableAction>;
 
-type TableOptionsSortItem = {
+export type TableOptionsSortItem = {
   sortKey: string;
   label: string;
 };
 
-export type TableOptionsSort = {
-  sortedByKey: string;
-  sortedDirection: "asc" | "desc";
+export type TableOptionsSortCommon = {
   items: TableOptionsSortItem[];
-  onSort: (sortKey: string, direction: "asc" | "desc") => void;
 };
+
+export type SortDirectionOptions = "asc" | "desc";
+
+type TableOptionsSortQueryParam = {
+  type: "query_param";
+  defaultSortedBy: string;
+  defaultSortedDirection: SortDirectionOptions;
+  onSort?: never;
+  sortedByKey?: never;
+  sortedDirection?: never;
+};
+
+type TableOptionsSortAction = {
+  type: "action";
+  sortedByKey: string;
+  sortedDirection: SortDirectionOptions;
+  onSort: (sortKey: string, direction: SortDirectionOptions) => void;
+  defaultSortedBy?: never;
+  defaultSortedDirection?: never;
+};
+
+export type TableOptionsSort = TableOptionsSortCommon &
+  (TableOptionsSortAction | TableOptionsSortQueryParam);
 
 export type TableOptions = {
   actions?: TableOptionsActions;

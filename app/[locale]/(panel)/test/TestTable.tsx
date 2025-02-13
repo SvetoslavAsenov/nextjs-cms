@@ -132,15 +132,13 @@ const userTableOptions: TableOptions = {
     },
   },
   sort: {
-    sortedByKey: "putkatati",
-    sortedDirection: "asc",
+    type: "query_param",
+    defaultSortedBy: "putkatati",
+    defaultSortedDirection: "asc",
     items: [
       { label: "kur", sortKey: "kurami" },
       { label: "putka", sortKey: "putkatati" },
     ],
-    onSort: (sortKey, sortDirection) => {
-      alert(sortKey + " " + sortDirection);
-    },
   },
 };
 
