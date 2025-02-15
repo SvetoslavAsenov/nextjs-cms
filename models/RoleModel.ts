@@ -18,11 +18,9 @@ export default class RoleModel extends BaseModel<
   }
 
   public getRolePermissionsByRole = (role: Role) => {
-    if (!Array.isArray(role?.permissions)) {
-      return [];
-    }
-
-    return role.permissions as Permission[];
+    return Array.isArray(role?.permissions)
+      ? (role.permissions as Permission[])
+      : [];
   };
 
   public getRolePermissionsById = async (roleId: string) => {
