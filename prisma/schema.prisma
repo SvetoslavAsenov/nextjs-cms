@@ -76,8 +76,9 @@ model Authenticator {
 
 model Role {
   id                  String               @id @default(cuid())
-  name                Json?
+  name                String               @unique
   hierarchy           Int                  @unique @default(0)
+  permissions         Json                 @default("[]")
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
   RegistrationInvites RegistrationInvite[]
