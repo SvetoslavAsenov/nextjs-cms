@@ -9,6 +9,7 @@ export default class AccountModel extends BaseModel<
   Prisma.AccountFindFirstArgs,
   Prisma.AccountFindManyArgs,
   Prisma.AccountUpdateArgs,
+  Prisma.AccountOrderByWithRelationInput,
   Account
 > {
   constructor() {

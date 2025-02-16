@@ -15,6 +15,7 @@ export default class UserModel extends BaseModel<
   Prisma.UserFindFirstArgs,
   Prisma.UserFindManyArgs,
   Prisma.UserUpdateArgs,
+  Prisma.UserOrderByWithRelationInput,
   User
 > {
   constructor() {

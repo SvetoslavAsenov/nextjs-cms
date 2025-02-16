@@ -3,16 +3,22 @@ export default class BaseModel<
   TDeleteArgs,
   TFindUniqueArgs,
   TFindFirstArgs,
-  TFindManyArgs,
+  TFindManyArgs extends {
+    skip?: number;
+    take?: number;
+    orderBy?: TOrderBy | TOrderBy[];
+  },
   TUpdateArgs,
+  TOrderBy extends object,
   TReturn
 > {
-  private createFunc;
-  private deleteFunc;
-  private findUniqueFunc;
-  private findFirstFunc;
-  private findManyFunc;
-  private updateFunc;
+  private createFunc: (args: TCreateArgs) => Promise<TReturn>;
+  private deleteFunc: (args: TDeleteArgs) => Promise<TReturn>;
+  private findUniqueFunc: (args: TFindUniqueArgs) => Promise<TReturn | null>;
+  private findFirstFunc: (args: TFindFirstArgs) => Promise<TReturn | null>;
+  private findManyFunc: (args: TFindManyArgs) => Promise<TReturn[]>;
+  private updateFunc: (args: TUpdateArgs) => Promise<TReturn>;
+  private countFunc: () => Promise<number>;
 
   protected constructor(prismaModel: {
     create: (args: TCreateArgs) => Promise<TReturn>;
@@ -21,6 +27,7 @@ export default class BaseModel<
     findFirst: (args: TFindFirstArgs) => Promise<TReturn | null>;
     findMany: (args: TFindManyArgs) => Promise<TReturn[]>;
     update: (args: TUpdateArgs) => Promise<TReturn>;
+    count: () => Promise<number>;
   }) {
     this.createFunc = prismaModel.create;
     this.deleteFunc = prismaModel.delete;
@@ -28,6 +35,7 @@ export default class BaseModel<
     this.findFirstFunc = prismaModel.findFirst;
     this.findManyFunc = prismaModel.findMany;
     this.updateFunc = prismaModel.update;
+    this.countFunc = prismaModel.count;
   }
 
   public async create(args: TCreateArgs): Promise<TReturn> {
@@ -52,5 +60,52 @@ export default class BaseModel<
 
   public async update(args: TUpdateArgs): Promise<TReturn> {
     return this.updateFunc(args);
+  }
+
+  public async count(): Promise<number> {
+    return this.countFunc();
+  }
+
+  public async getPaginatedRecords({
+    page,
+    resultsPerPage,
+    orderBy,
+    orderDirection,
+  }: {
+    page: number;
+    resultsPerPage: number;
+    orderBy: keyof TReturn;
+    orderDirection: "asc" | "desc";
+  }): Promise<{
+    data: TReturn[];
+    pagination: {
+      currentPage: number;
+      totalPages: number;
+      resultsPerPage: number;
+      totalCount: number;
+    };
+  }> {
+    const skip = (page - 1) * resultsPerPage;
+    const take = resultsPerPage;
+
+    const orderByObj = { [orderBy]: orderDirection } as unknown as TOrderBy;
+
+    const records = await this.findManyFunc({
+      skip,
+      take,
+      orderBy: orderByObj,
+    } as TFindManyArgs);
+
+    const totalCount = await this.countFunc();
+
+    return {
+      data: records,
+      pagination: {
+        currentPage: page,
+        totalPages: Math.ceil(totalCount / resultsPerPage),
+        resultsPerPage,
+        totalCount,
+      },
+    };
   }
 }

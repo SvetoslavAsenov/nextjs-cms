@@ -9,6 +9,7 @@ export default class SessionModel extends BaseModel<
   Prisma.SessionFindFirstArgs,
   Prisma.SessionFindManyArgs,
   Prisma.SessionUpdateArgs,
+  Prisma.SessionOrderByWithRelationInput,
   Session
 > {
   constructor() {

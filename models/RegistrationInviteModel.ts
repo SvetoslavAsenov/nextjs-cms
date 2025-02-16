@@ -9,6 +9,7 @@ export default class RegistrationInviteModel extends BaseModel<
   Prisma.RegistrationInviteFindFirstArgs,
   Prisma.RegistrationInviteFindManyArgs,
   Prisma.RegistrationInviteUpdateArgs,
+  Prisma.RegistrationInviteOrderByWithRelationInput,
   RegistrationInvite
 > {
   constructor() {

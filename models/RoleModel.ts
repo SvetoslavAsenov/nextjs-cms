@@ -11,6 +11,7 @@ export default class RoleModel extends BaseModel<
   Prisma.RoleFindFirstArgs,
   Prisma.RoleFindManyArgs,
   Prisma.RoleUpdateArgs,
+  Prisma.RoleOrderByWithRelationInput,
   Role
 > {
   constructor() {
