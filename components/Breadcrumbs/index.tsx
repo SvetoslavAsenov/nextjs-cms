@@ -4,6 +4,7 @@ export type BreadcrumbsItem = {
   label: string;
   href?: string;
   first?: boolean;
+  icon?: React.ReactElement;
 };
 
 type BreadcrumbsProps = {
@@ -12,7 +13,7 @@ type BreadcrumbsProps = {
 
 const Breadcrumbs = ({ items }: BreadcrumbsProps) => {
   return (
-    <nav className="bg-background flex gap-[0.25rem] flex-wrap">
+    <nav className="bg-background flex gap-[0.25rem] flex-wrap select-none">
       {items.map((item, index) => (
         <Item key={index} {...item} first={index === 0} />
       ))}

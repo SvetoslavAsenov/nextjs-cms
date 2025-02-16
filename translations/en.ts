@@ -35,6 +35,7 @@ const en = {
   logout: "Logout",
   language: "Language",
   site: "Site",
+  home: "Home",
   pages: "Pages",
   navigations: "Navigations",
   users: "Users",

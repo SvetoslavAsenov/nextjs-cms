@@ -35,6 +35,7 @@ const bg = {
   logout: "Изход",
   language: "Език",
   site: "Сайт",
+  home: "Начало",
   pages: "Страници",
   navigations: "Менюта",
   users: "Потребители",
