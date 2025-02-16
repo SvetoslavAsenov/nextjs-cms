@@ -19,5 +19,8 @@ const permissions = {
 
 export default permissions;
 
-export type Permission =
-  (typeof permissions)[keyof typeof permissions][keyof (typeof permissions)[keyof typeof permissions]];
+type ExtractValues<T> = T extends Record<string, infer U> ? U : never;
+
+export type Permission = ExtractValues<
+  (typeof permissions)[keyof typeof permissions]
+>;
