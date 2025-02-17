@@ -24,22 +24,15 @@ export default class UserModel extends BaseModel<
 
   public isExistingUser = async (email: string): Promise<boolean> => {
     const result = await this.findUnique({
-      where: {
-        email,
-      },
+      where: { email },
     });
-
     return !!result;
   };
 
   public setRole = async (userId: string, roleId: string) => {
     await this.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        roleId,
-      },
+      where: { id: userId },
+      data: { roleId },
     });
   };
 
@@ -47,13 +40,8 @@ export default class UserModel extends BaseModel<
     email: string,
     password: string
   ): Promise<boolean> => {
-    const user = await this.findFirst({
-      where: {
-        email,
-      },
-    });
+    const user = await this.findFirst({ where: { email } });
     const withPepper = await applyPepper(password);
-
     return (
       !!user?.password && compareStringWithHash(withPepper, user?.password)
     );
@@ -72,15 +60,58 @@ export default class UserModel extends BaseModel<
       const withPepper = await applyPepper(password);
       const hashedPass = await hashAString(withPepper);
       const user = await this.create({
-        data: {
-          email,
-          password: hashedPass,
-        },
+        data: { email, password: hashedPass },
       });
-
       return user;
     }
-
     return null;
   };
+
+  public async getPaginatedRecords({
+    page,
+    resultsPerPage,
+    orderBy,
+    orderDirection,
+  }: {
+    page: number;
+    resultsPerPage: number;
+    orderBy: keyof User | "Role.name";
+    orderDirection: "asc" | "desc";
+  }) {
+    const skip = (page - 1) * resultsPerPage;
+    const take = resultsPerPage;
+
+    let orderByObj;
+    if (typeof orderBy === "string" && orderBy.includes(".")) {
+      const [relation, field] = orderBy.split(".");
+      orderByObj = { [relation]: { [field]: orderDirection } };
+    } else {
+      orderByObj = { [orderBy]: orderDirection };
+    }
+
+    const query = {
+      skip,
+      take,
+      orderBy: orderByObj,
+      include: { Role: { select: { name: true } } },
+    };
+
+    const records = (await this.findMany(query)) as (User & {
+      Role: { name: string };
+    })[];
+    const totalCount = await this.count();
+
+    return {
+      data: records.map((r) => ({
+        ...r,
+        roleName: r.Role.name,
+      })),
+      pagination: {
+        currentPage: page,
+        totalPages: Math.ceil(totalCount / resultsPerPage),
+        resultsPerPage,
+        totalCount,
+      },
+    };
+  }
 }

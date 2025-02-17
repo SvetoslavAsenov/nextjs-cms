@@ -76,6 +76,7 @@ const Sort = (props: TableOptionsSort) => {
       params.set(SORT_BY_QUERY_PARAM, value);
       params.set(SORT_DIRECTION_QUERY_PARAM, sortedDirection);
       router.push(`?${params.toString()}`);
+      router.refresh();
     }
   };
 

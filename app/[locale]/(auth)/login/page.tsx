@@ -17,7 +17,7 @@ export default async function register({
   const validLocale = getValidLocale(locale);
   const logged = await isLoggedIn();
 
-  if (!logged) {
+  if (logged) {
     redirect(setLocaleToRelativeUrl(REDIRECT_URL, validLocale));
   }
 

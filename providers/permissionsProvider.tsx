@@ -10,6 +10,7 @@ type PermissionsContextProps = {
 
 export type PermissionsProviderProps = {
   permissions?: Permission[];
+  isRoleRoot: boolean;
   children: React.ReactNode;
 };
 
@@ -19,10 +20,11 @@ export const PermissionsContext = createContext<
 
 export const PermissionsProvider = ({
   permissions,
+  isRoleRoot,
   children,
 }: PermissionsProviderProps) => {
   const canAccess = (permission: Permission) => {
-    return !!permissions?.includes?.(permission);
+    return isRoleRoot || !permissions?.includes?.(permission);
   };
 
   return (

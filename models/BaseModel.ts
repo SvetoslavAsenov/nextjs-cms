@@ -7,10 +7,12 @@ export default class BaseModel<
     skip?: number;
     take?: number;
     orderBy?: TOrderBy | TOrderBy[];
+    include?: TInclude;
   },
   TUpdateArgs,
   TOrderBy extends object,
-  TReturn
+  TReturn,
+  TInclude = unknown
 > {
   private createFunc: (args: TCreateArgs) => Promise<TReturn>;
   private deleteFunc: (args: TDeleteArgs) => Promise<TReturn>;
@@ -71,11 +73,13 @@ export default class BaseModel<
     resultsPerPage,
     orderBy,
     orderDirection,
+    include,
   }: {
     page: number;
     resultsPerPage: number;
-    orderBy: keyof TReturn;
+    orderBy: keyof TReturn | `${string}.${string}`;
     orderDirection: "asc" | "desc";
+    include?: TInclude;
   }): Promise<{
     data: TReturn[];
     pagination: {
@@ -88,14 +92,22 @@ export default class BaseModel<
     const skip = (page - 1) * resultsPerPage;
     const take = resultsPerPage;
 
-    const orderByObj = { [orderBy]: orderDirection } as unknown as TOrderBy;
+    let orderByObj: TOrderBy;
+    if (typeof orderBy === "string" && orderBy.includes(".")) {
+      const [relation, field] = orderBy.split(".");
+      orderByObj = { [relation]: { [field]: orderDirection } } as TOrderBy;
+    } else {
+      orderByObj = { [orderBy]: orderDirection } as unknown as TOrderBy;
+    }
 
-    const records = await this.findManyFunc({
+    const query = {
       skip,
       take,
       orderBy: orderByObj,
-    } as TFindManyArgs);
+      ...(include !== undefined ? { include } : {}),
+    } as TFindManyArgs;
 
+    const records = await this.findManyFunc(query);
     const totalCount = await this.countFunc();
 
     return {

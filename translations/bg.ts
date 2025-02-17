@@ -58,6 +58,10 @@ const bg = {
   [permissions.roles.delete]: "Триене на роли",
   [permissions.settings.read]: "Достъп до настройки",
   [permissions.settings.update]: "Редакция на настройки",
+  name: "Име",
+  role: "Роля",
+  createdAt: "Създаден",
+  actions: "Действия",
 };
 
 export default bg;

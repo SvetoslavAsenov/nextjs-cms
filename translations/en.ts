@@ -58,6 +58,10 @@ const en = {
   [permissions.roles.delete]: "Delete roles",
   [permissions.settings.read]: "Access settings",
   [permissions.settings.update]: "Update settings",
+  name: "Name",
+  role: "Role",
+  createdAt: "Created at",
+  actions: "Actions",
 };
 
 export default en;
