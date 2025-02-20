@@ -40,19 +40,10 @@ const TableAndPagination = async ({
     orderBy,
   });
 
-  const users = usersResult.data.map((user) => {
-    return {
-      ...user,
-      createdAt: `${user.createdAt.getDate()}.${
-        user.createdAt.getMonth() + 1
-      }.${user.createdAt.getFullYear()}`,
-    };
-  });
-
   return (
     <>
       <Table
-        users={users}
+        users={usersResult}
         defaultSortedBy={DEFAULT_SORT_BY}
         defaultSortedDirection={DEFAULT_SORT_DIRECTION}
       />

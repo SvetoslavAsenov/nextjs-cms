@@ -8,6 +8,21 @@ import {
 } from "@/utils/auth.server";
 import { credentialsCreateUserSchema } from "@/schemas/auth";
 
+export type PaginatedRecord = User & {
+  roleName: string;
+  roleHierarchy: number;
+};
+
+export type PaginatedRecordsReturn = {
+  data: PaginatedRecord[];
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+    resultsPerPage: number;
+    totalCount: number;
+  };
+};
+
 export default class UserModel extends BaseModel<
   Prisma.UserCreateArgs,
   Prisma.UserDeleteArgs,
@@ -93,19 +108,22 @@ export default class UserModel extends BaseModel<
       skip,
       take,
       orderBy: orderByObj,
-      include: { Role: { select: { name: true } } },
+      include: { Role: { select: { name: true, hierarchy: true } } },
     };
 
     const records = (await this.findMany(query)) as (User & {
-      Role: { name: string };
+      Role: { name: string; hierarchy: number };
     })[];
     const totalCount = await this.count();
 
     return {
-      data: records.map((r) => ({
-        ...r,
-        roleName: r.Role.name,
-      })),
+      data: records.map(
+        (r): PaginatedRecord => ({
+          ...r,
+          roleName: r.Role.name,
+          roleHierarchy: r.Role.hierarchy,
+        })
+      ),
       pagination: {
         currentPage: page,
         totalPages: Math.ceil(totalCount / resultsPerPage),

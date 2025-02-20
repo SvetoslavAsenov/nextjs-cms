@@ -7,6 +7,7 @@ import Spinner from "../Spinner";
 
 type RowOptions = {
   selectable?: boolean;
+  rowActions?: string[];
   selectedTableActions?: string[];
 };
 

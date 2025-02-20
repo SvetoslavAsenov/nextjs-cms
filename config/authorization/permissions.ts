@@ -19,6 +19,14 @@ const permissions = {
 
 export default permissions;
 
+// This is the "root" role.
+// It has the highes hierarchy of 0.
+// It can't be deleted or edited.
+// It also has all the permissions and is granted a full access.
+// Only one user can have this role.
+// The user having this role also can't be deleted.
+export const ROOT_ROLE_NAME = "Root";
+
 type ExtractValues<T> = T extends Record<string, infer U> ? U : never;
 
 export type Permission = ExtractValues<

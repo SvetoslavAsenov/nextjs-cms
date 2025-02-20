@@ -7,9 +7,14 @@ const PermissionsProvider = ({
   permissions,
   isRoleRoot,
   children,
+  hierarchy,
 }: PermissionsProviderProps) => {
   return (
-    <Provider permissions={permissions} isRoleRoot={isRoleRoot}>
+    <Provider
+      permissions={permissions}
+      isRoleRoot={isRoleRoot}
+      hierarchy={hierarchy}
+    >
       {children}
     </Provider>
   );
