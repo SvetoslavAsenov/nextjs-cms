@@ -1,6 +1,7 @@
 export default class BaseModel<
   TCreateArgs,
   TDeleteArgs,
+  TDeleteManyArgs,
   TFindUniqueArgs,
   TFindFirstArgs,
   TFindManyArgs extends {
@@ -16,6 +17,7 @@ export default class BaseModel<
 > {
   private createFunc: (args: TCreateArgs) => Promise<TReturn>;
   private deleteFunc: (args: TDeleteArgs) => Promise<TReturn>;
+  private deleteManyFunc: (args: TDeleteManyArgs) => Promise<{ count: number }>;
   private findUniqueFunc: (args: TFindUniqueArgs) => Promise<TReturn | null>;
   private findFirstFunc: (args: TFindFirstArgs) => Promise<TReturn | null>;
   private findManyFunc: (args: TFindManyArgs) => Promise<TReturn[]>;
@@ -25,6 +27,7 @@ export default class BaseModel<
   protected constructor(prismaModel: {
     create: (args: TCreateArgs) => Promise<TReturn>;
     delete: (args: TDeleteArgs) => Promise<TReturn>;
+    deleteMany: (args: TDeleteManyArgs) => Promise<{ count: number }>;
     findUnique: (args: TFindUniqueArgs) => Promise<TReturn | null>;
     findFirst: (args: TFindFirstArgs) => Promise<TReturn | null>;
     findMany: (args: TFindManyArgs) => Promise<TReturn[]>;
@@ -33,6 +36,7 @@ export default class BaseModel<
   }) {
     this.createFunc = prismaModel.create;
     this.deleteFunc = prismaModel.delete;
+    this.deleteManyFunc = prismaModel.deleteMany;
     this.findUniqueFunc = prismaModel.findUnique;
     this.findFirstFunc = prismaModel.findFirst;
     this.findManyFunc = prismaModel.findMany;
@@ -46,6 +50,10 @@ export default class BaseModel<
 
   public async delete(args: TDeleteArgs): Promise<TReturn> {
     return this.deleteFunc(args);
+  }
+
+  public async deleteMany(args: TDeleteManyArgs): Promise<{ count: number }> {
+    return this.deleteManyFunc(args);
   }
 
   public async findUnique(args: TFindUniqueArgs): Promise<TReturn | null> {

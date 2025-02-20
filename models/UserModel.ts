@@ -8,13 +8,15 @@ import {
 } from "@/utils/auth.server";
 import { credentialsCreateUserSchema } from "@/schemas/auth";
 
-export type PaginatedRecord = User & {
-  roleName: string;
-  roleHierarchy: number;
+export type UserRecordWithRole = User & {
+  Role: {
+    name: string;
+    hierarchy: number;
+  };
 };
 
 export type PaginatedRecordsReturn = {
-  data: PaginatedRecord[];
+  data: UserRecordWithRole[];
   pagination: {
     currentPage: number;
     totalPages: number;
@@ -23,9 +25,12 @@ export type PaginatedRecordsReturn = {
   };
 };
 
+export type GetManyByIdWithRoleReturn = UserRecordWithRole[];
+
 export default class UserModel extends BaseModel<
   Prisma.UserCreateArgs,
   Prisma.UserDeleteArgs,
+  Prisma.UserDeleteManyArgs,
   Prisma.UserFindUniqueArgs,
   Prisma.UserFindFirstArgs,
   Prisma.UserFindManyArgs,
@@ -118,10 +123,8 @@ export default class UserModel extends BaseModel<
 
     return {
       data: records.map(
-        (r): PaginatedRecord => ({
+        (r): UserRecordWithRole => ({
           ...r,
-          roleName: r.Role.name,
-          roleHierarchy: r.Role.hierarchy,
         })
       ),
       pagination: {
@@ -132,4 +135,27 @@ export default class UserModel extends BaseModel<
       },
     };
   }
+
+  public getManyByIdWithRole = async (ids: string[]) => {
+    if (!Array.isArray(ids) || ids.length === 0) {
+      throw new Error("Invalid input: ids must be a non-empty array");
+    }
+
+    const res = (await this.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+      include: { Role: { select: { name: true, hierarchy: true } } },
+    })) as (User & {
+      Role: { name: string; hierarchy: number };
+    })[];
+
+    return res.map(
+      (r): UserRecordWithRole => ({
+        ...r,
+      })
+    );
+  };
 }

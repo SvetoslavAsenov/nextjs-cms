@@ -7,6 +7,7 @@ import type { Permission } from "@/config/authorization/permissions";
 export default class RoleModel extends BaseModel<
   Prisma.RoleCreateArgs,
   Prisma.RoleDeleteArgs,
+  Prisma.RoleDeleteManyArgs,
   Prisma.RoleFindUniqueArgs,
   Prisma.RoleFindFirstArgs,
   Prisma.RoleFindManyArgs,

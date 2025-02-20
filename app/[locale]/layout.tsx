@@ -37,13 +37,9 @@ export default async function MainLayout({
   const user = await getLoggedUser();
 
   let permissions = [] as Permission[];
-  let role;
   if (user?.roleId) {
     const roleModel = new RoleModel();
-    role = await roleModel.findUnique({ where: { id: user.roleId } });
-    if (role) {
-      permissions = roleModel.getRolePermissionsByRole(role);
-    }
+    permissions = await roleModel.getRolePermissionsById(user?.roleId);
   }
 
   let siteLocale = await getCookieValueByKey(SITE_LOCALE_COOKIE);
@@ -58,8 +54,8 @@ export default async function MainLayout({
     <AuthProvider user={user}>
       <PermissionsProvider
         permissions={permissions}
-        isRoleRoot={role?.name === ROOT_ROLE_NAME}
-        hierarchy={role?.hierarchy ?? Infinity}
+        isRoleRoot={user?.roleName === ROOT_ROLE_NAME}
+        hierarchy={user?.roleHierarchy ?? Infinity}
       >
         <LocaleProvider locale={locale}>
           <TranslateProvider>

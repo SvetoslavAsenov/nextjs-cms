@@ -11,7 +11,7 @@ import permissions from "@/config/authorization/permissions";
 
 import type { TableOptions } from "@/components/DataTable";
 import type {
-  PaginatedRecord,
+  UserRecordWithRole,
   PaginatedRecordsReturn,
 } from "@/models/UserModel";
 import type { Row } from "@/components/DataTable";
@@ -31,13 +31,13 @@ const Table = ({
   const { canAccess, hierarchy: loggedUserHierarchy } = usePermissions();
   const { user: loggedUser } = useAuth();
 
-  const getActions = (user: PaginatedRecord) => {
+  const getActions = (user: UserRecordWithRole) => {
     const rowActions = [];
     const selectedTableActions = [];
 
     // Is the hierarchy of the logged in user higher than the current row user
     const loggedHasHigherHierarchyRole =
-      loggedUserHierarchy && loggedUserHierarchy < user.roleHierarchy;
+      !user?.Role?.hierarchy || loggedUserHierarchy < user?.Role?.hierarchy;
 
     // Does the current row represent the logged in user
     const isRowOfTheLoggedUser = loggedUser && loggedUser.id === user.id;
@@ -74,7 +74,7 @@ const Table = ({
       columnKey: "email",
       header: { label: translate("email") },
       cell: (row: Row) => {
-        const user = row.data as PaginatedRecord;
+        const user = row.data as UserRecordWithRole;
         return <CommonRowCell>{user.email}</CommonRowCell>;
       },
     },
@@ -82,8 +82,8 @@ const Table = ({
       columnKey: "role",
       header: { label: translate("role") },
       cell: (row: Row) => {
-        const user = row.data as PaginatedRecord;
-        return <CommonRowCell>{user.roleName}</CommonRowCell>;
+        const user = row.data as UserRecordWithRole;
+        return <CommonRowCell>{user?.Role?.name}</CommonRowCell>;
       },
     },
     {
@@ -93,7 +93,7 @@ const Table = ({
         element: <p className="text-center w-full">{translate("createdAt")}</p>,
       },
       cell: (row: Row) => {
-        const user = row.data as PaginatedRecord;
+        const user = row.data as UserRecordWithRole;
         return (
           <CommonRowCell className="text-center w-full">
             {`${user.createdAt.getDate()}.${
