@@ -30,14 +30,14 @@ const Table = ({
   const { translate } = useTranslate();
   const { canAccess, hierarchy: loggedUserHierarchy } = usePermissions();
   const { user: loggedUser } = useAuth();
-
   const getActions = (user: UserRecordWithRole) => {
     const rowActions = [];
     const selectedTableActions = [];
 
     // Is the hierarchy of the logged in user higher than the current row user
     const loggedHasHigherHierarchyRole =
-      !user?.Role?.hierarchy || loggedUserHierarchy < user?.Role?.hierarchy;
+      (!user?.Role?.hierarchy && user?.Role?.hierarchy !== 0) ||
+      loggedUserHierarchy < user?.Role?.hierarchy;
 
     // Does the current row represent the logged in user
     const isRowOfTheLoggedUser = loggedUser && loggedUser.id === user.id;

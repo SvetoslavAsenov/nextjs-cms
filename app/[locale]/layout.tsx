@@ -10,7 +10,6 @@ import { getLoggedUser } from "@/utils/auth.server";
 import { getCookieValueByKey } from "@/utils/cookies/cookies.server";
 import { SITE_SUPPORTED_LOCALES, SITE_DEFAULT_LOCALE } from "@/config/site";
 import { SITE_LOCALE_COOKIE } from "@/constants/cookies";
-import { LOGIN_URL } from "@/constants/urls";
 import RoleModel from "@/models/RoleModel";
 import { ROOT_ROLE_NAME } from "@/config/authorization/permissions";
 import RedirectHandler from "@/components/RedirectHandler";
@@ -63,7 +62,7 @@ export default async function MainLayout({
               <SidebarProvider>
                 <html lang={locale} className={themeClasses}>
                   <body className={"antialiased"}>
-                    {!user && <RedirectHandler redirectUrl={LOGIN_URL} />}
+                    {!user && <RedirectHandler />}
                     {children}
                   </body>
                 </html>
