@@ -65,7 +65,7 @@ export default async function MainLayout({
               <SidebarProvider>
                 <html lang={locale} className={themeClasses}>
                   <body className={"antialiased"}>
-                    <Toaster position="top-right" />
+                    <Toaster position="top-right" richColors />
                     <CustomDialogProvider>
                       {!user && <RedirectHandler />}
                       {children}
