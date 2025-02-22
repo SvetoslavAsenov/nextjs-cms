@@ -5,7 +5,7 @@ import CustomDialog from "@/components/CustomDialog";
 
 import type { CustomDialogProps } from "@/components/CustomDialog";
 
-type ShowProps = Omit<CustomDialogProps, "shown">;
+type ShowProps = Omit<CustomDialogProps, "shown" | "onOpenChange">;
 
 type CustomDialogContextProps = {
   show: (props: ShowProps) => void;
@@ -28,8 +28,18 @@ export const CustomDialogProvider = ({
     CustomDialogProps | undefined
   >();
 
+  const onOpenChange = (openState: boolean) => {
+    setDialogProps(
+      (prev) => ({ ...prev, open: openState } as CustomDialogProps)
+    );
+  };
+
   const show = (props: ShowProps) => {
-    setDialogProps({ ...props, open: true } as CustomDialogProps);
+    setDialogProps({
+      ...props,
+      open: true,
+      onOpenChange,
+    } as CustomDialogProps);
   };
 
   const close = () => {};

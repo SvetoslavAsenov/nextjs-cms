@@ -64,6 +64,12 @@ const bg = {
   actions: "Действия",
   cancel: "Отказ",
   ok: "OK",
+  delete_user_dialog_title: "Изтриване на потребителя?",
+  delete_user_dialog_description:
+    "Сигурни ли сте, че искате да изтриете потребителя? Това действие е необратимо.",
+  delete_selected_users_dialog_title: "Изтриване на избраните потребители?",
+  delete_selected_users_dialog_description:
+    "Сигурни ли сте, че искате да изтриете избраните потребители? Дова действие е необратимо.",
 };
 
 export default bg;

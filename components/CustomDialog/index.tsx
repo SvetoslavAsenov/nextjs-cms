@@ -73,7 +73,7 @@ export default function CustomDialog({
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          {title && <AlertDialogTitle>{title}</AlertDialogTitle>}
+          <AlertDialogTitle>{title || ""}</AlertDialogTitle>
           {description && (
             <AlertDialogDescription>{description}</AlertDialogDescription>
           )}
