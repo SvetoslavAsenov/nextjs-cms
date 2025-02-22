@@ -10,47 +10,36 @@ type RowOptions = {
   rowActions?: string[];
   selectedTableActions?: string[];
 };
-
 export type Row = {
   data: Record<string, unknown> & { id: string | number };
   options?: RowOptions;
 };
-
 type TableActionLink = {
   type: "link";
   href: string;
   onAction?: never;
 };
-
 export type SelectedRows = Row[];
-
 type ActionCtaHandler = (items?: SelectedRows) => void;
-
 type TableActionCta = {
   type: "action";
   onAction: ActionCtaHandler;
   href?: never;
 };
-
 type TableAction = (TableActionLink | TableActionCta) & {
   title: string;
   shown: "always" | "onselect";
   icon: React.ReactNode;
 };
-
 export type TableOptionsActions = Record<string, TableAction>;
-
 export type TableOptionsSortItem = {
   sortKey: string;
   label: string;
 };
-
 export type TableOptionsSortCommon = {
   items: TableOptionsSortItem[];
 };
-
 export type SortDirectionOptions = "asc" | "desc";
-
 type TableOptionsSortQueryParam = {
   type: "query_param";
   defaultSortedBy: string;
@@ -59,7 +48,6 @@ type TableOptionsSortQueryParam = {
   sortedByKey?: never;
   sortedDirection?: never;
 };
-
 type TableOptionsSortAction = {
   type: "action";
   sortedByKey: string;
@@ -68,10 +56,8 @@ type TableOptionsSortAction = {
   defaultSortedBy?: never;
   defaultSortedDirection?: never;
 };
-
 export type TableOptionsSort = TableOptionsSortCommon &
   (TableOptionsSortAction | TableOptionsSortQueryParam);
-
 export type TableOptions = {
   actions?: TableOptionsActions;
   sort?: TableOptionsSort;
@@ -79,7 +65,6 @@ export type TableOptions = {
   gridColumns?: string;
   loading?: boolean;
 };
-
 export type Column = {
   columnKey: string;
   header: {
@@ -88,13 +73,11 @@ export type Column = {
   };
   cell: (row: Row) => React.ReactElement;
 };
-
 export type DataTableProps = {
   options?: TableOptions;
   columns: Column[];
   rows?: Row[];
 };
-
 export type ToggleSelectAll = () => void;
 export type ToggleSelectRow = (targetRow: Row) => void;
 

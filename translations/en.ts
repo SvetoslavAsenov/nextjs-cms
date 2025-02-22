@@ -62,6 +62,8 @@ const en = {
   role: "Role",
   createdAt: "Created at",
   actions: "Actions",
+  cancel: "Cancel",
+  ok: "OK",
 };
 
 export default en;

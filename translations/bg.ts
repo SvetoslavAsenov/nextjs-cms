@@ -62,6 +62,8 @@ const bg = {
   role: "Роля",
   createdAt: "Създаден",
   actions: "Действия",
+  cancel: "Отказ",
+  ok: "OK",
 };
 
 export default bg;

@@ -1,11 +1,14 @@
-import { getThemeClasses } from "@/utils/theme/theme.server";
 import "@/assets/styles/globals.css";
+
 import LocaleProvider from "@/components/providers/LocaleProvider";
 import TranslateProvider from "@/components/providers/TranslateProvider";
 import AuthProvider from "@/components/providers/AuthProvider";
 import PermissionsProvider from "@/components/providers/PermissionsProvider";
 import SiteProvider from "@/components/providers/SiteProvider";
 import SidebarProvider from "@/components/providers/SidebarProvider";
+import CustomDialogProvider from "@/components/providers/CustomDialogProvider";
+
+import { getThemeClasses } from "@/utils/theme/theme.server";
 import { getLoggedUser } from "@/utils/auth.server";
 import { getCookieValueByKey } from "@/utils/cookies/cookies.server";
 import { SITE_SUPPORTED_LOCALES, SITE_DEFAULT_LOCALE } from "@/config/site";
@@ -62,8 +65,10 @@ export default async function MainLayout({
               <SidebarProvider>
                 <html lang={locale} className={themeClasses}>
                   <body className={"antialiased"}>
-                    {!user && <RedirectHandler />}
-                    {children}
+                    <CustomDialogProvider>
+                      {!user && <RedirectHandler />}
+                      {children}
+                    </CustomDialogProvider>
                   </body>
                 </html>
               </SidebarProvider>
