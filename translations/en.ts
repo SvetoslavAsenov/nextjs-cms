@@ -70,6 +70,8 @@ const en = {
   delete_selected_users_dialog_title: "Delete Selected Users?",
   delete_selected_users_dialog_description:
     "Are you sure you want to delete the selected users? This action is irreversible.",
+  delete_successfull: "Deletion was successful",
+  delete_unsuccessfull: "Deletion was unsuccessful",
 };
 
 export default en;

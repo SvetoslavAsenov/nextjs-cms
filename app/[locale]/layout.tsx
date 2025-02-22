@@ -16,11 +16,11 @@ import { SITE_LOCALE_COOKIE } from "@/constants/cookies";
 import RoleModel from "@/models/RoleModel";
 import { ROOT_ROLE_NAME } from "@/config/authorization/permissions";
 import RedirectHandler from "@/components/RedirectHandler";
-
 import type { Metadata } from "next";
 import type { SupportedLocale } from "@/types/locales";
 import type { SiteSupportedLocale } from "@/types/site/locales";
 import type { Permission } from "@/config/authorization/permissions";
+import { Toaster } from "@/components/shadcn/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -65,6 +65,7 @@ export default async function MainLayout({
               <SidebarProvider>
                 <html lang={locale} className={themeClasses}>
                   <body className={"antialiased"}>
+                    <Toaster position="top-right" />
                     <CustomDialogProvider>
                       {!user && <RedirectHandler />}
                       {children}

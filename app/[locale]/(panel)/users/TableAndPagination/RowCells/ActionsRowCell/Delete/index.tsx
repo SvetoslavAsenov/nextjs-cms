@@ -3,6 +3,7 @@ import { Trash2 } from "lucide-react";
 import { useTranslate } from "@/hooks/useTranslate";
 import { useCustomDialog } from "@/hooks/useCustomDialog";
 import deleteUsersAction from "@/actions/users/deleteUsers";
+import { toast } from "sonner";
 
 type DeleteProps = {
   id: string;
@@ -22,7 +23,12 @@ const Delete = ({ id }: DeleteProps) => {
           title: translate("delete_user_dialog_title"),
           description: translate("delete_user_dialog_description"),
           onConfirm: async () => {
-            await deleteUsersAction(null, [id]);
+            const deletedCount = await deleteUsersAction(null, [id]);
+            if (deletedCount) {
+              toast.success(translate("delete_successfull"));
+            } else {
+              toast.error(translate("delete_unsuccessfull"));
+            }
             router.refresh();
           },
         });

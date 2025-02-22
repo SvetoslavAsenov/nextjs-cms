@@ -70,6 +70,8 @@ const bg = {
   delete_selected_users_dialog_title: "Изтриване на избраните потребители?",
   delete_selected_users_dialog_description:
     "Сигурни ли сте, че искате да изтриете избраните потребители? Дова действие е необратимо.",
+  delete_successfull: "Изтриването беше успешно",
+  delete_unsuccessfull: "Изтриването не беше успешно",
 };
 
 export default bg;
