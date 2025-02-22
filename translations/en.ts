@@ -72,6 +72,7 @@ const en = {
     "Are you sure you want to delete the selected users? This action is irreversible.",
   delete_successfull: "Deletion was successful",
   delete_unsuccessfull: "Deletion was unsuccessful",
+  edit: "Edit",
 };
 
 export default en;
