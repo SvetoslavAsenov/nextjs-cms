@@ -10,7 +10,12 @@ import type { DeleteUsers } from "@/types/actions/UserActionsTypes";
 const deleteUsersAction: DeleteUsers = async (previousState, ids) => {
   const hasPermissionToDelete = canAccess(permissions.users.delete);
   const loggedUser = await getLoggedUser();
-  if (!hasPermissionToDelete || !loggedUser || !Array.isArray(ids))
+  if (
+    !hasPermissionToDelete ||
+    !loggedUser ||
+    !Array.isArray(ids) ||
+    !ids.length
+  )
     throw new Error("Invalid input");
 
   const userModel = new UserModel();
