@@ -14,6 +14,8 @@ const ProfileIcon = () => {
           src={user.image}
           alt="profile"
           className="h-8 w-8 rounded-full"
+          width="32"
+          height="32"
         />
       ) : (
         <div className="h-8 w-8 rounded-full bg-foreground flex items-center justify-center">
