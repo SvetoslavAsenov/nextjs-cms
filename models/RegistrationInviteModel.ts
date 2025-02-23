@@ -5,10 +5,12 @@ import { prisma } from "@/lib/prisma";
 export default class RegistrationInviteModel extends BaseModel<
   Prisma.RegistrationInviteCreateArgs,
   Prisma.RegistrationInviteDeleteArgs,
+  Prisma.RegistrationInviteDeleteManyArgs,
   Prisma.RegistrationInviteFindUniqueArgs,
   Prisma.RegistrationInviteFindFirstArgs,
   Prisma.RegistrationInviteFindManyArgs,
   Prisma.RegistrationInviteUpdateArgs,
+  Prisma.RegistrationInviteOrderByWithRelationInput,
   RegistrationInvite
 > {
   constructor() {

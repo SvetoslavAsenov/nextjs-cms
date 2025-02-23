@@ -2,6 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import bcrypt from "bcryptjs";
+import UserModel from "@/models/UserModel";
 
 import type { AuthUser } from "@/types/auth";
 import type { User } from "@prisma/client";
@@ -12,7 +13,9 @@ type CompareStringWithHash = (
   digest: string
 ) => Promise<boolean>;
 type IsLoggedIn = () => Promise<boolean>;
-type GetLoggedUser = () => Promise<AuthUser | undefined>;
+type GetLoggedUser = () => Promise<
+  (AuthUser & { roleHierarchy: number; roleName: string }) | undefined
+>;
 
 const SALT_ROUNDS = 10;
 
@@ -33,7 +36,7 @@ export const compareStringWithHash: CompareStringWithHash = async (
 
 export const isLoggedIn: IsLoggedIn = async () => {
   const authResult = await auth();
-  const isLogged = !authResult?.user?.id;
+  const isLogged = !!authResult?.user?.id;
   return isLogged;
 };
 
@@ -41,8 +44,22 @@ export const getLoggedUser: GetLoggedUser = async () => {
   const authResult = await auth();
   let user;
   if (authResult?.user?.id) {
-    const { id, email, name, image, roleId } = authResult.user as User;
-    user = { id, email, name, image, roleId };
+    const userModel = new UserModel();
+    const userRecord = await userModel.getManyByIdWithRole([
+      authResult.user.id,
+    ]);
+    if (userRecord?.[0]) {
+      const { id, email, name, image, roleId } = authResult.user as User;
+      user = {
+        id,
+        email,
+        name,
+        image,
+        roleId,
+        roleName: userRecord[0].Role.name,
+        roleHierarchy: userRecord[0].Role.hierarchy,
+      };
+    }
   }
   return user;
 };

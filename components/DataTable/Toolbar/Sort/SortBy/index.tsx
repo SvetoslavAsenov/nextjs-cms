@@ -1,21 +1,23 @@
-import type { TableOptionsSort } from "@/components/DataTable";
+import type { TableOptionsSortItem } from "@/components/DataTable";
 import type { UpdateSortBy } from "..";
 
 const SortBy = ({
-  sortedByKey,
+  sortBy,
   items,
   id,
   updateSortBy,
-}: TableOptionsSort & {
+}: {
   id: string;
   updateSortBy: UpdateSortBy;
+  items: TableOptionsSortItem[];
+  sortBy: string;
 }) => {
   return (
     <select
       name="sort"
       id={id}
       className="bg-background p-0.5"
-      value={sortedByKey}
+      value={sortBy}
       onChange={(ev) => {
         updateSortBy(ev.target.value);
       }}

@@ -1,12 +1,15 @@
 import { ChevronUp, ChevronDown } from "lucide-react";
 
-import type { TableOptionsSort } from "@/components/DataTable";
+import type { SortDirectionOptions } from "@/components/DataTable";
 import type { ToggleSortDirection } from "..";
 
 const SortDirection = ({
   sortedDirection,
   toggleSortDirection,
-}: TableOptionsSort & { toggleSortDirection: ToggleSortDirection }) => {
+}: {
+  sortedDirection: SortDirectionOptions;
+  toggleSortDirection: ToggleSortDirection;
+}) => {
   const chevronsClasses = "w-3 rounded-[0.125rem]";
   const activeChevronClasses = " bg-background";
   const inactiveChevronClasses = " text-background group-hover:bg-primary";

@@ -6,7 +6,7 @@ import { setLocaleToRelativeUrl } from "@/utils/url";
 
 import type { BreadcrumbsItem } from "..";
 
-const Item = ({ label, href, first }: BreadcrumbsItem) => {
+const Item = ({ label, icon, href, first }: BreadcrumbsItem) => {
   const { locale } = useLocale();
 
   const labelClasses = `leading-[0] 
@@ -47,6 +47,8 @@ const Item = ({ label, href, first }: BreadcrumbsItem) => {
     first ? firstClasses : ""
   }`;
 
+  const content = icon ? <div className="scale-[70%]">{icon}</div> : label;
+
   return (
     <li title={label} className={`list-none flex`}>
       {href ? (
@@ -54,10 +56,10 @@ const Item = ({ label, href, first }: BreadcrumbsItem) => {
           href={setLocaleToRelativeUrl(href, locale)}
           className={linkClasses}
         >
-          {label}
+          {content}
         </Link>
       ) : (
-        <span className={spanClasses}>{label}</span>
+        <span className={spanClasses}>{content}</span>
       )}
     </li>
   );
