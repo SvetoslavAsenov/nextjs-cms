@@ -1,11 +1,12 @@
 import { redirect } from "next/navigation";
 import { getValidLocale } from "@/utils/locale";
 import { setLocaleToRelativeUrl } from "@/utils/url";
+import { HOME_URL } from "@/constants/urls";
 
 import AuthCard from "@/components/auth/AuthCard";
 import { isLoggedIn } from "@/utils/auth.server";
 
-const REDIRECT_URL = "/";
+const REDIRECT_URL = HOME_URL;
 
 export default async function register({
   params,
@@ -16,7 +17,7 @@ export default async function register({
   const validLocale = getValidLocale(locale);
   const logged = await isLoggedIn();
 
-  if (!logged) {
+  if (logged) {
     redirect(setLocaleToRelativeUrl(REDIRECT_URL, validLocale));
   }
 

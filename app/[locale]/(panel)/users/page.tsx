@@ -1,20 +1,34 @@
+import Breadcrumbs from "@/components/Breadcrumbs";
+import { canAccess } from "@/utils/permissions/permissions.server";
+import permissions from "@/config/authorization/permissions";
+import { HOME_URL } from "@/constants/urls";
+import { redirect } from "next/navigation";
 import { getTranslation } from "@/utils/translations";
-import type { SupportedLocale } from "@/types/locales";
-import { auth } from "@/lib/auth";
-import { randomBytes } from "crypto";
+import { House } from "lucide-react";
+import TableAndPagination from "./TableAndPagination";
 
-export default async function Users({
-  params,
-}: {
-  params: { locale: SupportedLocale };
-}) {
-  const { locale } = await params;
-  const t = await auth();
+import type { SupportedLocale } from "@/types/locales";
+type UsersProps = {
+  locale: SupportedLocale;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+export default async function Users({ locale, searchParams }: UsersProps) {
+  const canReadUsers = await canAccess(permissions.users.read);
+  if (!canReadUsers) {
+    redirect(HOME_URL);
+  }
+
   return (
-    <div>
-      <h1>{getTranslation("greeting", locale)}</h1>
-      <p>{t?.user?.email}</p>
-      <p>{randomBytes(32).toString("hex")}</p>
+    <div className="flex flex-col gap-2">
+      <Breadcrumbs
+        items={[
+          { label: getTranslation("home", locale), icon: <House />, href: "/" },
+          { label: getTranslation("users", locale) },
+        ]}
+      />
+
+      <TableAndPagination searchParams={searchParams} />
     </div>
   );
 }

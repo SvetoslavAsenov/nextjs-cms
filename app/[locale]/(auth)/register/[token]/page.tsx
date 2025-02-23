@@ -4,9 +4,7 @@ import { setLocaleToRelativeUrl } from "@/utils/url";
 import RegistrationInviteModel from "@/models/RegistrationInviteModel";
 import AuthCard from "@/components/auth/AuthCard";
 import { isLoggedIn } from "@/utils/auth.server";
-
-const HOME_URL = "/";
-const LOGIN_URL = "/login";
+import { HOME_URL, LOGIN_URL } from "@/constants/urls";
 
 export default async function Register({
   params,

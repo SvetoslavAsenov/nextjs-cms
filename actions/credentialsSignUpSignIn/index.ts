@@ -4,6 +4,7 @@ import {
   credentialsRegisterSchema,
 } from "@/schemas/auth";
 import credentialsAuthService from "./credentialsAuthService";
+import { HOME_URL } from "@/constants/urls";
 
 import type {
   CredentialsFormHandlerType,
@@ -12,7 +13,7 @@ import type {
   ResultObjectItemType,
 } from "@/types/actions/CredentialsFormHandlerTypes";
 
-const REDIRECT_URL = "/";
+const REDIRECT_URL = HOME_URL;
 
 const formDataToResultObject: formDataToResultObject = (formData) => {
   const fieldsObject = {

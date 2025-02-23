@@ -1,16 +1,18 @@
 "use client";
 
-import { useAuth } from "@/hooks/useAuth";
+import Breadcrumbs from "@/components/Breadcrumbs";
+
 export default function Test() {
-  const { user, logout } = useAuth();
   return (
-    <>
-      <p onClick={logout} className="cursor-pointer">
-        {user?.email}
-        <br />
-        {typeof user}
-      </p>
-      <p>Test</p>
-    </>
+    <div className="pb-2 border-bottom-solid">
+      <Breadcrumbs
+        items={[
+          { label: "лорем ипсум", href: "/users" },
+          { label: "сит долор" },
+          { label: "лорем ипсум", href: "/test" },
+          { label: "сит долор" },
+        ]}
+      />
+    </div>
   );
 }

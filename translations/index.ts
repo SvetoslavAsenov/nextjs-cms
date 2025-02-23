@@ -1,11 +1,12 @@
-import bg from "./bg.json";
-import en from "./en.json";
+import bg from "./bg";
+import en from "./en";
 import type { SupportedLocale } from "@/types/locales";
 
-type TranslationObject = Record<string, string>;
+export type TranslationKey = keyof typeof bg;
+type TranslationObject = Record<TranslationKey, string>;
 type TranslationsObject = Record<SupportedLocale, TranslationObject>;
 
 export const translations: TranslationsObject = {
-  bg: bg as TranslationObject,
-  en: en as TranslationObject,
+  bg,
+  en,
 };

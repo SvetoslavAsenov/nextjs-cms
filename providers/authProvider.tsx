@@ -2,16 +2,15 @@
 
 import React, { createContext } from "react";
 import { signOut } from "next-auth/react";
+import { LOGIN_URL } from "@/constants/urls";
 
 import type { AuthUser, AuthProviderProps } from "@/types/auth";
 
 type AuthContextProps = {
   isLoggedIn: boolean;
-  user?: AuthUser;
+  user?: AuthUser & { roleHierarchy: number; roleName: string };
   logout: () => void;
 };
-
-const LOGIN_URL = "/login";
 
 export const AuthContext = createContext<AuthContextProps | undefined>(
   undefined

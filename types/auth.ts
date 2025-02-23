@@ -7,6 +7,6 @@ export type AuthUser = {
 };
 
 export type AuthProviderProps = {
-  user?: AuthUser;
+  user?: AuthUser & { roleHierarchy: number; roleName: string };
   children: React.ReactNode;
 };
