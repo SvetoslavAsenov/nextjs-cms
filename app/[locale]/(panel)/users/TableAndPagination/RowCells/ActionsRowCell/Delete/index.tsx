@@ -1,38 +1,17 @@
-import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
-import { useTranslate } from "@/hooks/useTranslate";
-import { useCustomDialog } from "@/hooks/useCustomDialog";
-import deleteUsersAction from "@/actions/users/deleteUsers";
-import { toast } from "sonner";
+import { useDeleteUsersAction } from "../../../../Hooks/useDeleteUsersAction";
 
 type DeleteProps = {
-  id: string;
+  user: Record<string, number>;
 };
 
-const Delete = ({ id }: DeleteProps) => {
-  const router = useRouter();
-  const { show } = useCustomDialog();
-  const { translate } = useTranslate();
+const Delete = ({ user }: DeleteProps) => {
+  const { deleteUsers } = useDeleteUsersAction();
 
   return (
     <Trash2
       className="cursor-pointer hover:text-primary"
-      onClick={async () => {
-        show({
-          type: "confirm",
-          title: translate("delete_user_dialog_title"),
-          description: translate("delete_user_dialog_description"),
-          onConfirm: async () => {
-            const deletedCount = await deleteUsersAction(null, [id]);
-            if (deletedCount) {
-              toast.success(translate("delete_successfull"));
-            } else {
-              toast.error(translate("delete_unsuccessfull"));
-            }
-            router.refresh();
-          },
-        });
-      }}
+      onClick={async () => await deleteUsers([user])}
     />
   );
 };

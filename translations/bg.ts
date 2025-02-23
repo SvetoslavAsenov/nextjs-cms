@@ -65,14 +65,21 @@ const bg = {
   cancel: "Отказ",
   ok: "OK",
   delete_user_dialog_title: "Изтриване на потребителя?",
+  delete_users_dialog_title: "Изтриване на {count} потребителя?",
   delete_user_dialog_description:
     "Сигурни ли сте, че искате да изтриете потребителя? Това действие е необратимо.",
+  delete_users_dialog_description:
+    "Сигурни ли сте, че искате да изтриете {count} потребителя? Това действие е необратимо.",
   delete_selected_users_dialog_title: "Изтриване на избраните потребители?",
   delete_selected_users_dialog_description:
     "Сигурни ли сте, че искате да изтриете избраните потребители? Дова действие е необратимо.",
   delete_successfull: "Изтриването беше успешно",
+  delete_successfull_many: "Успешно бяха изтрити {count} от {total} записа",
   delete_unsuccessfull: "Изтриването не беше успешно",
+  delete_unsuccessfull_many:
+    "{count} от {total} записа не бяха изтрити успешно",
   edit: "Редакция",
+  of: "от",
 };
 
 export default bg;

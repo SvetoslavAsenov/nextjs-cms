@@ -71,8 +71,12 @@ const en = {
   delete_selected_users_dialog_description:
     "Are you sure you want to delete the selected users? This action is irreversible.",
   delete_successfull: "Deletion was successful",
+  delete_successfull_many: "Successfully deleted {count} from {total} records",
   delete_unsuccessfull: "Deletion was unsuccessful",
+  delete_unsuccessfull_many:
+    "{count} from {total} records were not successfully deleted",
   edit: "Edit",
+  of: "of",
 };
 
 export default en;

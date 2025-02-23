@@ -19,9 +19,8 @@ const deleteUsersAction: DeleteUsers = async (previousState, ids) => {
   const filteredItemsIds = fetchedUsers
     .filter((userRecord) => {
       return (
-        userRecord.id !== loggedUser?.id &&
-        (!userRecord?.Role?.hierarchy ||
-          loggedUser?.roleHierarchy < userRecord?.Role?.hierarchy)
+        typeof userRecord?.Role?.hierarchy !== "number" ||
+        loggedUser?.roleHierarchy < userRecord?.Role?.hierarchy
       );
     })
     ?.map((record) => record.id);

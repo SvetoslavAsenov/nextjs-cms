@@ -8,7 +8,7 @@ import type { AuthUser, AuthProviderProps } from "@/types/auth";
 
 type AuthContextProps = {
   isLoggedIn: boolean;
-  user?: AuthUser;
+  user?: AuthUser & { roleHierarchy: number; roleName: string };
   logout: () => void;
 };
 

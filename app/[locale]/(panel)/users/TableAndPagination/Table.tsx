@@ -7,6 +7,7 @@ import CommonRowCell from "./RowCells/CommonRowCell";
 import ActionsRowCell from "./RowCells/ActionsRowCell";
 import { useAuth } from "@/hooks/useAuth";
 import { usePermissions } from "@/hooks/usePermissions";
+import { useDeleteUsersAction } from "../Hooks/useDeleteUsersAction";
 import permissions from "@/config/authorization/permissions";
 
 import type { TableOptions } from "@/components/DataTable";
@@ -30,6 +31,8 @@ const Table = ({
   const { translate } = useTranslate();
   const { canAccess, hierarchy: loggedUserHierarchy } = usePermissions();
   const { user: loggedUser } = useAuth();
+  const { deleteUsers } = useDeleteUsersAction();
+
   const getActions = (user: UserRecordWithRole) => {
     const rowActions = [];
     const selectedTableActions = [];
@@ -109,7 +112,11 @@ const Table = ({
         label: translate("actions"),
         element: <p className="text-right">{translate("actions")}</p>,
       },
-      cell: (row: Row) => <ActionsRowCell row={row} />,
+      cell: (row: Row) => {
+        return (
+          <ActionsRowCell row={row as Row & { data: UserRecordWithRole }} />
+        );
+      },
     },
   ];
 
@@ -122,8 +129,19 @@ const Table = ({
         type: "action",
         icon: <Trash2 />,
         shown: "onselect",
-        onAction: (items) => {
-          console.log(items);
+        onAction: async (items) => {
+          if (items?.length) {
+            const usersArr = items?.map((item) => {
+              const user = item.data as UserRecordWithRole;
+              return {
+                [user.id]:
+                  typeof user?.Role?.hierarchy === "number"
+                    ? user.Role.hierarchy
+                    : Infinity,
+              };
+            });
+            await deleteUsers(usersArr);
+          }
         },
       },
       ...(canAccess(permissions.users.create)
@@ -133,7 +151,7 @@ const Table = ({
               type: "link",
               icon: <ListPlus />,
               shown: "always",
-              href: "/users",
+              href: "/users/create",
             },
           }
         : {}),
