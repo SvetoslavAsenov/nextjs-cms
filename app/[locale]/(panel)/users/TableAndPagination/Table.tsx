@@ -122,7 +122,7 @@ const Table = ({
 
   const userTableOptions: TableOptions = {
     selectableItems: true,
-    gridColumns: "2.5rem minmax(6rem, 1fr) 10rem 10rem 6.1rem",
+    gridColumns: "2.5rem minmax(6rem, 1fr) 10rem 10rem 6.125rem",
     actions: {
       delete: {
         title: "Delete",
