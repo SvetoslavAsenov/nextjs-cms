@@ -4,7 +4,6 @@ import permissions from "@/config/authorization/permissions";
 import { HOME_URL } from "@/constants/urls";
 import { redirect } from "next/navigation";
 import { getTranslation } from "@/utils/translations";
-import { House } from "lucide-react";
 import TableAndPagination from "./TableAndPagination";
 
 import type { SupportedLocale } from "@/types/locales";
@@ -22,10 +21,8 @@ export default async function Users({ locale, searchParams }: UsersProps) {
   return (
     <div className="flex flex-col gap-2">
       <Breadcrumbs
-        items={[
-          { label: getTranslation("home", locale), icon: <House />, href: "/" },
-          { label: getTranslation("users", locale) },
-        ]}
+        locale={locale}
+        items={[{ label: getTranslation("users", locale) }]}
       />
 
       <TableAndPagination searchParams={searchParams} />

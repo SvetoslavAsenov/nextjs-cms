@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useLocale } from "@/hooks/useLocale";
 import { setLocaleToRelativeUrl } from "@/utils/url";
 
-import type { BreadcrumbsItem } from "..";
+import type { BreadcrumbsItem } from "@/types/components/breadcrumbs";
 
 const Item = ({ label, icon, href, first }: BreadcrumbsItem) => {
   const { locale } = useLocale();
