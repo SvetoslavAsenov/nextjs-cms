@@ -6,6 +6,7 @@ import type { Permission } from "@/config/authorization/permissions";
 
 export const canAccess = async (permission: Permission) => {
   const user = await getLoggedUser();
+
   if (!user?.roleId) {
     return false;
   }

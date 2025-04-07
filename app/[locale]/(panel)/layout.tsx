@@ -11,7 +11,9 @@ export default async function AppLayout({ children }: AppLayoutProps) {
     <div className="app-wrapper">
       <AppHeader />
       <Sidebar />
-      <Main>{children}</Main>
+      <Main>
+        <div className="flex flex-col gap-2">{children}</div>
+      </Main>
     </div>
   );
 }

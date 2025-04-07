@@ -1,6 +1,6 @@
 import { Pencil } from "lucide-react";
 import Link from "next/link";
-import { USERS_UPDATE } from "@/constants/urls";
+import { USERS_UPDATE_URL } from "@/constants/urls";
 import { useTranslate } from "@/hooks/useTranslate";
 
 type UpdateProps = {
@@ -9,7 +9,7 @@ type UpdateProps = {
 
 const Update = ({ id }: UpdateProps) => {
   const { translate } = useTranslate();
-  const href = USERS_UPDATE.replace("{id}", id);
+  const href = USERS_UPDATE_URL.replace("{id}", id);
 
   return (
     <Link href={href} title={translate("edit")}>

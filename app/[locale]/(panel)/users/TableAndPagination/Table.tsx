@@ -9,6 +9,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { usePermissions } from "@/hooks/usePermissions";
 import { useDeleteUsersAction } from "../Hooks/useDeleteUsersAction";
 import permissions from "@/config/authorization/permissions";
+import { USERS_NEW_URL } from "@/constants/urls";
 
 import type { TableOptions } from "@/components/DataTable";
 import type {
@@ -151,7 +152,7 @@ const Table = ({
               type: "link",
               icon: <ListPlus />,
               shown: "always",
-              href: "/users/create",
+              href: USERS_NEW_URL,
             },
           }
         : {}),
