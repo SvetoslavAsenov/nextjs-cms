@@ -8,11 +8,12 @@ import TableAndPagination from "./TableAndPagination";
 
 import type { SupportedLocale } from "@/types/locales";
 type UsersProps = {
-  locale: SupportedLocale;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  params: { locale: SupportedLocale };
 };
 
-export default async function Users({ locale, searchParams }: UsersProps) {
+export default async function Users({ searchParams, params }: UsersProps) {
+  const { locale } = await params;
   const canReadUsers = await canAccess(permissions.users.read);
   if (!canReadUsers) {
     redirect(HOME_URL);

@@ -34,6 +34,7 @@ export default async function MainLayout({
   children: React.ReactNode;
   params: { locale: SupportedLocale };
 }>) {
+  // This is the admin panel locale
   const { locale } = await params;
   const themeClasses = await getThemeClasses();
   const user = await getLoggedUser();
@@ -44,6 +45,7 @@ export default async function MainLayout({
     permissions = await roleModel.getRolePermissionsById(user?.roleId);
   }
 
+  // This is the edited site language version
   let siteLocale = await getCookieValueByKey(SITE_LOCALE_COOKIE);
   if (
     !siteLocale ||
