@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState } from "react";
 import { useTranslate } from "@/hooks/useTranslate";
 import { CardContent } from "@/components/shadcn/ui/card";
 import { Button } from "@/components/shadcn/ui/button";
@@ -11,6 +11,7 @@ import CredentialsFormHandler from "@/actions/credentialsSignUpSignIn";
 
 import type { AuthCardContentProps } from "../AuthCard.types";
 import type { ResultObjectType } from "@/types/actions/CredentialsFormHandlerTypes";
+import type { TranslationKey } from "@/translations";
 
 const LOGIN_ROUTE = "/login";
 const FORGOT_PASSWORD_ROUTE = "/forgot-password";
@@ -26,15 +27,6 @@ const AuthCardContent = ({
     ResultObjectType,
     FormData
   >(CredentialsFormHandler, { fields: {}, errors: {} });
-
-  useEffect(() => {
-    if (actionState?.redirectUrl && typeof window !== "undefined") {
-      // Using window.location.href instead of router.push to ensure a full page reload.
-      // Authentication data is stored in cookies and relies on SSR,
-      // and we need to fully synchronized the session with the server.
-      window.location.href = actionState.redirectUrl;
-    }
-  }, [actionState?.redirectUrl]);
 
   const getError = (fieldName: string): string[] | undefined => {
     const error = actionState?.errors?.[fieldName];
@@ -57,12 +49,12 @@ const AuthCardContent = ({
           : undefined;
 
       case "confirmPassword":
-        return error === "passwords_does_not_match"
-          ? [translate("password_does_not_match")]
+        return error === "passwords_do_not_match"
+          ? [translate("passwords_do_not_match")]
           : undefined;
 
       default:
-        return [translate(error)];
+        return [translate(error as TranslationKey)];
     }
   };
 

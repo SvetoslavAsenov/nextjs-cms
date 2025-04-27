@@ -34,7 +34,7 @@ export const credentialsRegisterSchema = z
       return values.password === values.confirmPassword;
     },
     {
-      message: "passwords_does_not_match",
+      message: "passwords_do_not_match",
       path: ["confirmPassword"],
     }
   );

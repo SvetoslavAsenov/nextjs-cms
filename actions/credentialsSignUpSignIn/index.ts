@@ -3,6 +3,7 @@ import {
   credentialsLoginSchema,
   credentialsRegisterSchema,
 } from "@/schemas/auth";
+import { redirect } from "next/navigation";
 import credentialsAuthService from "./credentialsAuthService";
 import { HOME_URL } from "@/constants/urls";
 
@@ -48,10 +49,11 @@ const CredentialsFormHandler: CredentialsFormHandlerType = async (
     for (const issue of validationResult.error.issues) {
       // If there is an error with the token
       // we will redirect the user.
-      if (issue?.path?.[0] === "token") {
-        resultObject.redirectUrl = REDIRECT_URL;
-        return resultObject;
-      }
+      // if (issue?.path?.[0] === "token") {
+      //   resultObject.redirectUrl = REDIRECT_URL;
+      //   return resultObject;
+      // }
+      redirect(REDIRECT_URL);
       const errorCode: string | undefined = issue?.code;
       const errorMsg: string | undefined = issue?.message;
       resultObject.errors[issue?.path?.[0]] =
@@ -71,8 +73,7 @@ const CredentialsFormHandler: CredentialsFormHandlerType = async (
     return resultObject;
   }
 
-  resultObject.redirectUrl = REDIRECT_URL;
-  return resultObject;
+  redirect(REDIRECT_URL);
 };
 
 export default CredentialsFormHandler;

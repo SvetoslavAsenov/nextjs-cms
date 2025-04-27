@@ -26,7 +26,7 @@ const en = {
   email_taken: "A user with this email already exists.",
   invalid_password_format: "Invalid password format",
   invalid_email: "Invalid email",
-  passwords_does_not_match: "Passwords do not match",
+  passwords_do_not_match: "Passwords do not match",
   password_requirements:
     "The password must be at least 8 characters long and contain an uppercase letter, a lowercase letter, a digit, and a special character (!@#$%^&*).",
   invalid_credentials: "Invalid credentials",

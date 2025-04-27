@@ -11,12 +11,14 @@ import {
 import ChangeLocale from "./ChangeLocale";
 import AuthCardContent from "./AuthCardContent";
 
+import { useTranslate } from "@/hooks/useTranslate";
+
 import type {
   AuthCardVariantTranslations,
   AuthCardProps,
   AuthCardVariant,
 } from "./AuthCard.types";
-import { useTranslate } from "@/hooks/useTranslate";
+import type { TranslationKey } from "@/translations";
 
 const AuthCard = ({ locale, variant, token }: AuthCardProps) => {
   useSetRegistrationInviteToken(token);
@@ -41,7 +43,9 @@ const AuthCard = ({ locale, variant, token }: AuthCardProps) => {
     const res: AuthCardVariantTranslations = {} as AuthCardVariantTranslations;
 
     for (const [key, value] of Object.entries(keys)) {
-      res[key as keyof AuthCardVariantTranslations] = translate(value);
+      res[key as keyof AuthCardVariantTranslations] = translate(
+        value as TranslationKey
+      );
     }
 
     return res;
