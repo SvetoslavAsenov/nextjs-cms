@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { getTranslation } from "@/utils/translations";
 import { getLoggedUser } from "@/utils/auth.server";
 import UserModel from "@/models/UserModel";
+import UserDetails from "../../components/UserDetails";
 
 import type { SupportedLocale } from "@/types/locales";
 type UsersProps = {
@@ -14,9 +15,20 @@ type UsersProps = {
 };
 
 const validateParamsAndPermissions = async (targetUserId: string) => {
-  const canReadUsers = await canAccess(permissions.users.read);
-  const loggedInUser = await getLoggedUser();
-  if (!canReadUsers || !loggedInUser) {
+  const [hasPermissionsResult, loggedInUserResult] = await Promise.allSettled([
+    canAccess([permissions.users.read, permissions.users.update]),
+    getLoggedUser(),
+  ]);
+
+  const hasPermissions =
+    hasPermissionsResult.status === "fulfilled" && hasPermissionsResult.value;
+  const loggedInUser =
+    loggedInUserResult.status === "fulfilled" ? loggedInUserResult.value : null;
+
+  if (
+    !loggedInUser ||
+    (!hasPermissions && loggedInUser?.id !== targetUserId!)
+  ) {
     return false;
   }
 
@@ -26,12 +38,12 @@ const validateParamsAndPermissions = async (targetUserId: string) => {
   return !!(
     targetUser &&
     targetUser.Role &&
-    (loggedInUser?.roleHierarchy > targetUser.Role.hierarchy ||
+    (loggedInUser?.roleHierarchy < targetUser.Role.hierarchy ||
       loggedInUser.id === targetUserId)
   );
 };
 
-export default async function Users({ locale, params }: UsersProps) {
+const UpdateUser = async ({ locale, params }: UsersProps) => {
   const { id: targetUserId } = await params;
   const validParamsAndHasPermissions = await validateParamsAndPermissions(
     targetUserId
@@ -42,9 +54,14 @@ export default async function Users({ locale, params }: UsersProps) {
   }
 
   return (
-    <Breadcrumbs
-      locale={locale}
-      items={[{ label: getTranslation("users", locale) }]}
-    />
+    <>
+      <Breadcrumbs
+        locale={locale}
+        items={[{ label: getTranslation("users", locale) }]}
+      />
+      <UserDetails />
+    </>
   );
-}
+};
+
+export default UpdateUser;

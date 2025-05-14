@@ -38,6 +38,9 @@ const InputGroup = ({
           {...labelProps}
         >
           {label}
+          {inputProps?.required && (
+            <span className="ml-1 text-destructive">*</span>
+          )}
         </Label>
       )}
       <Component onChange={handleOnChange} {...inputProps} />

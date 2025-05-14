@@ -67,6 +67,9 @@ const en = {
   delete_user_dialog_title: "Delete User?",
   delete_user_dialog_description:
     "Are you sure you want to delete this user? This action is irreversible.",
+  delete_users_dialog_title: "Delete {count} users?",
+  delete_users_dialog_description:
+    "Are you sure you want to delete {count} users? This action is irreversible!",
   delete_selected_users_dialog_title: "Delete Selected Users?",
   delete_selected_users_dialog_description:
     "Are you sure you want to delete the selected users? This action is irreversible.",
@@ -77,6 +80,8 @@ const en = {
     "{count} from {total} records were not successfully deleted",
   edit: "Edit",
   of: "of",
+  change_password: "Change password",
+  new_password: "New password",
 };
 
 export default en;
