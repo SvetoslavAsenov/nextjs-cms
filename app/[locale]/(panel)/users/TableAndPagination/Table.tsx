@@ -50,7 +50,7 @@ const Table = ({
     // Can edit its own profile and profiles of other users with a lower hierarchy role.
     if (
       isRowOfTheLoggedUser ||
-      (canAccess(permissions.users.update) && loggedHasHigherHierarchyRole)
+      (canAccess([permissions.users.update]) && loggedHasHigherHierarchyRole)
     ) {
       rowActions.push("update");
     }
@@ -61,7 +61,7 @@ const Table = ({
     if (
       !isRowOfTheLoggedUser &&
       loggedHasHigherHierarchyRole &&
-      canAccess(permissions.users.delete)
+      canAccess([permissions.users.delete])
     ) {
       rowActions.push("delete");
       selectedTableActions.push("delete");
@@ -145,7 +145,7 @@ const Table = ({
           }
         },
       },
-      ...(canAccess(permissions.users.create)
+      ...(canAccess([permissions.users.create])
         ? {
             add: {
               title: "Add",

@@ -5,7 +5,7 @@ import React, { createContext } from "react";
 import type { Permission } from "@/config/authorization/permissions";
 
 type PermissionsContextProps = {
-  canAccess: (permission: Permission) => boolean;
+  canAccess: (permissions: Permission[]) => boolean;
   permissions: Permission[];
   isRoleRoot: boolean;
   hierarchy: number;
@@ -23,18 +23,21 @@ export const PermissionsContext = createContext<
 >(undefined);
 
 export const PermissionsProvider = ({
-  permissions,
+  permissions: userPermissions,
   isRoleRoot,
   children,
   hierarchy,
 }: PermissionsProviderProps) => {
-  const canAccess = (permission: Permission) => {
-    return isRoleRoot || permissions.includes?.(permission);
+  const canAccess = (permissions: Permission[]) => {
+    const hasPermissions = permissions.every((permission) =>
+      userPermissions.includes(permission)
+    );
+    return isRoleRoot || hasPermissions;
   };
 
   return (
     <PermissionsContext
-      value={{ canAccess, isRoleRoot, hierarchy, permissions }}
+      value={{ canAccess, isRoleRoot, hierarchy, permissions: userPermissions }}
     >
       {children}
     </PermissionsContext>

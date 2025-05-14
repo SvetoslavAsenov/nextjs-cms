@@ -14,7 +14,7 @@ type UsersProps = {
 
 export default async function Users({ searchParams, params }: UsersProps) {
   const { locale } = await params;
-  const canReadUsers = await canAccess(permissions.users.read);
+  const canReadUsers = await canAccess([permissions.users.read]);
   if (!canReadUsers) {
     redirect(HOME_URL);
   }
