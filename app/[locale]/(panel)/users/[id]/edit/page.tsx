@@ -1,65 +1,83 @@
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { canAccess } from "@/utils/permissions/permissions.server";
-import permissions from "@/config/authorization/permissions";
-import { HOME_URL } from "@/constants/urls";
+import { HOME_URL, USERS_URL } from "@/constants/urls";
 import { redirect } from "next/navigation";
 import { getTranslation } from "@/utils/translations";
 import { getLoggedUser } from "@/utils/auth.server";
 import UserModel from "@/models/UserModel";
+import RoleModel from "@/models/RoleModel";
 import UserDetails from "../../components/UserDetails";
+import { Pencil } from "lucide-react";
+import { validateParamsAndPermissions } from "@/utils/users/crud";
 
 import type { SupportedLocale } from "@/types/locales";
+
 type UsersProps = {
   locale: SupportedLocale;
   params: Promise<{ id: string }>;
 };
 
-const validateParamsAndPermissions = async (targetUserId: string) => {
-  const [hasPermissionsResult, loggedInUserResult] = await Promise.allSettled([
-    canAccess([permissions.users.read, permissions.users.update]),
-    getLoggedUser(),
-  ]);
+const UpdateUser = async ({ locale, params }: UsersProps) => {
+  const { id: targetUserId } = await params;
 
-  const hasPermissions =
-    hasPermissionsResult.status === "fulfilled" && hasPermissionsResult.value;
+  const userModel = new UserModel();
+  const roleModel = new RoleModel();
+
+  const [targetUserResult, rolesResult, loggedInUserResult] =
+    await Promise.allSettled([
+      userModel.getManyByIdWithRole([targetUserId]),
+      roleModel.findMany({
+        orderBy: { hierarchy: "asc" },
+      }),
+      getLoggedUser(),
+    ]);
+
+  const targetUser =
+    targetUserResult.status === "fulfilled"
+      ? targetUserResult.value?.[0]
+      : null;
+
   const loggedInUser =
     loggedInUserResult.status === "fulfilled" ? loggedInUserResult.value : null;
 
-  if (
-    !loggedInUser ||
-    (!hasPermissions && loggedInUser?.id !== targetUserId!)
-  ) {
-    return false;
-  }
+  const ownProfile = loggedInUser?.id === targetUser?.id;
 
-  const userModel = new UserModel();
-  const [targetUser] = await userModel.getManyByIdWithRole([targetUserId]);
-
-  return !!(
-    targetUser &&
-    targetUser.Role &&
-    (loggedInUser?.roleHierarchy < targetUser.Role.hierarchy ||
-      loggedInUser.id === targetUserId)
-  );
-};
-
-const UpdateUser = async ({ locale, params }: UsersProps) => {
-  const { id: targetUserId } = await params;
   const validParamsAndHasPermissions = await validateParamsAndPermissions(
-    targetUserId
+    "update",
+    loggedInUser,
+    targetUser
   );
+
+  const PREVIEW_USER_URL = `${USERS_URL}/${targetUser?.id}`;
 
   if (!validParamsAndHasPermissions) {
-    redirect(HOME_URL);
+    redirect(targetUser ? PREVIEW_USER_URL : HOME_URL);
   }
+
+  const roles = rolesResult.status === "fulfilled" ? rolesResult.value : [];
 
   return (
     <>
       <Breadcrumbs
         locale={locale}
-        items={[{ label: getTranslation("users", locale) }]}
+        items={[
+          { label: getTranslation("users", locale), href: USERS_URL },
+          {
+            label: targetUser?.email as string,
+            href: PREVIEW_USER_URL,
+          },
+          { label: getTranslation("edit", locale), icon: <Pencil /> },
+        ]}
       />
-      <UserDetails />
+
+      <UserDetails
+        ownProfile={ownProfile}
+        userData={{
+          email: targetUser?.email as string,
+          roleId: targetUser?.roleId as string,
+        }}
+        loggedUserHierarchy={loggedInUser?.roleHierarchy}
+        roles={roles}
+      />
     </>
   );
 };

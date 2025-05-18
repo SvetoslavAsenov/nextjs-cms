@@ -18,7 +18,7 @@ export const password = z
   .refine((password) => /[0-9]/.test(password), {
     message: "invalid_password_format",
   })
-  .refine((password) => /[!@#$%^&*]/.test(password), {
+  .refine((password) => /[!@#$%^&*)(]/.test(password), {
     message: "invalid_password_format",
   });
 

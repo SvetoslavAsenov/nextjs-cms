@@ -28,7 +28,7 @@ const en = {
   invalid_email: "Invalid email",
   passwords_do_not_match: "Passwords do not match",
   password_requirements:
-    "The password must be at least 8 characters long and contain an uppercase letter, a lowercase letter, a digit, and a special character (!@#$%^&*).",
+    "The password must be at least 8 characters long and contain an uppercase letter, a lowercase letter, a digit, and a special character !@#$%^&*)(",
   invalid_credentials: "Invalid credentials",
   unexpected_error: "An unexpected error occurred",
   profile: "Profile",
@@ -82,6 +82,7 @@ const en = {
   of: "of",
   change_password: "Change password",
   new_password: "New password",
+  save: "Save",
 };
 
 export default en;
