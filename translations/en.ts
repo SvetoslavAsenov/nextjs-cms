@@ -87,6 +87,10 @@ const en = {
   back: "Back",
   this_field_is_mandatory: "This field is mandatory",
   password_atleast_8_characters: "Password must be at least 8 characters",
+  something_went_wrong: "Something went wrong! Please try again.",
+  wrong_password: "Wrong password!",
+  successfully_created_new_user: "The user was created successfully.",
+  successfully_updated_new_user: "The user was updated successfully.",
 };
 
 export default en;

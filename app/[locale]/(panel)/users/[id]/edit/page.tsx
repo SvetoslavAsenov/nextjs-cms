@@ -12,12 +12,11 @@ import { validateParamsAndPermissions } from "@/utils/users/crud";
 import type { SupportedLocale } from "@/types/locales";
 
 type UsersProps = {
-  locale: SupportedLocale;
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string; locale: SupportedLocale }>;
 };
 
-const UpdateUser = async ({ locale, params }: UsersProps) => {
-  const { id: targetUserId } = await params;
+const UpdateUser = async ({ params }: UsersProps) => {
+  const { id: targetUserId, locale } = await params;
 
   const userModel = new UserModel();
   const roleModel = new RoleModel();
@@ -79,9 +78,11 @@ const UpdateUser = async ({ locale, params }: UsersProps) => {
         userData={{
           email: targetUser?.email as string,
           roleId: targetUser?.roleId as string,
+          userId: targetUserId,
         }}
         loggedUserHierarchy={loggedInUser.roleHierarchy}
         roles={roles}
+        locale={locale}
       />
     </>
   );

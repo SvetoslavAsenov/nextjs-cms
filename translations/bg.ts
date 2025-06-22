@@ -87,6 +87,10 @@ const bg = {
   back: "Назад",
   this_field_is_mandatory: "Това поле е задължително",
   password_atleast_8_characters: "Паролата трябва да е с дължна поне 8 символа",
+  something_went_wrong: "Нещо се обърка! Моля опитайте отново.",
+  wrong_password: "Грешна парола!",
+  successfully_created_new_user: "Потребителя беше създаден успешно.",
+  successfully_updated_new_user: "Потребителя беше обновен успешно.",
 };
 
 export default bg;

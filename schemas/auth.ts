@@ -70,6 +70,17 @@ export const updateProfileWithPassword = z
     path: ["confirmPassword"],
   });
 
+export const createNewUser = z
+  .object({
+    email,
+    newPassword: password,
+    confirmPassword: stringNotEmpty,
+  })
+  .refine(refineMatchingPasswords, {
+    message: "passwords_do_not_match",
+    path: ["confirmPassword"],
+  });
+
 export const credentialsLoginSchema = z.object({
   email,
   password: z.string().max(MAX_PASSWORD_LENGTH),

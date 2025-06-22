@@ -14,7 +14,7 @@ export type FormFieldsObjectType = {
   errors: FormFieldsObjectTypeErrorsItemType;
 };
 
-export const formDataToFieldsObject = (
+export const convertFormDataToFieldsObject = (
   formData: FormData
 ): FormFieldsObjectType => {
   const fieldsObject: FormFieldsObjectType = {

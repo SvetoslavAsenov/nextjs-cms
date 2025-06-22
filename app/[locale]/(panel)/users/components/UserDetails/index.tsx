@@ -6,6 +6,7 @@ import permissions from "@/config/authorization/permissions";
 // Components
 import InputGroup from "@/components/ui/InputGroup";
 import ButtonsGroup, { ButtonItem } from "@/components/ButtonsGroup";
+import Spinner from "@/components/Spinner";
 import { Label } from "@/components/shadcn/ui/label";
 import { Switch } from "@/components/shadcn/ui/switch";
 import {
@@ -17,28 +18,30 @@ import {
 } from "@/components/shadcn/ui/select";
 
 // Hooks
-import { useState, useActionState, useRef } from "react";
+import { useState, useRef } from "react";
 import { useTranslate } from "@/hooks/useTranslate";
 import { usePermissions } from "@/hooks/usePermissions";
 
-// Schemas
-import { updateProfile, updateProfileWithPassword } from "@/schemas/auth";
-
 // Utils
-import {
-  formDataToFieldsObject,
-  addValidationErrorsToFieldsObject,
-} from "@/utils/validation";
+import { toast } from "sonner";
+import { validateFormData } from "@/utils/users/crud";
+
+// Actions
+import createUpdateUserAction from "@/actions/users/createUpdateUsers";
 
 // Types
 import type { Role } from "@prisma/client";
-import type { SafeParseReturnType } from "zod";
-import type { FormFieldsObjectTypeErrorsItemType } from "@/utils/validation";
+import type {
+  FormFieldsObjectType,
+  FormFieldsObjectTypeErrorsItemType,
+} from "@/utils/validation";
 import type { TranslationKey } from "@/translations";
+import type { SupportedLocale } from "@/types/locales";
 
 type UserData = {
   email: string;
   roleId: string;
+  userId?: string;
 };
 
 type UserDetailsProps = {
@@ -47,6 +50,12 @@ type UserDetailsProps = {
   readOnly?: boolean;
   userData?: UserData;
   loggedUserHierarchy: number;
+  locale: SupportedLocale;
+};
+
+const showToast = (msg: string, success: boolean) => {
+  const fn = success ? toast.success : toast.error;
+  fn(msg, { duration: 5000 });
 };
 
 const UserDetails = ({
@@ -55,38 +64,45 @@ const UserDetails = ({
   userData,
   roles,
   loggedUserHierarchy,
+  locale,
 }: UserDetailsProps) => {
   const { translate } = useTranslate();
   const { canAccess } = usePermissions();
   const [changePasswordChecked, setChangePasswordChecked] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<FormFieldsObjectTypeErrorsItemType>({});
   const isRoot = loggedUserHierarchy === 0;
   const formRef = useRef<HTMLFormElement>(null);
 
   const buttons: ButtonItem[] = [];
 
-  const handleSubmit = () => {
-    if (!formRef.current) return;
-    const formData = new FormData(formRef.current);
-    const fieldsObject = formDataToFieldsObject(formData);
+  const translateErrors = (fieldsObject: FormFieldsObjectType) => {
+    const translatedErrors = Object.fromEntries(
+      Object.entries(fieldsObject.errors).map(([field, messages]) => [
+        field,
+        messages && messages.length > 0
+          ? [translate(messages[0] as TranslationKey)] // only first translated error
+          : [],
+      ])
+    );
 
-    const validationResult = (
-      changePasswordChecked ? updateProfileWithPassword : updateProfile
-    ).safeParse(fieldsObject.fields) as SafeParseReturnType<unknown, unknown>;
+    return translatedErrors;
+  };
 
-    if (validationResult.success) {
-      setErrors({});
-    } else {
-      addValidationErrorsToFieldsObject(fieldsObject, validationResult);
-      const translatedErrors = Object.fromEntries(
-        Object.entries(fieldsObject.errors).map(([field, messages]) => [
-          field,
-          messages && messages.length > 0
-            ? [translate(messages[0] as TranslationKey)] // only first translated error
-            : [],
-        ])
-      );
-      setErrors(translatedErrors);
+  const handleSubmit = async () => {
+    if (formRef.current) {
+      const formData = new FormData(formRef.current);
+      const fieldsObject = validateFormData(formData);
+      const validationSuccess = !Object.keys(fieldsObject.errors)?.length;
+      setErrors(validationSuccess ? {} : translateErrors(fieldsObject));
+
+      if (validationSuccess) {
+        setLoading(true);
+        const { message, success: submitSuccess } =
+          await createUpdateUserAction(formData, locale);
+        setLoading(false);
+        showToast(message, submitSuccess);
+      }
     }
   };
 
@@ -107,111 +123,120 @@ const UserDetails = ({
   }
 
   return (
-    <form
-      className="flex flex-col gap-4"
-      ref={formRef}
-      onSubmit={(e) => {
-        e.preventDefault();
-      }}
-    >
-      <InputGroup
-        name="email"
-        id="email"
-        placeholder={translate("email")}
-        label={translate("email")}
-        defaultValue={userData?.email}
-        disabled={(readOnly || ownProfile) && !isRoot}
-        errors={errors.email}
-      />
+    <>
+      <form
+        className="flex flex-col gap-4"
+        ref={formRef}
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+      >
+        <input type="hidden" name="userId" value={userData?.userId} />
+        <InputGroup
+          name="email"
+          id="email"
+          placeholder={translate("email")}
+          label={translate("email")}
+          defaultValue={userData?.email}
+          disabled={(readOnly || ownProfile) && !isRoot}
+          errors={errors.email}
+        />
 
-      {!!roles?.length && (
-        <div className="flex flex-col items-start justify-start mr-1">
-          <Label
-            htmlFor="select-role"
-            className="mb-1 ml-[1px] mr-2 text-lg font-semibold cursor-pointer"
-          >
-            {translate("role")}
-          </Label>
-          <Select
-            defaultValue={userData?.roleId}
-            disabled={readOnly || ownProfile}
-          >
-            <SelectTrigger className="w-fit min-w-[10rem]" id="select-role">
-              <SelectValue placeholder={translate("role")} />
-            </SelectTrigger>
-            <SelectContent>
-              {roles.map((r) => {
-                return r.hierarchy > loggedUserHierarchy || ownProfile ? (
-                  <SelectItem value={r.id} key={r.id}>
-                    {r.name}
-                  </SelectItem>
-                ) : null;
-              })}
-            </SelectContent>
-          </Select>
-        </div>
-      )}
+        {!!roles?.length && (
+          <div className="flex flex-col items-start justify-start mr-1">
+            <Label
+              htmlFor="select-role"
+              className="mb-1 ml-[1px] mr-2 text-lg font-semibold cursor-pointer"
+            >
+              {translate("role")}
+            </Label>
+            <Select
+              defaultValue={userData?.roleId}
+              disabled={readOnly || ownProfile}
+              name="roleId"
+            >
+              <SelectTrigger className="w-fit min-w-[10rem]" id="select-role">
+                <SelectValue placeholder={translate("role")} />
+              </SelectTrigger>
+              <SelectContent>
+                {roles.map((r) => {
+                  return r.hierarchy > loggedUserHierarchy || ownProfile ? (
+                    <SelectItem value={r.id} key={r.id}>
+                      {r.name}
+                    </SelectItem>
+                  ) : null;
+                })}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
 
-      {(ownProfile || !userData) && !readOnly && (
-        <>
-          {userData && (
-            <div className="flex flex-col items-start justify-start mr-1">
-              <Label
-                htmlFor="change-password"
-                className="mb-1 ml-[1px] mr-2 text-lg font-semibold cursor-pointer"
-              >
-                {translate("change_password")}
-              </Label>
-              <Switch
-                name="change-password"
-                id="change-password"
-                className="shadow-none w-auto mb-1 cursor-pointer w-9"
-                onCheckedChange={(checked) => {
-                  setChangePasswordChecked(checked);
-                }}
-                disabled={readOnly}
-              />
-            </div>
-          )}
+        {(ownProfile || !userData) && !readOnly && (
+          <>
+            {userData && (
+              <div className="flex flex-col items-start justify-start mr-1">
+                <Label
+                  htmlFor="change-password"
+                  className="mb-1 ml-[1px] mr-2 text-lg font-semibold cursor-pointer"
+                >
+                  {translate("change_password")}
+                </Label>
+                <Switch
+                  name="changePassword"
+                  id="change-password"
+                  className="shadow-none w-auto mb-1 cursor-pointer w-9"
+                  onCheckedChange={(checked) => {
+                    setChangePasswordChecked(checked);
+                  }}
+                  disabled={readOnly}
+                />
+              </div>
+            )}
 
-          {(changePasswordChecked || !userData) && (
-            <>
-              {userData && (
+            {(changePasswordChecked || !userData) && (
+              <>
+                {userData && (
+                  <InputGroup
+                    type="password"
+                    label={translate("password")}
+                    id="old-password"
+                    name="oldPassword"
+                    required
+                    disabled={readOnly}
+                    errors={errors.oldPassword}
+                  />
+                )}
                 <InputGroup
                   type="password"
-                  label={translate("password")}
-                  id="old-password"
-                  name="oldPassword"
+                  description={translate("password_requirements")}
+                  label={translate("new_password")}
+                  id="new-password"
+                  name="newPassword"
                   required
                   disabled={readOnly}
-                  errors={errors.oldPassword}
+                  errors={errors.newPassword}
                 />
-              )}
-              <InputGroup
-                type="password"
-                description={translate("password_requirements")}
-                label={translate("new_password")}
-                id="new-password"
-                name="newPassword"
-                required
-                disabled={readOnly}
-                errors={errors.newPassword}
-              />
-              <InputGroup
-                type="password"
-                label={translate("confirm_password")}
-                id="confirm-password"
-                name="confirmPassword"
-                required
-                disabled={readOnly}
-                errors={errors.confirmPassword}
-              />
-            </>
-          )}
-        </>
+                <InputGroup
+                  type="password"
+                  label={translate("confirm_password")}
+                  id="confirm-password"
+                  name="confirmPassword"
+                  required
+                  disabled={readOnly}
+                  errors={errors.confirmPassword}
+                />
+              </>
+            )}
+          </>
+        )}
+        <ButtonsGroup buttons={buttons} />
+      </form>
+      {loading && (
+        <div className="absolute top-0 left-0 w-full h-full">
+          <Spinner withOverlay />
+        </div>
       )}
-      <ButtonsGroup buttons={buttons} />
-    </form>
+    </>
   );
 };
 
