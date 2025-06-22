@@ -1,5 +1,5 @@
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { HOME_URL, USERS_URL } from "@/constants/urls";
+import { HOME_URL, LOGIN_URL, USERS_URL } from "@/constants/urls";
 import { redirect } from "next/navigation";
 import { getTranslation } from "@/utils/translations";
 import { getLoggedUser } from "@/utils/auth.server";
@@ -31,20 +31,25 @@ const UpdateUser = async ({ locale, params }: UsersProps) => {
       getLoggedUser(),
     ]);
 
+  const loggedInUser =
+    loggedInUserResult.status === "fulfilled" ? loggedInUserResult.value : null;
+
+  if (!loggedInUser) {
+    redirect(LOGIN_URL);
+  }
+
   const targetUser =
     targetUserResult.status === "fulfilled"
       ? targetUserResult.value?.[0]
       : null;
-
-  const loggedInUser =
-    loggedInUserResult.status === "fulfilled" ? loggedInUserResult.value : null;
 
   const ownProfile = loggedInUser?.id === targetUser?.id;
 
   const validParamsAndHasPermissions = await validateParamsAndPermissions(
     "update",
     loggedInUser,
-    targetUser
+    targetUser,
+    ownProfile
   );
 
   const PREVIEW_USER_URL = `${USERS_URL}/${targetUser?.id}`;
@@ -75,7 +80,7 @@ const UpdateUser = async ({ locale, params }: UsersProps) => {
           email: targetUser?.email as string,
           roleId: targetUser?.roleId as string,
         }}
-        loggedUserHierarchy={loggedInUser?.roleHierarchy}
+        loggedUserHierarchy={loggedInUser.roleHierarchy}
         roles={roles}
       />
     </>

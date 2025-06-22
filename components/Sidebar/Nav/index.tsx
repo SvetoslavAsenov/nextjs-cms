@@ -9,7 +9,10 @@ import {
 } from "lucide-react";
 import Item from "./Item";
 import { usePathname } from "next/navigation";
-import { comparePaths } from "@/utils/url";
+import { isSameOrSubpath } from "@/utils/url";
+import { useTranslate } from "@/hooks/useTranslate";
+
+import type { TranslationKey } from "@/translations";
 
 export type ItemType = {
   label: string;
@@ -47,7 +50,9 @@ const items: Items = [
 ];
 
 const Nav = () => {
+  const { translate } = useTranslate();
   const currentPath = usePathname();
+
   return (
     <nav className="flex flex-col justify-center basis-full">
       <ul>
@@ -55,8 +60,8 @@ const Nav = () => {
           return (
             <Item
               key={index}
-              data={item}
-              isActive={comparePaths(currentPath, item.path)}
+              data={{ ...item, label: translate(item.label as TranslationKey) }}
+              isActive={isSameOrSubpath(currentPath, item.path)}
             />
           );
         })}

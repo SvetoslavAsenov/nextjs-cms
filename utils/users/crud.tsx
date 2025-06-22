@@ -9,13 +9,15 @@ type actionType = "update" | "create" | "view";
 
 type validateParamsAndPermissionsType = (
   action: actionType,
-  loggedInUser: loggedInUserType | null,
-  targetUser?: UserRecordWithRole | null
+  loggedInUser: loggedInUserType,
+  targetUser: UserRecordWithRole | null,
+  ownProfile?: boolean
 ) => Promise<boolean>;
 
 export const validateParamsAndPermissions: validateParamsAndPermissionsType =
-  async (action, loggedInUser, targetUser) => {
-    if (!targetUser || !loggedInUser) {
+  async (action, loggedInUser, targetUser, ownProfile) => {
+    // The logged in user must have a hierarchy.
+    if (!Number.isInteger(loggedInUser?.roleHierarchy)) {
       return false;
     }
 
@@ -25,9 +27,6 @@ export const validateParamsAndPermissions: validateParamsAndPermissionsType =
     }
 
     const hasPermissions = await canAccess(permissionsToCheck);
-    const ownProfile = loggedInUser.id === targetUser?.id;
-    const higherHierarchy =
-      loggedInUser.roleHierarchy < targetUser?.Role?.hierarchy;
 
     switch (action) {
       case "create":
@@ -35,7 +34,15 @@ export const validateParamsAndPermissions: validateParamsAndPermissionsType =
 
       case "view":
       case "update":
-        return (hasPermissions && higherHierarchy) || ownProfile;
+        // We allow the action if the user accesses his own profile
+        // OR:
+        // The logged user must have a higher hierarchy than the target user
+        return (
+          (hasPermissions &&
+            targetUser &&
+            loggedInUser.roleHierarchy < targetUser?.Role?.hierarchy) ||
+          !!ownProfile
+        );
 
       default:
         return false;

@@ -1,7 +1,11 @@
 "use client";
 
+// Configs
+import permissions from "@/config/authorization/permissions";
+
 // Components
 import InputGroup from "@/components/ui/InputGroup";
+import ButtonsGroup, { ButtonItem } from "@/components/ButtonsGroup";
 import { Label } from "@/components/shadcn/ui/label";
 import { Switch } from "@/components/shadcn/ui/switch";
 import {
@@ -13,11 +17,24 @@ import {
 } from "@/components/shadcn/ui/select";
 
 // Hooks
-import { useState } from "react";
+import { useState, useActionState, useRef } from "react";
 import { useTranslate } from "@/hooks/useTranslate";
+import { usePermissions } from "@/hooks/usePermissions";
+
+// Schemas
+import { updateProfile, updateProfileWithPassword } from "@/schemas/auth";
+
+// Utils
+import {
+  formDataToFieldsObject,
+  addValidationErrorsToFieldsObject,
+} from "@/utils/validation";
 
 // Types
 import type { Role } from "@prisma/client";
+import type { SafeParseReturnType } from "zod";
+import type { FormFieldsObjectTypeErrorsItemType } from "@/utils/validation";
+import type { TranslationKey } from "@/translations";
 
 type UserData = {
   email: string;
@@ -29,7 +46,7 @@ type UserDetailsProps = {
   roles: Role[];
   readOnly?: boolean;
   userData?: UserData;
-  loggedUserHierarchy?: number;
+  loggedUserHierarchy: number;
 };
 
 const UserDetails = ({
@@ -40,17 +57,71 @@ const UserDetails = ({
   loggedUserHierarchy,
 }: UserDetailsProps) => {
   const { translate } = useTranslate();
+  const { canAccess } = usePermissions();
   const [changePasswordChecked, setChangePasswordChecked] = useState(false);
+  const [errors, setErrors] = useState<FormFieldsObjectTypeErrorsItemType>({});
+  const isRoot = loggedUserHierarchy === 0;
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const buttons: ButtonItem[] = [];
+
+  const handleSubmit = () => {
+    if (!formRef.current) return;
+    const formData = new FormData(formRef.current);
+    const fieldsObject = formDataToFieldsObject(formData);
+
+    const validationResult = (
+      changePasswordChecked ? updateProfileWithPassword : updateProfile
+    ).safeParse(fieldsObject.fields) as SafeParseReturnType<unknown, unknown>;
+
+    if (validationResult.success) {
+      setErrors({});
+    } else {
+      addValidationErrorsToFieldsObject(fieldsObject, validationResult);
+      const translatedErrors = Object.fromEntries(
+        Object.entries(fieldsObject.errors).map(([field, messages]) => [
+          field,
+          messages && messages.length > 0
+            ? [translate(messages[0] as TranslationKey)] // only first translated error
+            : [],
+        ])
+      );
+      setErrors(translatedErrors);
+    }
+  };
+
+  if (!readOnly) {
+    buttons.push({
+      label: translate("save"),
+      onClick: handleSubmit,
+    });
+  }
+
+  if (
+    !readOnly &&
+    !ownProfile &&
+    userData &&
+    canAccess([permissions.users.delete])
+  ) {
+    buttons.push({ label: translate("delete"), variant: "destructive" });
+  }
 
   return (
-    <form className="flex flex-col gap-4">
+    <form
+      className="flex flex-col gap-4"
+      ref={formRef}
+      onSubmit={(e) => {
+        e.preventDefault();
+      }}
+    >
       <InputGroup
         name="email"
         id="email"
         placeholder={translate("email")}
         label={translate("email")}
         defaultValue={userData?.email}
-        disabled={readOnly}
+        disabled={(readOnly || ownProfile) && !isRoot}
+        errors={errors.email}
       />
 
       {!!roles?.length && (
@@ -70,9 +141,7 @@ const UserDetails = ({
             </SelectTrigger>
             <SelectContent>
               {roles.map((r) => {
-                return (loggedUserHierarchy &&
-                  r.hierarchy > loggedUserHierarchy) ||
-                  ownProfile ? (
+                return r.hierarchy > loggedUserHierarchy || ownProfile ? (
                   <SelectItem value={r.id} key={r.id}>
                     {r.name}
                   </SelectItem>
@@ -115,6 +184,7 @@ const UserDetails = ({
                   name="oldPassword"
                   required
                   disabled={readOnly}
+                  errors={errors.oldPassword}
                 />
               )}
               <InputGroup
@@ -125,6 +195,7 @@ const UserDetails = ({
                 name="newPassword"
                 required
                 disabled={readOnly}
+                errors={errors.newPassword}
               />
               <InputGroup
                 type="password"
@@ -133,11 +204,13 @@ const UserDetails = ({
                 name="confirmPassword"
                 required
                 disabled={readOnly}
+                errors={errors.confirmPassword}
               />
             </>
           )}
         </>
       )}
+      <ButtonsGroup buttons={buttons} />
     </form>
   );
 };

@@ -83,6 +83,10 @@ const bg = {
   change_password: "Смяна на парола",
   new_password: "Нова парола",
   save: "Запис",
+  delete: "Изтриване",
+  back: "Назад",
+  this_field_is_mandatory: "Това поле е задължително",
+  password_atleast_8_characters: "Паролата трябва да е с дължна поне 8 символа",
 };
 
 export default bg;

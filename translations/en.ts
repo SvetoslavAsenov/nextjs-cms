@@ -83,6 +83,10 @@ const en = {
   change_password: "Change password",
   new_password: "New password",
   save: "Save",
+  delete: "Delete",
+  back: "Back",
+  this_field_is_mandatory: "This field is mandatory",
+  password_atleast_8_characters: "Password must be at least 8 characters",
 };
 
 export default en;
