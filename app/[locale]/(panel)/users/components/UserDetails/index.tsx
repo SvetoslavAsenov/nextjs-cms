@@ -102,6 +102,9 @@ const UserDetails = ({
           await createUpdateUserAction(formData, locale);
         setLoading(false);
         showToast(message, submitSuccess);
+        if (submitSuccess && changePasswordChecked) {
+          setChangePasswordChecked(false);
+        }
       }
     }
   };
@@ -189,6 +192,7 @@ const UserDetails = ({
                     setChangePasswordChecked(checked);
                   }}
                   disabled={readOnly}
+                  checked={changePasswordChecked}
                 />
               </div>
             )}
