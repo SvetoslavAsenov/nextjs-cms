@@ -26,9 +26,9 @@ const en = {
   email_taken: "A user with this email already exists.",
   invalid_password_format: "Invalid password format",
   invalid_email: "Invalid email",
-  passwords_does_not_match: "Passwords do not match",
+  passwords_do_not_match: "Passwords do not match",
   password_requirements:
-    "The password must be at least 8 characters long and contain an uppercase letter, a lowercase letter, a digit, and a special character (!@#$%^&*).",
+    "The password must be at least 8 characters long and contain an uppercase letter, a lowercase letter, a digit, and a special character !@#$%^&*)(",
   invalid_credentials: "Invalid credentials",
   unexpected_error: "An unexpected error occurred",
   profile: "Profile",
@@ -67,6 +67,9 @@ const en = {
   delete_user_dialog_title: "Delete User?",
   delete_user_dialog_description:
     "Are you sure you want to delete this user? This action is irreversible.",
+  delete_users_dialog_title: "Delete {count} users?",
+  delete_users_dialog_description:
+    "Are you sure you want to delete {count} users? This action is irreversible!",
   delete_selected_users_dialog_title: "Delete Selected Users?",
   delete_selected_users_dialog_description:
     "Are you sure you want to delete the selected users? This action is irreversible.",
@@ -77,6 +80,19 @@ const en = {
     "{count} from {total} records were not successfully deleted",
   edit: "Edit",
   of: "of",
+  change_password: "Change password",
+  new_password: "New password",
+  save: "Save",
+  delete: "Delete",
+  back: "Back",
+  this_field_is_mandatory: "This field is mandatory",
+  password_atleast_8_characters: "Password must be at least 8 characters",
+  something_went_wrong: "Something went wrong! Please try again.",
+  wrong_password: "Wrong password!",
+  successfully_created_new_user: "The user was created successfully.",
+  successfully_updated_new_user: "The user was updated successfully.",
+  add_new_user: "Add new user",
+  without_role: "Without role",
 };
 
 export default en;

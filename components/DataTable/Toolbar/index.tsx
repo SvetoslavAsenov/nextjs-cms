@@ -15,7 +15,7 @@ type ToolbarProps = {
 const Toolbar = ({ options, selectedRows, toggleSelectAll }: ToolbarProps) => {
   return options?.actions || options?.sort?.items?.length ? (
     <header className="bg-foreground p-[0.375rem] select-none flex justify-between items-center gap-2 flex-wrap">
-      {options?.sort?.items?.length && <Sort {...options.sort} />}
+      {!!options?.sort?.items?.length && <Sort {...options.sort} />}
       {options?.selectableItems && (
         <div className="lg:hidden">
           <SelectAll

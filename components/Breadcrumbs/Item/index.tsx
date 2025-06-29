@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useLocale } from "@/hooks/useLocale";
 import { setLocaleToRelativeUrl } from "@/utils/url";
 
-import type { BreadcrumbsItem } from "..";
+import type { BreadcrumbsItem } from "@/types/components/breadcrumbs";
 
 const Item = ({ label, icon, href, first }: BreadcrumbsItem) => {
   const { locale } = useLocale();
@@ -43,7 +43,7 @@ const Item = ({ label, icon, href, first }: BreadcrumbsItem) => {
   const linkClasses = `${labelClasses} bg-foreground hover:bg-primary after:border-l-foreground  hover:after:border-l-primary ${
     first ? firstClasses : ""
   }`;
-  const spanClasses = `${labelClasses} bg-muted-foreground after:border-l-muted-foreground ${
+  const spanClasses = `${labelClasses} bg-muted-foreground after:border-l-muted-foreground z-0 ${
     first ? firstClasses : ""
   }`;
 

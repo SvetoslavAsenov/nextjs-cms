@@ -8,7 +8,7 @@ import UserModel from "@/models/UserModel";
 import type { DeleteUsers } from "@/types/actions/UserActionsTypes";
 
 const deleteUsersAction: DeleteUsers = async (previousState, ids) => {
-  const hasPermissionToDelete = canAccess(permissions.users.delete);
+  const hasPermissionToDelete = canAccess([permissions.users.delete]);
   const loggedUser = await getLoggedUser();
   if (
     !hasPermissionToDelete ||

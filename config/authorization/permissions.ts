@@ -24,7 +24,7 @@ export default permissions;
 // It can't be deleted or edited.
 // It also has all the permissions and is granted a full access.
 // Only one user can have this role.
-// The user having this role also can't be deleted.
+// Also, the user having this role can't be deleted.
 export const ROOT_ROLE_NAME = "Root";
 
 type ExtractValues<T> = T extends Record<string, infer U> ? U : never;

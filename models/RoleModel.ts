@@ -57,9 +57,11 @@ export default class RoleModel extends BaseModel<
     });
   };
 
-  public hasPermission = async (roleId: string, permission: Permission) => {
+  public hasPermission = async (roleId: string, permissions: Permission[]) => {
     const existingPermissions = await this.getRolePermissionsById(roleId);
 
-    return existingPermissions.includes(permission);
+    return permissions.every((permission) =>
+      existingPermissions.includes(permission)
+    );
   };
 }

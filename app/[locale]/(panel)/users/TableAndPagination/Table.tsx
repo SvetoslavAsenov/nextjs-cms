@@ -9,6 +9,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { usePermissions } from "@/hooks/usePermissions";
 import { useDeleteUsersAction } from "../Hooks/useDeleteUsersAction";
 import permissions from "@/config/authorization/permissions";
+import { USERS_NEW_URL } from "@/constants/urls";
 
 import type { TableOptions } from "@/components/DataTable";
 import type {
@@ -49,7 +50,7 @@ const Table = ({
     // Can edit its own profile and profiles of other users with a lower hierarchy role.
     if (
       isRowOfTheLoggedUser ||
-      (canAccess(permissions.users.update) && loggedHasHigherHierarchyRole)
+      (canAccess([permissions.users.update]) && loggedHasHigherHierarchyRole)
     ) {
       rowActions.push("update");
     }
@@ -60,7 +61,7 @@ const Table = ({
     if (
       !isRowOfTheLoggedUser &&
       loggedHasHigherHierarchyRole &&
-      canAccess(permissions.users.delete)
+      canAccess([permissions.users.delete])
     ) {
       rowActions.push("delete");
       selectedTableActions.push("delete");
@@ -144,14 +145,14 @@ const Table = ({
           }
         },
       },
-      ...(canAccess(permissions.users.create)
+      ...(canAccess([permissions.users.create])
         ? {
             add: {
-              title: "Add",
+              title: translate("add_new_user"),
               type: "link",
               icon: <ListPlus />,
               shown: "always",
-              href: "/users/create",
+              href: USERS_NEW_URL,
             },
           }
         : {}),

@@ -3,8 +3,9 @@ import {
   credentialsLoginSchema,
   credentialsRegisterSchema,
 } from "@/schemas/auth";
+import { redirect } from "next/navigation";
 import credentialsAuthService from "./credentialsAuthService";
-import { HOME_URL } from "@/constants/urls";
+import { LOGIN_URL } from "@/constants/urls";
 
 import type {
   CredentialsFormHandlerType,
@@ -13,7 +14,7 @@ import type {
   ResultObjectItemType,
 } from "@/types/actions/CredentialsFormHandlerTypes";
 
-const REDIRECT_URL = HOME_URL;
+const REDIRECT_URL = LOGIN_URL;
 
 const formDataToResultObject: formDataToResultObject = (formData) => {
   const fieldsObject = {
@@ -49,8 +50,7 @@ const CredentialsFormHandler: CredentialsFormHandlerType = async (
       // If there is an error with the token
       // we will redirect the user.
       if (issue?.path?.[0] === "token") {
-        resultObject.redirectUrl = REDIRECT_URL;
-        return resultObject;
+        redirect(REDIRECT_URL);
       }
       const errorCode: string | undefined = issue?.code;
       const errorMsg: string | undefined = issue?.message;
@@ -71,8 +71,7 @@ const CredentialsFormHandler: CredentialsFormHandlerType = async (
     return resultObject;
   }
 
-  resultObject.redirectUrl = REDIRECT_URL;
-  return resultObject;
+  redirect(REDIRECT_URL);
 };
 
 export default CredentialsFormHandler;

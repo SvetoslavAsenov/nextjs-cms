@@ -8,14 +8,14 @@ import type { AuthUser } from "@/types/auth";
 import type { User } from "@prisma/client";
 
 type ManipulateString = (target: string) => Promise<string>;
+export type loggedInUserType =
+  | AuthUser & { roleHierarchy: number; roleName: string };
 type CompareStringWithHash = (
   candidate: string,
   digest: string
 ) => Promise<boolean>;
 type IsLoggedIn = () => Promise<boolean>;
-type GetLoggedUser = () => Promise<
-  (AuthUser & { roleHierarchy: number; roleName: string }) | undefined
->;
+type GetLoggedUser = () => Promise<loggedInUserType | undefined>;
 
 const SALT_ROUNDS = 10;
 

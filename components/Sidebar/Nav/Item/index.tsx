@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { useTranslate } from "@/hooks/useTranslate";
 
 import type { ItemType } from "..";
 
@@ -10,13 +9,11 @@ type ItemProps = {
 
 const Item = ({ data, isActive }: ItemProps) => {
   const { label, path, icon: Icon } = data;
-  const { translate } = useTranslate();
   const nonActiveClasses = " hover:bg-muted hover:text-primary";
   const activeClasses = " cursor-default bg-foreground text-background";
-  const translation = translate(data.label);
 
   return (
-    <li key={label} title={translation} className="flex w-full">
+    <li key={label} title={data.label} className="flex w-full">
       <Link
         href={path}
         className={`flex w-full p-[0.625rem]${
@@ -24,7 +21,7 @@ const Item = ({ data, isActive }: ItemProps) => {
         }`}
       >
         <Icon className="mr-[1rem] w-[1.75rem] h-auto shrink-0" />
-        <span>{translation}</span>
+        <span>{data.label}</span>
       </Link>
     </li>
   );
