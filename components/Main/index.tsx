@@ -13,6 +13,8 @@ const Main = ({ children }: MainProps) => {
   return (
     <main
       className={`bg-muted 
+        flex
+        flex-col
         p-[0.5rem]
         min-h-[calc(100vh-var(--header-height))] 
         mt-[var(--header-height)] 

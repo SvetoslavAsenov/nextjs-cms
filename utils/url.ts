@@ -20,13 +20,26 @@ export const setLocaleToRelativeUrl = (
   return locale !== defaultLocale ? `/${locale}/${newPath}` : `/${newPath}`;
 };
 
+const removeLocaleFromPath = (inputPath: string): string => {
+  // Remove any potential locale from the url
+  const regex = new RegExp(`(\/(${supportedLocales.join("|")}))`, "gi");
+  const cleanedInputPath = inputPath.replaceAll(regex, "");
+  return cleanedInputPath;
+};
+
 export const comparePaths = (
   inputPath: string,
   targetPath: string
 ): boolean => {
-  // Remove any potential locale from the url
-  const regex = new RegExp(`(\/(${supportedLocales.join("|")}))`, "gi");
-  const cleanedInputPath = inputPath.replaceAll(regex, "");
-
+  const cleanedInputPath = removeLocaleFromPath(inputPath);
   return cleanedInputPath === targetPath;
+};
+
+export const isSameOrSubpath = (
+  inputPath: string,
+  targetPath: string
+): boolean => {
+  const cleanedInputPath = removeLocaleFromPath(inputPath);
+  const inputBeginning = cleanedInputPath.slice(0, targetPath.length);
+  return inputBeginning === targetPath;
 };

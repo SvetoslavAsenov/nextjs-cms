@@ -28,7 +28,7 @@ const bg = {
   invalid_password_format: "Невалиден формат на паролата",
   passwords_do_not_match: "Паролите не съвпадат",
   password_requirements:
-    "Паролата трябва да е поне 8 символа и да съдържа главна буква, малка буква, цифра и специален знак (!@#$%^&*).",
+    "Паролата трябва да е поне 8 символа и да съдържа главна буква, малка буква, цифра и специален знак !@#$%^&*)(",
   invalid_credentials: "Грешен email или парола.",
   unexpected_error: "Възникна неочаквана грешка",
   profile: "Профил",
@@ -69,7 +69,7 @@ const bg = {
   delete_user_dialog_description:
     "Сигурни ли сте, че искате да изтриете потребителя? Това действие е необратимо.",
   delete_users_dialog_description:
-    "Сигурни ли сте, че искате да изтриете {count} потребителя? Това действие е необратимо.",
+    "Сигурни ли сте, че искате да изтриете {count} потребителя? Това действие е необратимо!",
   delete_selected_users_dialog_title: "Изтриване на избраните потребители?",
   delete_selected_users_dialog_description:
     "Сигурни ли сте, че искате да изтриете избраните потребители? Дова действие е необратимо.",
@@ -80,6 +80,19 @@ const bg = {
     "{count} от {total} записа не бяха изтрити успешно",
   edit: "Редакция",
   of: "от",
+  change_password: "Смяна на парола",
+  new_password: "Нова парола",
+  save: "Запис",
+  delete: "Изтриване",
+  back: "Назад",
+  this_field_is_mandatory: "Това поле е задължително",
+  password_atleast_8_characters: "Паролата трябва да е с дължна поне 8 символа",
+  something_went_wrong: "Нещо се обърка! Моля опитайте отново.",
+  wrong_password: "Грешна парола!",
+  successfully_created_new_user: "Потребителя беше създаден успешно.",
+  successfully_updated_new_user: "Потребителя беше обновен успешно.",
+  add_new_user: "Добавяне на нов потребител",
+  without_role: "Без роля",
 };
 
 export default bg;

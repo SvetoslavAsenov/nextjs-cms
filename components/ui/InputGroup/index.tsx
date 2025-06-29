@@ -6,11 +6,13 @@ import TogglePasswordInput from "../TogglePasswordInput";
 
 const InputGroup = ({
   label,
+  description,
   labelProps,
   errors,
   ...inputProps
 }: {
   label?: string;
+  description?: string;
   labelProps?: React.InputHTMLAttributes<HTMLLabelElement>;
   errors?: string[];
 } & React.InputHTMLAttributes<HTMLInputElement>) => {
@@ -38,7 +40,13 @@ const InputGroup = ({
           {...labelProps}
         >
           {label}
+          {inputProps?.required && (
+            <span className="ml-1 text-destructive">*</span>
+          )}
         </Label>
+      )}
+      {description && (
+        <span className="mb-2 text-sm italic">{description}</span>
       )}
       <Component onChange={handleOnChange} {...inputProps} />
       {errors?.length &&
