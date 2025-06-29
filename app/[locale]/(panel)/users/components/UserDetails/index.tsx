@@ -21,6 +21,8 @@ import {
 import { useState, useRef } from "react";
 import { useTranslate } from "@/hooks/useTranslate";
 import { usePermissions } from "@/hooks/usePermissions";
+import { useDeleteUsersAction } from "../../Hooks/useDeleteUsersAction";
+import { useRouter } from "next/navigation";
 
 // Utils
 import { toast } from "sonner";
@@ -28,6 +30,10 @@ import { validateFormData } from "@/utils/users/crud";
 
 // Actions
 import createUpdateUserAction from "@/actions/users/createUpdateUsers";
+
+// Consts
+import { USERS_URL } from "@/constants/urls";
+import { WITHOUT_ROLE_VALUE } from "@/constants/common";
 
 // Types
 import type { Role } from "@prisma/client";
@@ -40,12 +46,13 @@ import type { SupportedLocale } from "@/types/locales";
 
 type UserData = {
   email: string;
-  roleId: string;
-  userId?: string;
+  roleId?: string;
+  userId: string;
+  hierarchy?: number;
 };
 
 type UserDetailsProps = {
-  ownProfile: boolean;
+  ownProfile?: boolean;
   roles: Role[];
   readOnly?: boolean;
   userData?: UserData;
@@ -53,9 +60,17 @@ type UserDetailsProps = {
   locale: SupportedLocale;
 };
 
-const showToast = (msg: string, success: boolean) => {
+const showToast = (
+  msg: string,
+  success: boolean,
+  callback?: (...args: unknown[]) => unknown
+) => {
+  const toastDuration = 5000;
   const fn = success ? toast.success : toast.error;
-  fn(msg, { duration: 5000 });
+  fn(msg, { duration: toastDuration });
+  if (callback) {
+    setTimeout(callback, toastDuration);
+  }
 };
 
 const UserDetails = ({
@@ -68,12 +83,13 @@ const UserDetails = ({
 }: UserDetailsProps) => {
   const { translate } = useTranslate();
   const { canAccess } = usePermissions();
+  const { deleteUsers } = useDeleteUsersAction();
   const [changePasswordChecked, setChangePasswordChecked] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<FormFieldsObjectTypeErrorsItemType>({});
   const isRoot = loggedUserHierarchy === 0;
   const formRef = useRef<HTMLFormElement>(null);
-
+  const router = useRouter();
   const buttons: ButtonItem[] = [];
 
   const translateErrors = (fieldsObject: FormFieldsObjectType) => {
@@ -98,10 +114,23 @@ const UserDetails = ({
 
       if (validationSuccess) {
         setLoading(true);
-        const { message, success: submitSuccess } =
-          await createUpdateUserAction(formData, locale);
-        setLoading(false);
-        showToast(message, submitSuccess);
+        const {
+          message,
+          success: submitSuccess,
+          newUserId,
+        } = await createUpdateUserAction(formData, locale);
+
+        setLoading(!!(submitSuccess && newUserId));
+
+        if (submitSuccess && !userData) {
+          const PREVIEW_USER_URL = `${USERS_URL}/${newUserId}`;
+          showToast(message, submitSuccess, () => {
+            router.push(PREVIEW_USER_URL);
+          });
+        } else {
+          showToast(message, submitSuccess);
+        }
+
         if (submitSuccess && changePasswordChecked) {
           setChangePasswordChecked(false);
         }
@@ -109,10 +138,21 @@ const UserDetails = ({
     }
   };
 
+  const handleDeleteBtn = async () => {
+    if (userData) {
+      const userHierachy =
+        userData.hierarchy || userData.hierarchy === 0
+          ? userData.hierarchy
+          : Infinity;
+      await deleteUsers([{ [userData.userId]: userHierachy }]);
+    }
+  };
+
   if (!readOnly) {
     buttons.push({
       label: translate("save"),
       onClick: handleSubmit,
+      disabled: loading,
     });
   }
 
@@ -122,7 +162,12 @@ const UserDetails = ({
     userData &&
     canAccess([permissions.users.delete])
   ) {
-    buttons.push({ label: translate("delete"), variant: "destructive" });
+    buttons.push({
+      label: translate("delete"),
+      variant: "destructive",
+      onClick: handleDeleteBtn,
+      disabled: loading,
+    });
   }
 
   return (
@@ -141,7 +186,7 @@ const UserDetails = ({
           placeholder={translate("email")}
           label={translate("email")}
           defaultValue={userData?.email}
-          disabled={(readOnly || ownProfile) && !isRoot}
+          disabled={loading || readOnly || (ownProfile && !isRoot)}
           errors={errors.email}
         />
 
@@ -154,8 +199,8 @@ const UserDetails = ({
               {translate("role")}
             </Label>
             <Select
-              defaultValue={userData?.roleId}
-              disabled={readOnly || ownProfile}
+              defaultValue={userData?.roleId || WITHOUT_ROLE_VALUE}
+              disabled={readOnly || ownProfile || loading}
               name="roleId"
             >
               <SelectTrigger className="w-fit min-w-[10rem]" id="select-role">
@@ -169,6 +214,9 @@ const UserDetails = ({
                     </SelectItem>
                   ) : null;
                 })}
+                <SelectItem value={WITHOUT_ROLE_VALUE}>
+                  {translate("without_role")}
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -206,7 +254,7 @@ const UserDetails = ({
                     id="old-password"
                     name="oldPassword"
                     required
-                    disabled={readOnly}
+                    disabled={readOnly || loading}
                     errors={errors.oldPassword}
                   />
                 )}
@@ -217,7 +265,7 @@ const UserDetails = ({
                   id="new-password"
                   name="newPassword"
                   required
-                  disabled={readOnly}
+                  disabled={readOnly || loading}
                   errors={errors.newPassword}
                 />
                 <InputGroup
@@ -226,7 +274,7 @@ const UserDetails = ({
                   id="confirm-password"
                   name="confirmPassword"
                   required
-                  disabled={readOnly}
+                  disabled={readOnly || loading}
                   errors={errors.confirmPassword}
                 />
               </>
@@ -235,11 +283,11 @@ const UserDetails = ({
         )}
         <ButtonsGroup buttons={buttons} />
       </form>
-      {loading && (
+      {/* {loading && (
         <div className="absolute top-0 left-0 w-full h-full">
           <Spinner withOverlay />
         </div>
-      )}
+      )} */}
     </>
   );
 };

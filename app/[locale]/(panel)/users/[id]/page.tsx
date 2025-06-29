@@ -5,8 +5,7 @@ import { getTranslation } from "@/utils/translations";
 import { getLoggedUser } from "@/utils/auth.server";
 import UserModel from "@/models/UserModel";
 import RoleModel from "@/models/RoleModel";
-import UserDetails from "../../components/UserDetails";
-import { Pencil } from "lucide-react";
+import UserDetails from "../components/UserDetails";
 import { validateParamsAndPermissions } from "@/utils/users/crud";
 
 import type { SupportedLocale } from "@/types/locales";
@@ -44,16 +43,14 @@ const UpdateUser = async ({ params }: UsersProps) => {
   const ownProfile = loggedInUser?.id === targetUser?.id;
 
   const validParamsAndHasPermissions = await validateParamsAndPermissions(
-    "update",
+    "view",
     loggedInUser,
     targetUser,
     ownProfile
   );
 
-  const PREVIEW_USER_URL = `${USERS_URL}/${targetUser?.id}`;
-
   if (!validParamsAndHasPermissions) {
-    redirect(targetUser ? PREVIEW_USER_URL : HOME_URL);
+    redirect(HOME_URL);
   }
 
   const roles = rolesResult.status === "fulfilled" ? rolesResult.value : [];
@@ -66,13 +63,12 @@ const UpdateUser = async ({ params }: UsersProps) => {
           { label: getTranslation("users", locale), href: USERS_URL },
           {
             label: targetUser?.email as string,
-            href: PREVIEW_USER_URL,
           },
-          { label: getTranslation("edit", locale), icon: <Pencil /> },
         ]}
       />
 
       <UserDetails
+        readOnly
         ownProfile={ownProfile}
         userData={{
           email: targetUser?.email as string,

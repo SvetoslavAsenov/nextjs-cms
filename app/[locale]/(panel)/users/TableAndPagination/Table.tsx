@@ -148,7 +148,7 @@ const Table = ({
       ...(canAccess([permissions.users.create])
         ? {
             add: {
-              title: "Add",
+              title: translate("add_new_user"),
               type: "link",
               icon: <ListPlus />,
               shown: "always",

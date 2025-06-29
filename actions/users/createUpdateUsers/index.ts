@@ -12,6 +12,9 @@ import { prisma } from "@/lib/prisma";
 import UserModel from "@/models/UserModel";
 import RoleModel from "@/models/RoleModel";
 
+// Consts
+import { WITHOUT_ROLE_VALUE } from "@/constants/common";
+
 // Types
 import type { createUpdateUserAction } from "@/types/actions/CreateUpdateUserActionTypes";
 import type { Permission } from "@/config/authorization/permissions";
@@ -29,6 +32,7 @@ const createUpdateUserAction: createUpdateUserAction = async (
   const returnObj = {
     success: false,
     message: getTranslation("something_went_wrong", locale),
+    newUserId: "",
   };
 
   try {
@@ -84,8 +88,12 @@ const createUpdateUserAction: createUpdateUserAction = async (
       return returnObj;
     }
 
-    // The role with such id must exist
-    if (fieldsObject.fields.roleId && !desiredRole) {
+    // A role with such id must exist
+    if (
+      fieldsObject.fields.roleId &&
+      fieldsObject.fields.roleId !== WITHOUT_ROLE_VALUE &&
+      !desiredRole
+    ) {
       return returnObj;
     }
 
@@ -99,7 +107,7 @@ const createUpdateUserAction: createUpdateUserAction = async (
       }
 
       // Can't update other peoples profiles with higher or same role hierarchy as his own.
-      // This role includes his own - can't change his own role.
+      // This includes his own - can't change his own role.
       if (
         targetUser?.Role?.hierarchy &&
         loggedUser.roleHierarchy >= targetUser?.Role.hierarchy
@@ -127,7 +135,7 @@ const createUpdateUserAction: createUpdateUserAction = async (
         }
       }
 
-      const data: Record<string, string> = {
+      const data: Record<string, string | null> = {
         email: fieldsObject.fields.email as string,
       };
 
@@ -140,7 +148,10 @@ const createUpdateUserAction: createUpdateUserAction = async (
       }
 
       if (fieldsObject.fields.roleId) {
-        data.roleId = fieldsObject.fields.roleId as string;
+        data.roleId =
+          fieldsObject.fields.roleId !== WITHOUT_ROLE_VALUE
+            ? (fieldsObject.fields.roleId as string)
+            : null;
       }
 
       const updatedUser = userModel?.update({
@@ -168,7 +179,6 @@ const createUpdateUserAction: createUpdateUserAction = async (
       const data = {
         email: fieldsObject.fields.email as string,
         password: hashedPassword,
-        roleId: fieldsObject.fields.roleId,
       };
 
       const createdUser = await prisma.$transaction(async (tx) => {
@@ -194,6 +204,7 @@ const createUpdateUserAction: createUpdateUserAction = async (
           "successfully_created_new_user",
           locale
         );
+        returnObj.newUserId = createdUser.id;
 
         return returnObj;
       }

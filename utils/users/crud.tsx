@@ -50,10 +50,14 @@ export const validateParamsAndPermissions: validateParamsAndPermissionsType =
         // We allow the action if the user accesses his own profile
         // OR:
         // The logged user must have a higher hierarchy than the target user
+        const targetUserHierarchy =
+          targetUser?.Role?.hierarchy && targetUser?.Role?.hierarchy !== 0
+            ? targetUser?.Role?.hierarchy
+            : Infinity;
         return (
           (hasPermissions &&
             targetUser &&
-            loggedInUser.roleHierarchy < targetUser?.Role?.hierarchy) ||
+            loggedInUser.roleHierarchy < targetUserHierarchy) ||
           !!ownProfile
         );
 

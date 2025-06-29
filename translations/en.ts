@@ -91,6 +91,8 @@ const en = {
   wrong_password: "Wrong password!",
   successfully_created_new_user: "The user was created successfully.",
   successfully_updated_new_user: "The user was updated successfully.",
+  add_new_user: "Add new user",
+  without_role: "Without role",
 };
 
 export default en;

@@ -91,6 +91,8 @@ const bg = {
   wrong_password: "Грешна парола!",
   successfully_created_new_user: "Потребителя беше създаден успешно.",
   successfully_updated_new_user: "Потребителя беше обновен успешно.",
+  add_new_user: "Добавяне на нов потребител",
+  without_role: "Без роля",
 };
 
 export default bg;
